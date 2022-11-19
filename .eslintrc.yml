@@ -67,7 +67,6 @@ rules:
   react/prop-types:
     - off # want not to show 「’○○’ is missing in props validation」. https://cpoint-lab.co.jp/article/202107/20531/
   sort-imports: 0
-  react/react-in-jsx-scope: off
   import/order:
     - error
     - groups:
@@ -82,7 +81,7 @@ rules:
         - pattern: '{react,react-dom/**,react-router-dom,next,next/*}'
           group: builtin
           position: before
-        - pattern: '{styles/*, components/*, utils/*, pages/*, locales/*, themes/*}'
+        - pattern: '@src/**'
           group: parent
           position: before
       pathGroupsExcludedImportTypes:
