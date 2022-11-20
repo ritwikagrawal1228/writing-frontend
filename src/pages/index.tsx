@@ -8,17 +8,17 @@ import { useEffect } from 'react'
 
 export default function Home() {
   const { data: session, status } = useSession()
-  const { data } = useQuery(gql`
-    query {
-      problemsByUserId(userId: "U1") {
-        id
-      }
-    }
-  `)
+  // const { data } = useQuery(gql`
+  //   query {
+  //     problemsByUserId(userId: "U1") {
+  //       id
+  //     }
+  //   }
+  // `)
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
+  // useEffect(() => {
+  //   console.log(data)
+  // }, [data])
 
   if (status === 'loading') {
     return null
@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <>
       Json <br />
-      {JSON.stringify(data)} <br />
+      {/* {JSON.stringify(data)} <br /> */}
       Not signed in <br />
       <button onClick={() => signIn()}>Sign in</button>
     </>

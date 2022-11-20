@@ -25,7 +25,7 @@ export default async function handler(
       },
     })
     .then(({ data }) => {
-      console.log('res', data.data)
+      // console.log('res', data.data)
     })
 
   res.end()
