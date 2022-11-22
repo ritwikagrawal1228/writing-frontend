@@ -1,9 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { authOptions } from './auth/[...nextauth]'
-import { unstable_getServerSession } from 'next-auth/next'
-import { gql, useQuery } from '@apollo/client'
+
 import axios from 'axios'
+import { unstable_getServerSession } from 'next-auth/next'
+
+import { authOptions } from './auth/[...nextauth]'
 
 type Data = {
   name: string
