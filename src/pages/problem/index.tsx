@@ -1,13 +1,15 @@
-import { graphql } from '@/graphql/client'
-import { Query, QueryProblemsByUserIdArgs } from '@/graphql/client/graphql'
-import { TypedDocumentNode, useQuery, gql } from '@apollo/client'
-import { DocumentNode, QueryDocumentKeys } from 'graphql/language/ast'
-import { useSession, signIn, signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { useEffect } from 'react'
+import React from 'react'
 
-export default function Problem() {
-  const { data: session, status } = useSession()
+import { useQuery, gql } from '@apollo/client'
+
+import Layout from '@/components/templates/Layout'
+
+type Props = {
+  session: string
+}
+
+export default function Problem(props: Props) {
   const { data } = useQuery(gql`
     query {
       problemsByUserId(userId: "U1") {
@@ -16,32 +18,19 @@ export default function Problem() {
     }
   `)
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
-
-  if (status === 'loading') {
-    return null
+  const signOut = () => {
+    return
   }
 
-  if (session && session.user) {
-    return (
+  return (
+    <Layout title="a" description="a">
       <>
-        Signed in as {session.user.email}
+        {/* Signed in as {session?.user?.email} */}
         <br />
         <button onClick={() => signOut()}>Sign Out</button>
         <br />
         <Link href="/setting">設定ページへ</Link>
       </>
-    )
-  }
-
-  return (
-    <>
-      Json <br />
-      {/* {JSON.stringify(data)} <br /> */}
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
+    </Layout>
   )
 }

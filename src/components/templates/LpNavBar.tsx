@@ -16,7 +16,6 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { useSession, signIn } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 
 import { colors, fontSizes } from '@/themes/globalStyles'
@@ -27,18 +26,13 @@ const languages = {
   ja: '日本語',
 }
 
-type Props = {
-  providerId: string
-}
-
-export default function LpNavBar({ providerId }: Props) {
+export default function LpNavBar() {
   const router = useRouter()
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('LP')
 
-  const { data: session, status } = useSession()
   const signInWithProvider = () => {
-    signIn(providerId)
+    return
   }
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)

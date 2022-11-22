@@ -1,61 +1,27 @@
 import { GetServerSideProps } from 'next'
+import Head from 'next/head'
 import * as React from 'react'
 
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
 import { Box, Button, Typography } from '@mui/material'
 import Container from '@mui/material/Container'
-import { OAuthProviderType } from 'next-auth/providers'
-import {
-  useSession,
-  signIn,
-  getProviders,
-  LiteralUnion,
-  ClientSafeProvider,
-} from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 
 import LpNavBar from '@/components/templates/LpNavBar'
 
-const pages = ['Products', 'Pricing', 'Blog']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
-
-type Props = {
-  providers: Record<LiteralUnion<OAuthProviderType, string>, ClientSafeProvider>
-}
-
-export default function Home({ providers }: Props) {
+export default function Home() {
   const t = useTranslations('LP')
 
-  const { data: session, status } = useSession()
-  const signInWithProvider = (provider: ClientSafeProvider) => {
-    signIn(provider.id).then((res) => {
-      alert('ログインしました')
-    })
-  }
-
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null,
-  )
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget)
-  }
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget)
-  }
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null)
-  }
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
+  const signInWithProvider = () => {
+    return
   }
 
   return (
     <>
-      <LpNavBar providerId={providers.cognito.id} />
+      <Head>
+        <title>{t('title')}</title>
+      </Head>
+      <LpNavBar />
       <Container
         maxWidth="xl"
         sx={{
@@ -90,7 +56,7 @@ export default function Home({ providers }: Props) {
               sx={{ mt: 5 }}
               variant="contained"
               endIcon={<DoubleArrowIcon />}
-              onClick={() => signInWithProvider(providers.cognito)}
+              onClick={() => signInWithProvider()}
             >
               <b>Start Now</b>
             </Button>
@@ -102,9 +68,8 @@ export default function Home({ providers }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const providers = await getProviders()
   const { locale } = context
   return {
-    props: { providers, messages: require(`@/locales/${locale}.json`) },
+    props: { messages: require(`@/locales/${locale}.json`) },
   }
 }

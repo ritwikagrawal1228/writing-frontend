@@ -2,9 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import axios from 'axios'
-import { unstable_getServerSession } from 'next-auth/next'
-
-import { authOptions } from './auth/[...nextauth]'
 
 type Data = {
   name: string
@@ -16,13 +13,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  const session = await unstable_getServerSession(req, res, authOptions)
+  const accessToken = ''
 
   axios
     .post(uri, req.body, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${session?.user.accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     })
     .then(({ data }) => {
