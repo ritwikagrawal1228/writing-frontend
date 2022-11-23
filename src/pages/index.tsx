@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
@@ -8,12 +9,14 @@ import Container from '@mui/material/Container'
 import { useTranslations } from 'next-intl'
 
 import LpNavBar from '@/components/templates/LpNavBar'
+import { Path } from '@/constants/Path'
 
 export default function Home() {
   const t = useTranslations('LP')
+  const router = useRouter()
 
-  const signInWithProvider = () => {
-    return
+  const toAuthPage = () => {
+    router.push(Path.Auth)
   }
 
   return (
@@ -56,7 +59,7 @@ export default function Home() {
               sx={{ mt: 5 }}
               variant="contained"
               endIcon={<DoubleArrowIcon />}
-              onClick={() => signInWithProvider()}
+              onClick={toAuthPage}
             >
               <b>Start Now</b>
             </Button>

@@ -18,6 +18,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { useTranslations } from 'next-intl'
 
+import { Path } from '@/constants/Path'
 import { colors, fontSizes } from '@/themes/globalStyles'
 
 const pages = ['Products', 'Pricing', 'Blog']
@@ -31,8 +32,8 @@ export default function LpNavBar() {
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('LP')
 
-  const signInWithProvider = () => {
-    return
+  const toAuthPage = () => {
+    router.push(Path.Auth)
   }
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
@@ -176,7 +177,7 @@ export default function LpNavBar() {
             <Button
               variant="contained"
               endIcon={<DoubleArrowIcon />}
-              onClick={signInWithProvider}
+              onClick={toAuthPage}
             >
               <b>Start Now</b>
             </Button>
