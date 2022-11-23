@@ -4,11 +4,13 @@ import { useRouter } from 'next/router'
 import React, {
   createContext,
   FC,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useState,
 } from 'react'
 
+import { useAuthenticator } from '@aws-amplify/ui-react'
 import MenuIcon from '@mui/icons-material/Menu'
 import TranslateIcon from '@mui/icons-material/Translate'
 import {
@@ -28,6 +30,7 @@ import {
 } from '@mui/material'
 import { useTranslations } from 'next-intl'
 
+import { Path } from '@/constants/Path'
 import { colors, fontSizes } from '@/themes/globalStyles'
 
 const drawerWidth = 220
@@ -50,13 +53,18 @@ const ColorModeContext = createContext({
 })
 
 const pages = ['Problems', 'Tips']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
+const settings = ['Profile', 'Logout']
 
 const Layout: FC<LayoutProps> = ({ children, title, description }) => {
   const [mode, setMode] = useState<PaletteMode>('light')
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
-  const t = useTranslations('Menu')
+  const t = useTranslations('Nav')
   const router = useRouter()
+  const { user, signOut } = useAuthenticator((context) => [context.user])
+
+  useEffect(() => {
+    console.log('user', user)
+  }, [user])
 
   useLayoutEffect(() => {
     setMode(() => {
@@ -101,13 +109,6 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
     null,
   )
 
-  // Update the theme only if the mode changes
-  const [mobileOpen, setMobileOpen] = useState(false)
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }
-
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
@@ -121,14 +122,18 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null)
   }
-  const handleCloseUserMenu = (lang: string) => {
+  const handleCloseUserMenu = (menu: string) => {
+    if (menu === 'Logout') {
+      signOut()
+      router.push(Path.Auth)
+      console.log(signOut)
+    }
+
     setAnchorElUser(null)
   }
   const handleCloseLangMenu = (lang: string) => {
     router.push(router.pathname, router.route, {
-      locale: router.locales
-        ? router.locales.filter((l) => l !== router.locale).join()
-        : 'en',
+      locale: lang,
     })
     setAnchorElLang(null)
   }
@@ -250,7 +255,7 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
                   {Object.keys(langs).map((lang) => (
                     <MenuItem
                       key={lang}
-                      onClick={() => handleCloseUserMenu(lang)}
+                      onClick={() => handleCloseLangMenu(lang)}
                     >
                       <Typography textAlign="center">{langs[lang]}</Typography>
                     </MenuItem>
@@ -285,7 +290,7 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
                   {settings.map((setting) => (
                     <MenuItem
                       key={setting}
-                      onClick={() => handleCloseUserMenu('')}
+                      onClick={() => handleCloseUserMenu(setting)}
                     >
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>

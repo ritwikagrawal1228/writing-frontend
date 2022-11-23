@@ -1,39 +1,68 @@
-import React from 'react'
+import { GetServerSideProps } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import React, { useEffect } from 'react'
 
-import {
-  withAuthenticator,
-  WithAuthenticatorProps,
-} from '@aws-amplify/ui-react'
-import { Amplify } from 'aws-amplify'
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react'
+import { Container } from '@mui/material'
+import { Amplify, withSSRContext } from 'aws-amplify'
 
 import '@aws-amplify/ui-react/styles.css'
 
 import awsExports from '@/aws-exports'
-Amplify.configure(awsExports)
+import LpNavBar from '@/components/templates/LpNavBar'
+import { Path } from '@/constants/Path'
 
-interface Props extends WithAuthenticatorProps {
-  isPassedToWithAuthenticator: boolean
-}
+Amplify.configure({ ...awsExports, ssr: true })
 
-function App({ isPassedToWithAuthenticator, signOut, user }: Props) {
-  if (!isPassedToWithAuthenticator) {
-    throw new Error('isPassedToWithAuthenticator was not provided')
-  }
+export default function Auth() {
+  const { user } = useAuthenticator()
+  const route = useRouter()
+
+  // Redirect After Sign In Success
+  useEffect(() => {
+    if (user) {
+      route.push(Path.Problem)
+    }
+  }, [user])
 
   return (
     <>
-      <h1>Hello {user?.username}</h1>
-      <button onClick={signOut}>Sign out</button>
+      <Head>
+        <title>Sign In or Sign Up</title>
+      </Head>
+      <LpNavBar isOnlyLogo={true} />
+      <Container
+        maxWidth="xl"
+        sx={{
+          pt: 8,
+          backgroundColor: 'var(--amplify-colors-border-tertiary)',
+          height: '100vh',
+        }}
+      >
+        <Authenticator />
+      </Container>
     </>
   )
 }
 
-export default withAuthenticator(App)
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
+  const { Auth } = withSSRContext(context)
 
-export async function getStaticProps() {
-  return {
-    props: {
-      isPassedToWithAuthenticator: true,
-    },
+  try {
+    await Auth.currentAuthenticatedUser()
+    return {
+      redirect: {
+        permanent: false,
+        destination: Path.Problem,
+      },
+    }
+  } catch (err) {
+    return {
+      props: {
+        messages: require(`@/locales/${locale}.json`),
+      },
+    }
   }
 }

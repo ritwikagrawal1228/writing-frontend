@@ -27,7 +27,11 @@ const languages = {
   ja: '日本語',
 }
 
-export default function LpNavBar() {
+type Props = {
+  isOnlyLogo?: boolean
+}
+
+export default function LpNavBar({ isOnlyLogo = false }: Props) {
   const router = useRouter()
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('LP')
@@ -63,7 +67,7 @@ export default function LpNavBar() {
 
   return (
     <>
-      <AppBar position="static" color="secondary">
+      <AppBar position="static" color="secondary" elevation={5}>
         <Container maxWidth="lg">
           <Toolbar disableGutters>
             <Image src="/logo.png" height={30} width={48.54} alt="logo" />
@@ -83,104 +87,110 @@ export default function LpNavBar() {
               IELTS Writing Helper
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                color="primary"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: 'block', md: 'none' },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem
-                    key={page}
+            {!isOnlyLogo && (
+              <>
+                <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleOpenNavMenu}
+                    color="inherit"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
                     color="primary"
-                    onClick={handleCloseNavMenu}
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                    sx={{
+                      display: { xs: 'block', md: 'none' },
+                    }}
                   >
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
+                    {pages.map((page) => (
+                      <MenuItem
+                        key={page}
+                        color="primary"
+                        onClick={handleCloseNavMenu}
+                      >
+                        <Typography textAlign="center">{page}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                  {pages.map((page) => (
+                    <Button
+                      key={page}
+                      onClick={handleCloseNavMenu}
+                      sx={{ color: colors.base.black, display: 'block' }}
+                    >
+                      {page}
+                    </Button>
+                  ))}
+                </Box>
+                <Box sx={{ flexGrow: 0, mr: 5 }}>
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <TranslateIcon />
+                      <Typography
+                        variant="caption"
+                        fontSize={fontSizes.m}
+                        sx={{ ml: 1 }}
+                      >
+                        {languages[router.locale as keyof typeof languages]}
+                      </Typography>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    {Object.keys(langs).map((lang) => (
+                      <MenuItem
+                        key={lang}
+                        onClick={() => handleCloseUserMenu(lang)}
+                      >
+                        <Typography textAlign="center">
+                          {langs[lang]}
+                        </Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
                 <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ color: colors.base.black, display: 'block' }}
+                  variant="contained"
+                  endIcon={<DoubleArrowIcon />}
+                  onClick={toAuthPage}
                 >
-                  {page}
+                  <b>Start Now</b>
                 </Button>
-              ))}
-            </Box>
-            <Box sx={{ flexGrow: 0, mr: 5 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <TranslateIcon />
-                  <Typography
-                    variant="caption"
-                    fontSize={fontSizes.m}
-                    sx={{ ml: 1 }}
-                  >
-                    {languages[router.locale as keyof typeof languages]}
-                  </Typography>
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {Object.keys(langs).map((lang) => (
-                  <MenuItem
-                    key={lang}
-                    onClick={() => handleCloseUserMenu(lang)}
-                  >
-                    <Typography textAlign="center">{langs[lang]}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-            <Button
-              variant="contained"
-              endIcon={<DoubleArrowIcon />}
-              onClick={toAuthPage}
-            >
-              <b>Start Now</b>
-            </Button>
+              </>
+            )}
           </Toolbar>
         </Container>
       </AppBar>

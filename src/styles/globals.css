@@ -26,3 +26,32 @@ a {
     background: black;
   }
 }
+
+
+.amplify-button[data-variation='primary'] {
+  background: linear-gradient(
+    to right,
+    var(--amplify-colors-red-80),
+    var(--amplify-colors-red-40)
+  );
+}
+
+[data-amplify-authenticator] {
+  --amplify-components-button-primary-background-color: var(--amplify-colors-red-60);
+  --amplify-components-button-primary-active-background-color: var(--amplify-colors-red-60);
+  --amplify-components-button-primary-visited-background-color: var(--amplify-colors-red-60);
+  --amplify-components-button-primary-focus-background-color: var(--amplify-colors-red-60);
+  --amplify-components-button-primary-hover-background-color: var(--amplify-colors-red-40);
+  --amplify-components-button-link-color: var(--amplify-colors-red-60);
+  --amplify-components-button-link-hover-color: var(--amplify-colors-red-60);
+  --amplify-components-button-link-focus-color: var(--amplify-colors-red-60);
+  --amplify-components-button-link-active-color: peachpuff;
+  --amplify-components-button-link-hover-background-color: peachpuff;
+  --amplify-components-button-link-active-background-color: var(--amplify-colors-red-40);
+  --amplify-components-tabs-item-active-color: var(--amplify-colors-red-60);
+  --amplify-components-tabs-item-hover-color: var(--amplify-colors-red-60);
+  --amplify-components-tabs-item-active-border-color: var(--amplify-colors-red-60);
+  --amplify-components-tabs-item-background-color	: var(--amplify-colors-neutral-90);
+  --amplify-components-tabs-item-disabled-background-color: var(--amplify-colors-neutral-90);
+  --amplify-components-authenticator-state-inactive-background-color: var(--amplify-colors-background-tertiary);
+}
