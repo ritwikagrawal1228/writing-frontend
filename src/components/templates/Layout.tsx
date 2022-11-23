@@ -1,14 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, {
-  createContext,
-  FC,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { createContext, FC, useMemo, useState } from 'react'
 
 import { useAuthenticator } from '@aws-amplify/ui-react'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -62,29 +55,6 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
   const router = useRouter()
   const { user, signOut } = useAuthenticator((context) => [context.user])
 
-  useEffect(() => {
-    console.log('user', user)
-  }, [user])
-
-  useLayoutEffect(() => {
-    setMode(() => {
-      const prevMode = localStorage.getItem('theme')
-      if (prevMode !== null) {
-        return prevMode as PaletteMode
-      }
-
-      const machineMode =
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
-
-      localStorage.setItem('theme', machineMode)
-
-      return machineMode
-    })
-  }, [])
-
   const colorMode = useMemo(
     () => ({
       // The dark mode switch would invoke this method
@@ -126,7 +96,6 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
     if (menu === 'Logout') {
       signOut()
       router.push(Path.Auth)
-      console.log(signOut)
     }
 
     setAnchorElUser(null)

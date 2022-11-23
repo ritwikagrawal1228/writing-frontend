@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+import { withSSRContext } from 'aws-amplify'
 import axios from 'axios'
 
 type Data = {
@@ -13,7 +14,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  const accessToken = ''
+  const { Auth } = withSSRContext({ req })
+  const user = await Auth.currentAuthenticatedUser()
+  const accessToken = user.signInUserSession.accessToken.jwtToken
 
   axios
     .post(uri, req.body, {
@@ -23,7 +26,7 @@ export default async function handler(
       },
     })
     .then(({ data }) => {
-      // console.log('res', data.data)
+      console.log('res', data.data)
     })
 
   res.end()

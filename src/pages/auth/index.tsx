@@ -29,7 +29,7 @@ export default function Auth() {
   return (
     <>
       <Head>
-        <title>Sign In or Sign Up</title>
+        <title>Sign In | Sign Up</title>
       </Head>
       <LpNavBar isOnlyLogo={true} />
       <Container

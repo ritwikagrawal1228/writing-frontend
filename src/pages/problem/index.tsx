@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next'
-import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { useQuery, gql } from '@apollo/client'
 import { withSSRContext } from 'aws-amplify'
@@ -22,18 +21,11 @@ export default function Problem({ authenticated, userStr }: Props) {
     }
   `)
 
-  useEffect(() => {
-    console.log(user)
-  }, [user])
-
   return (
     <Layout title="Problems" description="a">
       <>
         Signed in as {user.name}
         <br />
-        {/* <button onClick={signOut}>Sign Out</button> */}
-        <br />
-        <Link href="/setting">設定ページへ</Link>
       </>
     </Layout>
   )
@@ -41,7 +33,7 @@ export default function Problem({ authenticated, userStr }: Props) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context
-  const { Auth } = withSSRContext(context)
+  const { Auth } = withSSRContext({ req: context.req })
 
   try {
     const user = await Auth.currentAuthenticatedUser()
@@ -54,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     }
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return {
       redirect: {
         permanent: false,
