@@ -1,0 +1,22 @@
+{
+  "LP": {
+    "title": "IELTS Writing Helper | Manage your essays for IELTS writing tasks",
+    "catch": "How do you manage your essays \n for IELTS writing tasks?",
+    "catchDescription": "This app helps you manage your essays for IELTS writing tasks. From writing essays to reviewing essays, it's all taken care of.",
+    "language": "Language"
+  },
+  "Nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "profile": "Profile",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "admin": "Admin",
+    "userManagement": "User Management",
+    "siteSettings": "Site Settings"
+  }
+}
