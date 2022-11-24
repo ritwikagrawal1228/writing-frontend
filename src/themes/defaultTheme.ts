@@ -1,10 +1,10 @@
-import { outlinedInputClasses, ThemeOptions } from '@mui/material'
+import { outlinedInputClasses, PaletteMode, ThemeOptions } from '@mui/material'
 
 import { colors, fontSizes } from '@/themes/globalStyles'
 
-export const defaultTheme: ThemeOptions = {
+export const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
   palette: {
-    mode: 'light',
+    mode,
     common: {
       black: colors.base.black,
       white: colors.base.white,
@@ -30,8 +30,8 @@ export const defaultTheme: ThemeOptions = {
       default: colors.bg.highlighted,
     },
     text: {
-      primary: colors.base.black,
-      secondary: colors.base.gray,
+      primary: mode === 'dark' ? colors.base.white : colors.base.black,
+      secondary: mode === 'dark' ? colors.base.white : colors.base.gray,
     },
     action: {
       disabled: colors.disabled.main,
@@ -64,4 +64,4 @@ export const defaultTheme: ThemeOptions = {
       },
     },
   },
-}
+})
