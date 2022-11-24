@@ -17,12 +17,14 @@ export default async function handler(
   const { Auth } = withSSRContext({ req })
   const user = await Auth.currentAuthenticatedUser()
   const accessToken = user.signInUserSession.accessToken.jwtToken
+  const IdToken = user.signInUserSession.idToken.jwtToken
 
   axios
     .post(uri, req.body, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
+        'ID-Token': IdToken,
       },
     })
     .then(({ data }) => {
