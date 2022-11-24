@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { Auth } = withSSRContext(context)
 
   try {
-    await Auth.currentAuthenticatedUser()
+    const u = await Auth.currentAuthenticatedUser()
     return {
       redirect: {
         permanent: false,
