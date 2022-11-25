@@ -2,9 +2,13 @@ import type { AppProps } from 'next/app'
 import React, { useEffect, useMemo } from 'react'
 import '@/styles/globals.css'
 
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { Authenticator } from '@aws-amplify/ui-react'
-import { createTheme, PaletteMode, ThemeProvider } from '@mui/material'
+import {
+  createTheme,
+  CssBaseline,
+  PaletteMode,
+  ThemeProvider,
+} from '@mui/material'
 import { Amplify } from 'aws-amplify'
 import { NextIntlProvider } from 'next-intl'
 
@@ -15,10 +19,6 @@ import { getDesignTokens } from '@/themes/defaultTheme'
 Amplify.configure(awsExports)
 
 export default function App({ Component, pageProps }: AppProps) {
-  const client = new ApolloClient({
-    uri: '/api/graphql',
-    cache: new InMemoryCache(),
-  })
   const [mode, setMode] = React.useState<'light' | 'dark'>('light')
   useEffect(() => {
     setMode(() => {
@@ -53,16 +53,15 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [mode])
 
   return (
-    <ApolloProvider client={client}>
-      <NextIntlProvider messages={pageProps.messages}>
-        <Authenticator.Provider>
-          <ColorModeContext.Provider value={colorMode}>
-            <ThemeProvider theme={theme}>
-              <Component {...pageProps} />
-            </ThemeProvider>
-          </ColorModeContext.Provider>
-        </Authenticator.Provider>
-      </NextIntlProvider>
-    </ApolloProvider>
+    <NextIntlProvider messages={pageProps.messages}>
+      <Authenticator.Provider>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </Authenticator.Provider>
+    </NextIntlProvider>
   )
 }

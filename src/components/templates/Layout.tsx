@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { FC, Fragment } from 'react'
 
@@ -9,11 +10,13 @@ import Brightness4Icon from '@mui/icons-material/Brightness4'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import MenuIcon from '@mui/icons-material/Menu'
+import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import TranslateIcon from '@mui/icons-material/Translate'
 import {
   AppBar,
   Avatar,
   Box,
+  Breadcrumbs,
   Button,
   Collapse,
   Container,
@@ -37,12 +40,11 @@ import { ColorModeContext } from '@/context/ColorMode'
 import { colors } from '@/themes/globalStyles'
 import { stringAvatar } from '@/utils/avator'
 
-const drawerWidth = 220
-
 type LayoutProps = {
   title: string
   description?: string
   children: React.ReactNode
+  breadcrumbs?: { label: string; href?: string }[]
 }
 
 const languages = {
@@ -50,40 +52,17 @@ const languages = {
   ja: '日本語',
 }
 
-const pages = ['Problems', 'Tips']
 const langMenuItems = [
   { label: 'English', value: 'en' },
   { label: '日本語', value: 'ja' },
 ]
-const settings = [
-  {
-    key: 'profileSetting',
-    text: 'Profile Settings',
-    type: 'text',
-    icon: <ManageAccountsIcon />,
-  },
-  {
-    key: 'language',
-    text: 'Language',
-    type: 'collapse',
-    icon: <TranslateIcon />,
-    children: langMenuItems,
-  },
-  {
-    key: 'colorMode',
-    text: 'Switch Color Mode',
-    type: 'text',
-    icon: <Brightness4Icon />,
-  },
-  {
-    key: 'signOut',
-    text: 'Sign Out',
-    type: 'text',
-    icon: <ExitToAppIcon />,
-  },
-]
 
-const Layout: FC<LayoutProps> = ({ children, title, description }) => {
+const Layout: FC<LayoutProps> = ({
+  children,
+  title,
+  description,
+  breadcrumbs,
+}) => {
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('Nav')
   const router = useRouter()
@@ -97,6 +76,39 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
   )
   const [open, setOpen] = React.useState(false)
 
+  const pages = [
+    { label: t('menu.problem'), href: Path.Problem },
+    { label: t('menu.tip'), href: Path.Tip },
+  ]
+
+  const settings = [
+    {
+      key: 'profileSetting',
+      text: t('profileMenu.profile'),
+      type: 'text',
+      icon: <ManageAccountsIcon />,
+    },
+    {
+      key: 'language',
+      text: t('profileMenu.language'),
+      type: 'collapse',
+      icon: <TranslateIcon />,
+      children: langMenuItems,
+    },
+    {
+      key: 'colorMode',
+      text: t('profileMenu.colorMode'),
+      type: 'text',
+      icon: <Brightness4Icon />,
+    },
+    {
+      key: 'signOut',
+      text: t('profileMenu.signOut'),
+      type: 'text',
+      icon: <ExitToAppIcon />,
+    },
+  ]
+
   const handleClick = () => {
     setOpen(!open)
   }
@@ -108,7 +120,8 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
     setAnchorElUser(event.currentTarget)
   }
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (href: string) => {
+    router.push(href)
     setAnchorElNav(null)
   }
   const handleCloseUserMenu = (menu: string) => {
@@ -202,11 +215,11 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
               >
                 {pages.map((page) => (
                   <MenuItem
-                    key={page}
+                    key={page.label}
                     color="primary"
-                    onClick={handleCloseNavMenu}
+                    onClick={() => handleCloseNavMenu(page.href)}
                   >
-                    <Typography textAlign="center">{page}</Typography>
+                    <Typography textAlign="center">{page.label}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -214,12 +227,12 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
                 <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
+                  key={page.label}
+                  onClick={() => handleCloseNavMenu(page.href)}
                   color="inherit"
                   sx={{ display: 'block' }}
                 >
-                  {page}
+                  {page.label}
                 </Button>
               ))}
             </Box>
@@ -307,7 +320,7 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
       </AppBar>
       <Box
         sx={{
-          height: 30,
+          height: 35,
           backgroundColor:
             theme.palette.mode === 'dark'
               ? colors.base.gray
@@ -316,9 +329,28 @@ const Layout: FC<LayoutProps> = ({ children, title, description }) => {
         }}
       >
         <Container maxWidth="lg">
-          <Typography fontSize={12} sx={{ lineHeight: '30px' }}>
-            Problem list
-          </Typography>
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+          >
+            {breadcrumbs?.map((b, i) =>
+              b.href ? (
+                <Link href={b.href} key={i}>
+                  <Typography
+                    sx={{ lineHeight: '35px', textDecoration: 'underline' }}
+                    color="link"
+                    fontSize="16px"
+                  >
+                    {b.label}
+                  </Typography>
+                </Link>
+              ) : (
+                <Typography fontSize="16px" key={i} sx={{ lineHeight: '35px' }}>
+                  {b.label}
+                </Typography>
+              ),
+            )}
+          </Breadcrumbs>
         </Container>
       </Box>
       <Box

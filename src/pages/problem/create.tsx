@@ -1,13 +1,16 @@
 import { GetServerSideProps } from 'next'
-import React from 'react'
+import React, { useState } from 'react'
 
-import AddIcon from '@mui/icons-material/Add'
+import SaveIcon from '@mui/icons-material/Save'
 import { Box, Button, Paper, useTheme } from '@mui/material'
 import { withSSRContext } from 'aws-amplify'
+import { useTranslations } from 'next-intl'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
+import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
+import { Path } from '@/constants/Path'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 
 type Props = {
@@ -18,6 +21,8 @@ type Props = {
 export default function ProblemCreate({ authenticated, userStr }: Props) {
   const user = JSON.parse(userStr || '{}')
   const theme = useTheme()
+  const t = useTranslations('Nav')
+  const [photo, setPhoto] = useState<File | undefined>(undefined)
 
   const methods = useForm<CreateProblemForm>({
     mode: 'onChange',
@@ -29,20 +34,29 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
   }
 
   return (
-    <Layout title="Problems" description="a">
+    <Layout
+      title="Problems"
+      description="a"
+      breadcrumbs={[
+        { label: 'Problem List', href: Path.Problem },
+        { label: 'Problem Create', href: undefined },
+      ]}
+    >
       <TitleBox title="Problem Create">
         <Box sx={{ maxHeight: '36px' }}>
-          <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+          <Button color="primary" variant="contained" startIcon={<SaveIcon />}>
             <b>保存</b>
           </Button>
         </Box>
       </TitleBox>
-      <Paper sx={{ minHeight: '500px', textAlign: 'center' }}>
+      <Paper sx={{ px: 5, py: 3, pb: 5 }}>
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
             style={{ width: '100%' }}
-          ></form>
+          >
+            <ProblemListForm photo={photo} setPhoto={setPhoto} />
+          </form>
         </FormProvider>
       </Paper>
     </Layout>

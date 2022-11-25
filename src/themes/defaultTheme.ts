@@ -26,6 +26,9 @@ export const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
     info: {
       main: colors.base.black,
     },
+    background: {
+      default: mode === 'dark' ? '' : colors.bg.highlighted,
+    },
     text: {
       primary: mode === 'dark' ? colors.base.white : colors.base.black,
       secondary: mode === 'dark' ? colors.base.white : colors.base.gray,

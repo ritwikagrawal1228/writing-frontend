@@ -3,7 +3,7 @@ import React, { FC, memo, ReactNode } from 'react'
 import InfoIcon from '@mui/icons-material/Info'
 import { Box, Typography, Alert } from '@mui/material'
 
-import { colors, fontSizes, spaces } from '@/themes/globalStyles'
+import { fontSizes, spaces } from '@/themes/globalStyles'
 
 type Props = {
   title: string | ReactNode
@@ -30,7 +30,6 @@ export const TitleBox: FC<Props> = memo(({ title, children, guide }) => {
             severity="error"
             icon={<InfoIcon fontSize="inherit" sx={{ color: '#F2901F' }} />}
             sx={{
-              background: colors.primary.light,
               fontSize: fontSizes.s,
               paddingY: 0,
               marginLeft: 2,

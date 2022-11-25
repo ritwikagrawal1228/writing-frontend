@@ -4,4 +4,5 @@ export enum Path {
   Problem = '/problem',
   ProblemCreate = '/problem/create',
   ProfileSettings = '/profile-settings',
+  Tip = '/tip',
 }

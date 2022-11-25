@@ -1,7 +1,26 @@
 {
   "LP": {
+    "title": "IELTS Writing Helper | IELTSライティングタスク管理ツール",
     "catch": "How do you manage your essays \n for IELTS writing tasks?",
     "catchDescription": "This app helps you manage your essays for IELTS writing tasks. From writing essays to reviewing essays, it's all taken care of.",
     "language": "Language"
+  },
+  "Nav": {
+    "menu": {
+      "problem": "問題",
+      "tip": "ヒント"
+    },
+    "profileMenu": {
+      "profile": "プロフィール設定",
+      "language": "言語",
+      "colorMode": "カラーモード変更",
+      "signOut": "サインアウト"
+    }
+  },
+  "Problem": {
+    "title": "問題一覧",
+    "description": "ライティングの問題一覧",
+    "addBtn": "新規作成",
+    "empty": "まだ問題がありません。"
   }
 }

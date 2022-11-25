@@ -1,4 +1,6 @@
 export type CreateProblemForm = {
   title: string
-  description: string
+  taskType: string
+  question: string
+  questionImage: string
 }
