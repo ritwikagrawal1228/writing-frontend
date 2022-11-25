@@ -1,5 +1,0 @@
-query {
-  problemsByUserId(userId:"U1") {
-    id
-  }
-}

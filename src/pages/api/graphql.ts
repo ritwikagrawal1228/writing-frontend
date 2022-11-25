@@ -19,7 +19,7 @@ export default async function handler(
   const accessToken = user.signInUserSession.accessToken.jwtToken
   const IdToken = user.signInUserSession.idToken.jwtToken
 
-  axios
+  const posts = await axios
     .post(uri, req.body, {
       headers: {
         'Content-Type': 'application/json',
@@ -28,8 +28,8 @@ export default async function handler(
       },
     })
     .then(({ data }) => {
-      console.log('res', data.data)
+      return data
     })
 
-  res.end()
+  res.status(200).json(posts)
 }

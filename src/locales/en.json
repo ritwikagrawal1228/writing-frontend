@@ -6,17 +6,21 @@
     "language": "Language"
   },
   "Nav": {
-    "home": "Home",
-    "about": "About",
-    "contact": "Contact",
-    "login": "Login",
-    "logout": "Logout",
-    "register": "Register",
-    "profile": "Profile",
-    "dashboard": "Dashboard",
-    "settings": "Settings",
-    "admin": "Admin",
-    "userManagement": "User Management",
-    "siteSettings": "Site Settings"
+    "menu": {
+      "problem": "Problem",
+      "tip": "Tips"
+    },
+    "profileMenu": {
+      "profile": "Profile Settings",
+      "language": "Language",
+      "colorMode": "Switch Color Mode",
+      "signOut": "Sign Out"
+    }
+  },
+  "Problem": {
+    "title": "Problem List",
+    "description": "List of Problem",
+    "addBtn": "Create New",
+    "empty": "There is no problem yet."
   }
 }
