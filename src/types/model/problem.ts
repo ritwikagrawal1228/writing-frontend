@@ -6,7 +6,7 @@ export type Problem = {
   id: string
   title: string
   question: string
-  questionImageUrl: string
+  questionImageKey: string
   taskType: TaskType
   createdAt: string
   updatedAt: string
