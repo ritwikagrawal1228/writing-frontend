@@ -2,13 +2,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { withSSRContext } from 'aws-amplify'
-import axios from 'axios'
-
-type Data = {
-  name: string
-}
+import { GraphQLClient } from 'graphql-request'
 
 const uri = process.env.API_URL
+
+type Data = object | unknown
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,17 +17,21 @@ export default async function handler(
   const accessToken = user.signInUserSession.accessToken.jwtToken
   const IdToken = user.signInUserSession.idToken.jwtToken
 
-  const posts = await axios
-    .post(uri, req.body, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-        'ID-Token': IdToken,
-      },
-    })
-    .then(({ data }) => {
-      return data
-    })
+  const client = new GraphQLClient(uri, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+      'ID-Token': IdToken,
+    },
+  })
 
-  res.status(200).json(posts)
+  try {
+    const response = await client.request<Data>(
+      req.body.query,
+      req.body.variables,
+    )
+    res.status(200).json(response)
+  } catch (error) {
+    res.status(500).json(error)
+  }
 }
