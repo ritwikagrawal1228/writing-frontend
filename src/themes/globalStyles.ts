@@ -6,9 +6,9 @@ const colors = {
     light: '#e8465f',
   },
   secondary: {
-    main: '#fff',
-    dark: '#b2b2b2',
-    light: '#fff',
+    main: '#6019E3',
+    dark: '#43119e',
+    light: '#7f47e8',
   },
   warning: {
     main: '#D32F2F',

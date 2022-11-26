@@ -158,7 +158,7 @@ const Layout: FC<LayoutProps> = ({
         <meta name="description" content={description} />
       </Head>
       <CssBaseline />
-      <AppBar position="static" color="secondary">
+      <AppBar position="static" color="default">
         <Container maxWidth="lg">
           <Toolbar
             sx={{

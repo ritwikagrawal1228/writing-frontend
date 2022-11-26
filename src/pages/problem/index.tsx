@@ -1,31 +1,36 @@
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import AddIcon from '@mui/icons-material/Add'
 import {
   Box,
   Button,
   Card,
+  CardActionArea,
+  CardActions,
   CardContent,
   CardMedia,
+  Chip,
   CircularProgress,
-  List,
-  ListItem,
+  Grid,
   Paper,
   Typography,
   useTheme,
 } from '@mui/material'
-import { withSSRContext } from 'aws-amplify'
-import request, { gql } from 'graphql-request'
+import { Storage, withSSRContext } from 'aws-amplify'
+import { gql } from 'graphql-request'
 import { useTranslations } from 'next-intl'
 import useSWR from 'swr'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
-import { colors } from '@/themes/globalStyles'
+import { ProblemType } from '@/constants/ProblemType'
+import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
+import { axios } from '@/utils/axios'
+import { roundSentence } from '@/utils/roundSentense'
 
 type Props = {
   userStr: string
@@ -33,7 +38,9 @@ type Props = {
 }
 
 type ProblemsByUserId = {
-  problemsByUserId: Problem[]
+  data: {
+    problemsByUserId: Problem[]
+  }
 }
 
 export default function ProblemList({ authenticated, userStr }: Props) {
@@ -41,9 +48,11 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
+  const [problems, setProblems] = React.useState<Problem[]>([])
+  const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
   const getQuery = useMemo(() => {
     return gql`query {
-      problemsByUserId(userId: "${user.id}") {
+      problemsByUserId(userId: "${user.sub}") {
         id
         title
         question
@@ -53,13 +62,30 @@ export default function ProblemList({ authenticated, userStr }: Props) {
       }
     }`
   }, [user])
-  const { data, error } = useSWR<ProblemsByUserId>(getQuery, (query) =>
-    request(Path.APIGraphql, query),
+  const { data: res, error } = useSWR<ProblemsByUserId>(getQuery, (query) =>
+    axios.post(Path.APIGraphql, { query }),
   )
 
   const moveCreatePage = () => {
     router.push(Path.ProblemCreate)
   }
+
+  useEffect(() => {
+    if (!res) {
+      return
+    }
+
+    res.data.problemsByUserId.map((prob) => {
+      if (prob.questionImageKey) {
+        Storage.get(prob.questionImageKey, {
+          level: 'private',
+        }).then((res) => {
+          // update images src
+          setImages((prev) => [...prev, { id: prob.id, src: res }])
+        })
+      }
+    })
+  }, [res])
 
   return (
     <Layout
@@ -67,7 +93,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
       description={t('description')}
       breadcrumbs={[{ label: t('title'), href: undefined }]}
     >
-      <TitleBox title={t('title')} guide="">
+      <TitleBox title={t('title')} guide="You can store up to 10 problems">
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
@@ -79,48 +105,75 @@ export default function ProblemList({ authenticated, userStr }: Props) {
           </Button>
         </Box>
       </TitleBox>
-      <Paper sx={{ minHeight: '300px', textAlign: 'center', p: 3 }}>
-        {!data ? (
+      <Paper
+        sx={{ minHeight: '600px', textAlign: 'center', pt: 5, pl: 5, pb: 5 }}
+      >
+        {!res ? (
           <Box sx={{ p: 10 }}>
             <CircularProgress size={80} />
           </Box>
-        ) : data.problemsByUserId.length > 0 ? (
-          <List component="div" disablePadding>
-            {data.problemsByUserId.map((problem: any) => (
-              <ListItem key={problem.id}>
+        ) : res.data.problemsByUserId?.length > 0 ? (
+          <Grid
+            container
+            spacing={5}
+            sx={{ width: '100%', mr: 0 }}
+            justifyContent="center"
+          >
+            {res.data.problemsByUserId.map((problem: any) => (
+              <Grid item key={problem.id}>
                 <Card
                   sx={{
-                    display: 'flex',
+                    width: '330px',
+                    height: '534px',
                     backgroundColor:
                       theme.palette.mode === 'dark'
                         ? colors.base.gray
                         : colors.disabled.light,
                   }}
+                  key={problem.id}
                 >
-                  <CardMedia
-                    component="img"
-                    sx={{ width: 300, height: 150 }}
-                    image={problem.questionImageKey}
-                    alt="Live from space album cover"
-                  />
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
-                      <Typography component="div" variant="h5">
-                        {problem.title}
-                      </Typography>
+                  <CardActionArea sx={{}}>
+                    <CardMedia
+                      component="img"
+                      height="204px"
+                      image={
+                        images.find((image) => image.id === problem.id)?.src ||
+                        'img/noImage.jpg'
+                      }
+                    />
+                    <CardContent
+                      sx={{ minHeight: '270px', maxHeight: '270px' }}
+                    >
                       <Typography
-                        variant="subtitle1"
-                        color="text.secondary"
-                        component="div"
+                        gutterBottom
+                        fontSize={fontSizes.xl}
+                        fontWeight="bold"
                       >
-                        {problem.question}
+                        {roundSentence(problem.title, 55)}
+                      </Typography>
+                      <Typography fontSize={fontSizes.m} color="text.secondary">
+                        {roundSentence(problem.question, 240)}
                       </Typography>
                     </CardContent>
-                  </Box>
+                  </CardActionArea>
+                  <CardActions>
+                    <Button size="small" color="primary" sx={{ mr: 3 }}>
+                      <Chip
+                        variant="outlined"
+                        label={ProblemType[problem.taskType]}
+                        color={
+                          ProblemType[problem.taskType] === 'Task 1'
+                            ? 'primary'
+                            : 'secondary'
+                        }
+                      />
+                    </Button>
+                    {new Date(problem.createdAt).toLocaleDateString()}
+                  </CardActions>
                 </Card>
-              </ListItem>
+              </Grid>
             ))}
-          </List>
+          </Grid>
         ) : (
           <Box sx={{ p: 10 }}>
             <Typography variant="h6" fontWeight="bold">

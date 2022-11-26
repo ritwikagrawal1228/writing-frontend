@@ -116,7 +116,7 @@ export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
           <Controller
             name="taskType"
             control={control}
-            defaultValue="task1"
+            defaultValue="Type_#Task1"
             render={({ field }) => (
               <BaseRadio
                 radioContents={[
@@ -141,10 +141,10 @@ export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
             render={({ field }) => (
               <MultiLineInput
                 labelText="Question"
-                placeholderText="This criterion assesses how appropriately,
-                accurately and relevantly the response fulfils the
-                requirements set out in the task, using the
-                minimum of 150 words. "
+                placeholderText="The chart below shows the number of men and women in further education in
+                Britain in three periods and whether they were studying fulltime or part-time.
+                Summarise the information by selecting and reporting the main features, and
+                make comparisons where relevant."
                 {...field}
                 minRowCount={2}
                 pxWidth="100%"

@@ -6,7 +6,7 @@ import { GraphQLClient } from 'graphql-request'
 
 const uri = process.env.API_URL
 
-type Data = object | unknown
+type Data = object
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,13 +25,9 @@ export default async function handler(
     },
   })
 
-  try {
-    const response = await client.request<Data>(
-      req.body.query,
-      req.body.variables,
-    )
-    res.status(200).json(response)
-  } catch (error) {
-    res.status(500).json(error)
-  }
+  const result = await client
+    .request<Data>(req.body.query, req.body.variables)
+    .then((res) => res)
+
+  return res.status(200).json(result)
 }
