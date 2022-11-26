@@ -11,7 +11,7 @@ import {
   Grid,
   IconButton,
 } from '@mui/material'
-import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 
 import { BaseInput } from '@/components/parts/common/inputs/BaseInput'
 import { MultiLineInput } from '@/components/parts/common/inputs/MultiLineInput'
@@ -27,10 +27,8 @@ type Props = {
 export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
   const {
     control,
-    setValue,
     formState: { errors },
   } = useFormContext<CreateProblemForm>()
-  const watchFormValue = useWatch<CreateProblemForm>({ control })
 
   const [isFileTypeError, setIsFileTypeError] = useState<string>('')
   const [isFileSizeError, setIsFileSizeError] = useState<string>('')
@@ -44,10 +42,8 @@ export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
     switch (true) {
       case !!isFileSizeError:
         return isFileSizeError
-        break
       case !!isFileTypeError:
         return isFileTypeError
-        break
       default:
         return ''
         break
@@ -102,6 +98,7 @@ export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
             name="title"
             control={control}
             rules={{ required: '選択してください' }}
+            defaultValue=""
             render={({ field }) => (
               <BaseInput
                 labelText="Title"
@@ -123,8 +120,8 @@ export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
             render={({ field }) => (
               <BaseRadio
                 radioContents={[
-                  { value: 'task1', labelText: 'Type1' },
-                  { value: 'task2', labelText: 'Type2' },
+                  { value: 'Type_#Task1', labelText: 'Type1' },
+                  { value: 'Type_#Task2', labelText: 'Type2' },
                 ]}
                 labelText="Select a type of task"
                 width="m"
@@ -140,6 +137,7 @@ export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
           <Controller
             name="question"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <MultiLineInput
                 labelText="Question"

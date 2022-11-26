@@ -17,7 +17,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { withSSRContext } from 'aws-amplify'
-import request from 'graphql-request'
+import request, { gql } from 'graphql-request'
 import { useTranslations } from 'next-intl'
 import useSWR from 'swr'
 
@@ -42,19 +42,19 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   const t = useTranslations('Problem')
   const router = useRouter()
   const getQuery = useMemo(() => {
-    return `query {
+    return gql`query {
       problemsByUserId(userId: "${user.id}") {
         id
         title
         question
-        questionImageUrl
+        questionImageKey
         taskType
         createdAt
       }
     }`
   }, [user])
   const { data, error } = useSWR<ProblemsByUserId>(getQuery, (query) =>
-    request('/api/graphql', query),
+    request(Path.APIGraphql, query),
   )
 
   const moveCreatePage = () => {
@@ -100,7 +100,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
                   <CardMedia
                     component="img"
                     sx={{ width: 300, height: 150 }}
-                    image={problem.questionImageUrl}
+                    image={problem.questionImageKey}
                     alt="Live from space album cover"
                   />
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
