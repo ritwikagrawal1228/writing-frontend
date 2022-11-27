@@ -67,7 +67,7 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
 
   return (
     <>
-      <AppBar position="static" color="secondary" elevation={5}>
+      <AppBar position="static" color="default" elevation={5}>
         <Container maxWidth="lg">
           <Toolbar disableGutters>
             <Image src="/logo.png" height={30} width={48.54} alt="logo" />
