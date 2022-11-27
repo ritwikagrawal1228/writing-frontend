@@ -26,5 +26,7 @@ export default async function handler(
     .request<Data>(req.body.query, req.body.variables)
     .then((res) => res)
 
+  console.log(result)
+
   return res.status(200).json(result)
 }
