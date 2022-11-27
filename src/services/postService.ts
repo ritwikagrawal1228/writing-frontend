@@ -1,5 +1,7 @@
+import axios from 'axios'
 import { gql } from 'graphql-request'
 
+import { Path } from '@/constants/Path'
 import { Problem } from '@/types/model/problem'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
@@ -27,6 +29,20 @@ const getProblemById = async (id: string, user: any) => {
     .then((res) => res)
 }
 
+const deleteProblemById = async (id: string, user: any): Promise<boolean> => {
+  const query = gql`
+    mutation ($id: ID!) {
+      deleteProblem(id: $id)
+    }
+  `
+  const variables = {
+    id,
+  }
+
+  return axios.post(Path.APIGraphql, { query, variables })
+}
+
 export const postService = {
   getProblemById,
+  deleteProblemById,
 }
