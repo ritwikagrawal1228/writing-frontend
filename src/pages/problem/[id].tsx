@@ -7,72 +7,19 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import EditIcon from '@mui/icons-material/Edit'
 import { Box, Button, Chip, Grid, Paper, Typography } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
-import { gql } from 'graphql-request'
 import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
+import { postService } from '@/services/postService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
-import { getGraphQLClient } from '@/utils/graphqlClient'
 
 type Props = {
   problem: Problem
   userStr: string
-}
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-
-    const { id } = context.query
-    if (typeof id !== 'string') {
-      return { notFound: true }
-    }
-
-    const query = gql`
-      query ($id: String!) {
-        problem(problemId: $id) {
-          id
-          title
-          taskType
-          question
-          questionImageKey
-          createdAt
-        }
-      }
-    `
-    const variables = {
-      id,
-    }
-
-    const client = getGraphQLClient(user)
-
-    const result = await client.request(query, variables).then((res) => res)
-
-    return {
-      props: {
-        problem: result.problem,
-        userStr: JSON.stringify(user.attributes),
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/auth',
-      },
-    }
-  }
 }
 
 export default function ProblemDetail({ problem, userStr }: Props) {
@@ -93,6 +40,10 @@ export default function ProblemDetail({ problem, userStr }: Props) {
         })
     }
   }, [problem])
+
+  const moveEditPage = (id: string) => {
+    router.push(`${Path.ProblemEdit}/${id}`)
+  }
 
   return (
     <Layout
@@ -119,6 +70,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 color="secondary"
                 variant="outlined"
                 startIcon={<EditIcon />}
+                onClick={() => moveEditPage(problem.id)}
               >
                 <b>Edit</b>
               </Button>
@@ -197,4 +149,38 @@ export default function ProblemDetail({ problem, userStr }: Props) {
       </Grid>
     </Layout>
   )
+}
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const { locale } = context
+  const { Auth } = withSSRContext({ req: context.req })
+
+  try {
+    const user = await Auth.currentAuthenticatedUser()
+
+    const { id } = context.query
+    if (typeof id !== 'string') {
+      return { notFound: true }
+    }
+
+    const result = await postService.getProblemById(id, user)
+
+    return {
+      props: {
+        problem: result.problem,
+        userStr: JSON.stringify(user.attributes),
+        messages: require(`@/locales/${locale}.json`),
+      },
+    }
+  } catch (err) {
+    console.error(err)
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth',
+      },
+    }
+  }
 }

@@ -20,7 +20,7 @@ import { fontSizes, formControlMinWidth } from '@/themes/globalStyles'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 
 type Props = {
-  photo?: File
+  photo?: File | string
   setPhoto: (photo?: File) => void
 }
 
@@ -198,7 +198,12 @@ export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
               <HighlightOffOutlinedIcon />
             </IconButton>
             <br />
-            <img src={URL.createObjectURL(photo)} height="300px" />
+            <img
+              src={
+                typeof photo === 'string' ? photo : URL.createObjectURL(photo)
+              }
+              height="300px"
+            />
           </>
         )}
       </Grid>
