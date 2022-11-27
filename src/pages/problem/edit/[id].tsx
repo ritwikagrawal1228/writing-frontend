@@ -78,9 +78,7 @@ export default function ProblemEdit({ problem, userStr }: Props) {
       question: problem.question,
     })
     if (problem.questionImageKey) {
-      Storage.get(problem.questionImageKey, {
-        level: 'private',
-      })
+      Storage.get(problem.questionImageKey)
         .then((res) => {
           setPhoto(res)
         })
@@ -94,9 +92,7 @@ export default function ProblemEdit({ problem, userStr }: Props) {
     let key = ''
     if (photo && typeof photo !== 'string') {
       if (problem.questionImageKey) {
-        await Storage.remove(problem.questionImageKey, {
-          level: 'private',
-        })
+        await Storage.remove(problem.questionImageKey)
       }
 
       const compPhoto = await imageCompression(photo, {
@@ -107,7 +103,6 @@ export default function ProblemEdit({ problem, userStr }: Props) {
       const res = await Storage.put(
         `${user.sub}-${Date.now()}.${fileExt}`,
         compPhoto,
-        { level: 'private' },
       )
       key = res.key
     } else if (photo && typeof photo === 'string') {
