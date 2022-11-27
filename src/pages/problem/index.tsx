@@ -48,7 +48,6 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
-  const [problems, setProblems] = React.useState<Problem[]>([])
   const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
   const getQuery = useMemo(() => {
     return gql`query {
@@ -68,6 +67,10 @@ export default function ProblemList({ authenticated, userStr }: Props) {
 
   const moveCreatePage = () => {
     router.push(Path.ProblemCreate)
+  }
+
+  const moveDetail = (problemId: string) => {
+    router.push(`${Path.Problem}/${problemId}`)
   }
 
   useEffect(() => {
@@ -132,7 +135,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
                   }}
                   key={problem.id}
                 >
-                  <CardActionArea sx={{}}>
+                  <CardActionArea onClick={() => moveDetail(problem.id)}>
                     <CardMedia
                       component="img"
                       height="204px"
@@ -141,9 +144,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
                         'img/noImage.jpg'
                       }
                     />
-                    <CardContent
-                      sx={{ minHeight: '270px', maxHeight: '270px' }}
-                    >
+                    <CardContent sx={{ minHeight: '275px' }}>
                       <Typography
                         gutterBottom
                         fontSize={fontSizes.xl}

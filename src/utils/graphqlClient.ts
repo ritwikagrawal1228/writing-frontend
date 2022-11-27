@@ -1,9 +1,16 @@
 import { GraphQLClient } from 'graphql-request'
 
-import { Path } from '@/constants/Path'
+const uri = process.env.API_URL
 
-export const graphQLClient = new GraphQLClient(Path.APIGraphql, {
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
+export const getGraphQLClient = (user: any) => {
+  const accessToken = user.signInUserSession.accessToken.jwtToken
+  const IdToken = user.signInUserSession.idToken.jwtToken
+
+  return new GraphQLClient(uri, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+      'ID-Token': IdToken,
+    },
+  })
+}

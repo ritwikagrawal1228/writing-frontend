@@ -2,7 +2,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { withSSRContext } from 'aws-amplify'
-import { GraphQLClient } from 'graphql-request'
+
+import { getGraphQLClient } from '@/utils/graphqlClient'
 
 const uri = process.env.API_URL
 
@@ -14,16 +15,12 @@ export default async function handler(
 ) {
   const { Auth } = withSSRContext({ req })
   const user = await Auth.currentAuthenticatedUser()
-  const accessToken = user.signInUserSession.accessToken.jwtToken
-  const IdToken = user.signInUserSession.idToken.jwtToken
 
-  const client = new GraphQLClient(uri, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-      'ID-Token': IdToken,
-    },
-  })
+  if (!req.body.variables) {
+    req.body.variables = { userId: user.sub }
+  }
+
+  const client = getGraphQLClient(user)
 
   const result = await client
     .request<Data>(req.body.query, req.body.variables)
