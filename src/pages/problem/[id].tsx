@@ -46,9 +46,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
 
   useEffect(() => {
     if (problem.questionImageKey) {
-      Storage.get(problem.questionImageKey, {
-        level: 'private',
-      })
+      Storage.get(problem.questionImageKey)
         .then((res) => {
           setImg(res)
         })

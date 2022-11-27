@@ -27,10 +27,11 @@ import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
 import { axios } from '@/utils/axios'
-import { roundSentence } from '@/utils/roundSentense'
+import { roundSentence } from '@/utils/roundSentence'
 
 type Props = {
   userStr: string
@@ -44,14 +45,14 @@ type ProblemsByUserId = {
 }
 
 export default function ProblemList({ authenticated, userStr }: Props) {
-  const user = JSON.parse(userStr || '{}')
+  const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
   const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
   const getQuery = useMemo(() => {
     return gql`query {
-      problemsByUserId(userId: "${user.sub}") {
+      problemsByUserId(userId: "${user?.id}") {
         id
         title
         question
@@ -61,6 +62,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
       }
     }`
   }, [user])
+
   const { data: res, error } = useSWR<ProblemsByUserId>(getQuery, (query) =>
     axios.post(Path.APIGraphql, { query }),
   )
@@ -80,9 +82,9 @@ export default function ProblemList({ authenticated, userStr }: Props) {
 
     res.data.problemsByUserId.map((prob) => {
       if (prob.questionImageKey) {
-        Storage.get(prob.questionImageKey, {
-          level: 'private',
-        }).then((res) => {
+        Storage.get(prob.questionImageKey).then((res) => {
+          console.log(res)
+
           // update images src
           setImages((prev) => [...prev, { id: prob.id, src: res }])
         })
@@ -96,7 +98,10 @@ export default function ProblemList({ authenticated, userStr }: Props) {
       description={t('description')}
       breadcrumbs={[{ label: t('title'), href: undefined }]}
     >
-      <TitleBox title={t('title')} guide="You can store up to 10 problems">
+      <TitleBox
+        title={t('title')}
+        guide={user?.plan === 'FREE' ? 'You can store up to 10 problems' : ''}
+      >
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
@@ -109,7 +114,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
         </Box>
       </TitleBox>
       <Paper
-        sx={{ minHeight: '600px', textAlign: 'center', pt: 5, pl: 5, pb: 5 }}
+        sx={{ minHeight: '460px', textAlign: 'center', pt: 5, pl: 5, pb: 5 }}
       >
         {!res ? (
           <Box sx={{ p: 10 }}>
@@ -120,14 +125,15 @@ export default function ProblemList({ authenticated, userStr }: Props) {
             container
             spacing={5}
             sx={{ width: '100%', mr: 0 }}
-            justifyContent="center"
+            justifyContent="start"
           >
             {res.data.problemsByUserId.map((problem: any) => (
               <Grid item key={problem.id}>
                 <Card
                   sx={{
-                    width: '330px',
-                    height: '534px',
+                    width: '235px',
+                    height: '380.2px',
+                    textAlign: 'left',
                     backgroundColor:
                       theme.palette.mode === 'dark'
                         ? colors.base.gray
@@ -138,22 +144,26 @@ export default function ProblemList({ authenticated, userStr }: Props) {
                   <CardActionArea onClick={() => moveDetail(problem.id)}>
                     <CardMedia
                       component="img"
-                      height="204px"
+                      height="145.2px"
                       image={
                         images.find((image) => image.id === problem.id)?.src ||
                         'img/noImage.jpg'
                       }
                     />
-                    <CardContent sx={{ minHeight: '275px' }}>
+                    <CardContent sx={{ minHeight: '180px', p: 2 }}>
                       <Typography
                         gutterBottom
-                        fontSize={fontSizes.xl}
+                        fontSize={fontSizes.l}
                         fontWeight="bold"
                       >
                         {roundSentence(problem.title, 55)}
                       </Typography>
-                      <Typography fontSize={fontSizes.m} color="text.secondary">
-                        {roundSentence(problem.question, 240)}
+                      <Typography
+                        fontSize={fontSizes.m}
+                        color="text.secondary"
+                        sx={{ wordBreak: 'break-word' }}
+                      >
+                        {roundSentence(problem.question, 47)}
                       </Typography>
                     </CardContent>
                   </CardActionArea>

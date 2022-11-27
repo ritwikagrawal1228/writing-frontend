@@ -17,7 +17,7 @@ export default async function handler(
   const user = await Auth.currentAuthenticatedUser()
 
   if (!req.body.variables) {
-    req.body.variables = { userId: user.sub }
+    req.body.variables = { userId: user.attributes.sub }
   }
 
   const client = getGraphQLClient(user)
@@ -25,8 +25,6 @@ export default async function handler(
   const result = await client
     .request<Data>(req.body.query, req.body.variables)
     .then((res) => res)
-
-  console.log(result)
 
   return res.status(200).json(result)
 }

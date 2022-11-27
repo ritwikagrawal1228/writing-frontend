@@ -44,7 +44,6 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
       const res = await Storage.put(
         `${user.sub}-${Date.now()}.${fileExt}`,
         compPhoto,
-        { level: 'private' },
       )
       key = res.key
     }
