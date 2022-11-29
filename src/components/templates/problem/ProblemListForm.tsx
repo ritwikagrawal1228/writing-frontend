@@ -189,6 +189,10 @@ export const ProblemListForm: FC<Props> = memo(({ photo, setPhoto }) => {
           </Button>
           <FormHelperText sx={{ marginLeft: 0, fontSize: fontSizes.xs }}>
             ※Upload a diagram image or a whole question image from textbook
+            <br />
+            <span style={{ color: 'red' }}>
+              ※This file can be seen by other users
+            </span>
           </FormHelperText>
         </FormControl>
         <br />

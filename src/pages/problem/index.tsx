@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import AddIcon from '@mui/icons-material/Add'
 import {
@@ -19,7 +19,6 @@ import {
   useTheme,
 } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
-import { gql } from 'graphql-request'
 import { useTranslations } from 'next-intl'
 import useSWR from 'swr'
 
@@ -28,9 +27,9 @@ import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { postService } from '@/services/postService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
-import { axios } from '@/utils/axios'
 import { roundSentence } from '@/utils/roundSentence'
 
 type Props = {
@@ -40,7 +39,7 @@ type Props = {
 
 type ProblemsByUserId = {
   data: {
-    problemsByUserId: Problem[]
+    problemsByUserId: Problem[] | []
   }
 }
 
@@ -50,21 +49,9 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   const t = useTranslations('Problem')
   const router = useRouter()
   const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
-  const getQuery = useMemo(() => {
-    return gql`query {
-      problemsByUserId(userId: "${user?.id}") {
-        id
-        title
-        question
-        questionImageKey
-        taskType
-        createdAt
-      }
-    }`
-  }, [user])
 
-  const { data: res, error } = useSWR<ProblemsByUserId>(getQuery, (query) =>
-    axios.post(Path.APIGraphql, { query }),
+  const { data: res } = useSWR<ProblemsByUserId>(user?.id, (userId) =>
+    postService.getProblemsByUserId(userId),
   )
 
   const moveCreatePage = () => {
@@ -98,10 +85,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
       description={t('description')}
       breadcrumbs={[{ label: t('title'), href: undefined }]}
     >
-      <TitleBox
-        title={t('title')}
-        guide={user?.plan === 'FREE' ? 'You can store up to 10 problems' : ''}
-      >
+      <TitleBox title={t('title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"

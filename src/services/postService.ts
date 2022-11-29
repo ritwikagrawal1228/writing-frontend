@@ -5,6 +5,25 @@ import { Path } from '@/constants/Path'
 import { Problem } from '@/types/model/problem'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
+const getProblemsByUserId = async (userId: string) => {
+  if (!userId) {
+    return { data: { problemsByUserId: [] } }
+  }
+
+  const query = gql`query {
+    problemsByUserId(userId: "${userId}") {
+      id
+      title
+      question
+      questionImageKey
+      taskType
+      createdAt
+    }
+  }`
+
+  return axios.post(Path.APIGraphql, { query })
+}
+
 const getProblemById = async (id: string, user: any) => {
   const query = gql`
     query ($id: String!) {
@@ -43,6 +62,7 @@ const deleteProblemById = async (id: string, user: any): Promise<boolean> => {
 }
 
 export const postService = {
+  getProblemsByUserId,
   getProblemById,
   deleteProblemById,
 }
