@@ -81,11 +81,11 @@ export default function ProblemList({ authenticated, userStr }: Props) {
 
   return (
     <Layout
-      title={t('title')}
-      description={t('description')}
-      breadcrumbs={[{ label: t('title'), href: undefined }]}
+      title={t('list.title')}
+      description={t('list.description')}
+      breadcrumbs={[{ label: t('list.title'), href: undefined }]}
     >
-      <TitleBox title={t('title')}>
+      <TitleBox title={t('list.title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
@@ -93,7 +93,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
             variant="contained"
             startIcon={<AddIcon />}
           >
-            <b>{t('addBtn')}</b>
+            <b>{t('list.addBtn')}</b>
           </Button>
         </Box>
       </TitleBox>
@@ -111,12 +111,12 @@ export default function ProblemList({ authenticated, userStr }: Props) {
             sx={{ width: '100%', mr: 0 }}
             justifyContent="start"
           >
-            {res.data.problemsByUserId.map((problem: any) => (
+            {res.data.problemsByUserId.map((problem: Problem) => (
               <Grid item key={problem.id}>
                 <Card
                   sx={{
-                    width: '235px',
-                    height: '380.2px',
+                    width: '324px',
+                    height: '400.4px',
                     textAlign: 'left',
                     backgroundColor:
                       theme.palette.mode === 'dark'
@@ -128,13 +128,13 @@ export default function ProblemList({ authenticated, userStr }: Props) {
                   <CardActionArea onClick={() => moveDetail(problem.id)}>
                     <CardMedia
                       component="img"
-                      height="145.2px"
+                      height="200.2px"
                       image={
                         images.find((image) => image.id === problem.id)?.src ||
-                        'img/noImage.jpg'
+                        '/img/noImage.jpg'
                       }
                     />
-                    <CardContent sx={{ minHeight: '180px', p: 2 }}>
+                    <CardContent sx={{ minHeight: '145.2px', p: 2 }}>
                       <Typography
                         gutterBottom
                         fontSize={fontSizes.l}
@@ -142,29 +142,32 @@ export default function ProblemList({ authenticated, userStr }: Props) {
                       >
                         {roundSentence(problem.title, 55)}
                       </Typography>
-                      <Typography
-                        fontSize={fontSizes.m}
-                        color="text.secondary"
-                        sx={{ wordBreak: 'break-word' }}
-                      >
-                        {roundSentence(problem.question, 47)}
-                      </Typography>
                     </CardContent>
+                    <CardActions>
+                      <Grid
+                        container
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Grid item>
+                          <Chip
+                            variant="outlined"
+                            label={ProblemType[problem.taskType]}
+                            color={
+                              ProblemType[problem.taskType] === 'Task 1'
+                                ? 'primary'
+                                : 'secondary'
+                            }
+                          />
+                        </Grid>
+                        <Grid item>
+                          <Typography fontSize={fontSizes.s}>
+                            {new Date(problem.createdAt).toLocaleDateString()}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </CardActions>
                   </CardActionArea>
-                  <CardActions>
-                    <Button size="small" color="primary" sx={{ mr: 3 }}>
-                      <Chip
-                        variant="outlined"
-                        label={ProblemType[problem.taskType]}
-                        color={
-                          ProblemType[problem.taskType] === 'Task 1'
-                            ? 'primary'
-                            : 'secondary'
-                        }
-                      />
-                    </Button>
-                    {new Date(problem.createdAt).toLocaleDateString()}
-                  </CardActions>
                 </Card>
               </Grid>
             ))}
@@ -172,7 +175,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
         ) : (
           <Box sx={{ p: 10 }}>
             <Typography variant="h6" fontWeight="bold">
-              {t('empty')}
+              {t('list.empty')}
             </Typography>
             <br />
             <Button
@@ -181,7 +184,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
               variant="contained"
               startIcon={<AddIcon />}
             >
-              <b>{t('addBtn')}</b>
+              <b>{t('list.addBtn')}</b>
             </Button>
           </Box>
         )}

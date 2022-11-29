@@ -21,7 +21,7 @@ export const TitleBox: FC<Props> = memo(({ title, children, guide }) => {
         mb: spaces.s,
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <Typography fontSize={fontSizes.xxl} fontWeight="bold">
           {title}
         </Typography>

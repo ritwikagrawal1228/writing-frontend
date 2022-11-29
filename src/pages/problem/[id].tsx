@@ -27,6 +27,7 @@ import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { postService } from '@/services/postService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
@@ -37,7 +38,7 @@ type Props = {
 }
 
 export default function ProblemDetail({ problem, userStr }: Props) {
-  const user = JSON.parse(userStr || '{}')
+  const { user } = useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const router = useRouter()
   const [img, setImg] = React.useState<string | undefined>()
@@ -95,8 +96,8 @@ export default function ProblemDetail({ problem, userStr }: Props) {
       title={problem.title}
       description={problem.question}
       breadcrumbs={[
-        { label: 'Problem List', href: Path.Problem },
-        { label: 'Problem Detail', href: undefined },
+        { label: t('list.title'), href: Path.Problem },
+        { label: t('detail.title'), href: undefined },
       ]}
     >
       {isDeleting && (
@@ -110,7 +111,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
       )}
       <Grid container columnSpacing={2}>
         <Grid item xs={6}>
-          <TitleBox title="Problem Detail">
+          <TitleBox title={t('detail.title')}>
             <Box sx={{ maxHeight: '36px' }}>
               <Button
                 color="primary"
@@ -119,7 +120,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 sx={{ mr: 2 }}
                 onClick={() => confirmDelete()}
               >
-                <b>Delete</b>
+                <b>{t('detail.deleteBtn')}</b>
               </Button>
               <Dialog
                 open={isAlertOpen}
@@ -128,24 +129,23 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  Are you sure you want to delete this problem?
+                  {t('detail.deleteConfirmTitle')}
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    You can not undo this action. <br /> Deleted problems will
-                    be permanently deleted.
+                    {t('detail.deleteConfirmDescription')}
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <Button color="inherit" onClick={handleAlertClose}>
-                    Cancel
+                    {t('detail.deleteConfirmCancelBtn')}
                   </Button>
                   <Button
                     onClick={() => deleteProblem(problem.id)}
                     variant="contained"
                     autoFocus
                   >
-                    delete
+                    {t('detail.deleteConfirmDeleteBtn')}
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -155,7 +155,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 startIcon={<EditIcon />}
                 onClick={() => moveEditPage(problem.id)}
               >
-                <b>Edit</b>
+                <b>{t('detail.editBtn')}</b>
               </Button>
             </Box>
           </TitleBox>
@@ -168,7 +168,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               }}
             >
               <Typography fontSize={fontSizes.m} color="text.secondary">
-                Title:{' '}
+                {t('form.title')}:{' '}
               </Typography>
               <Typography
                 sx={{ ml: 3, mt: 1, wordWrap: 'break-word' }}
@@ -181,7 +181,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               sx={{ p: 3, borderBottom: `1px solid${colors.disabled.light}` }}
             >
               <Typography fontSize={fontSizes.m} color="text.secondary">
-                Type:{' '}
+                {t('form.taskType')}:{' '}
               </Typography>
               <Chip
                 sx={{ ml: 3, mt: 1 }}
@@ -202,7 +202,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               }}
             >
               <Typography fontSize={fontSizes.m} color="text.secondary">
-                Question:{' '}
+                {t('form.question')}:{' '}
               </Typography>
               <Typography
                 sx={{ ml: 3, mt: 1, wordWrap: 'break-word' }}
@@ -215,7 +215,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               sx={{ p: 3, borderBottom: `1px solid${colors.disabled.light}` }}
             >
               <Typography fontSize={fontSizes.m} color="text.secondary">
-                Question Image:{' '}
+                {t('form.questionImage')}:{' '}
               </Typography>
               <Box sx={{ mt: 1 }}>
                 <img
@@ -230,14 +230,14 @@ export default function ProblemDetail({ problem, userStr }: Props) {
           </Paper>
         </Grid>
         <Grid item xs={6}>
-          <TitleBox title="Answer List">
+          <TitleBox title={t('detail.answer.list.title')}>
             <Box sx={{ maxHeight: '36px' }}>
               <Button
                 color="primary"
                 variant="contained"
                 startIcon={<BorderColorOutlinedIcon />}
               >
-                <b>Answer</b>
+                <b>{t('detail.answer.list.addBtn')}</b>
               </Button>
             </Box>
           </TitleBox>

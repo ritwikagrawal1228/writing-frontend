@@ -44,7 +44,7 @@ type ProblemsByUserId = {
 export default function ProblemCreate({ authenticated, userStr }: Props) {
   const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
-  const t = useTranslations('Nav')
+  const t = useTranslations('Problem')
   const [photo, setPhoto] = useState<File | undefined>(undefined)
   const router = useRouter()
   const [limitAlert, setLimitAlert] = useState(false)
@@ -98,7 +98,7 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
         router.push(`${Path.Problem}/${res.data.createProblem.id}`)
       })
       .catch((err) => {
-        if (err.response.data === 'PROBLEM_COUNT_LIMIT') {
+        if (err.response?.data === 'PROBLEM_COUNT_LIMIT') {
           setLimitAlert(true)
         }
       })
@@ -115,13 +115,40 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
     setLimitAlert(false)
   }
 
+  const getAlertWarningTitle = (): React.ReactNode => {
+    const limit =
+      (res?.data?.problemsByUserId && res?.data?.problemsByUserId.length) || 0
+
+    let text: React.ReactNode
+    switch (router.locale) {
+      case 'en':
+        text = (
+          <>
+            You can create <strong>{10 - limit}</strong> more questions!
+          </>
+        )
+        break
+      case 'ja':
+        text = (
+          <>
+            あと<strong>{10 - limit}</strong>問作成できます！
+          </>
+        )
+        break
+      default:
+        break
+    }
+
+    return text
+  }
+
   return (
     <Layout
-      title="Problems"
-      description="a"
+      title={t('create.title')}
+      description={t('create.title')}
       breadcrumbs={[
-        { label: 'Problem List', href: Path.Problem },
-        { label: 'Problem Create', href: undefined },
+        { label: t('list.title'), href: Path.Problem },
+        { label: t('create.title'), href: undefined },
       ]}
     >
       <Snackbar
@@ -134,18 +161,23 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
           severity="error"
           sx={{ width: '100%' }}
         >
-          You need to upgrade your plan to create more problems.
+          {t('create.limitAlertSnackbarTitle')}
         </Alert>
       </Snackbar>
-      <TitleBox title="Problem Create">
+      <TitleBox title={t('create.title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
             variant="contained"
             startIcon={<SaveIcon />}
             onClick={() => methods.handleSubmit(onSubmit)()}
+            disabled={
+              user?.plan === 'FREE' &&
+              res?.data.problemsByUserId &&
+              res.data.problemsByUserId.length >= 10
+            }
           >
-            <b>保存</b>
+            <b>{t('create.submitBtn')}</b>
           </Button>
         </Box>
       </TitleBox>
@@ -155,11 +187,11 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
             <>
               <Alert severity="error">
                 <AlertTitle>
-                  <strong>You can not create a problem!</strong>
+                  <strong>{t('create.limitAlertTitle')}</strong>
                 </AlertTitle>
-                In the free plan, you can save up to 10 questions. <br />
-                If you want to save more questions, please upgrade to the paid
-                plan{' '}
+                {t('create.limitAlertContent1')}
+                <br />
+                {t('create.limitAlertContent2')}{' '}
                 <Link href={Path.Purchase}>
                   <u style={{ color: 'link' }}>here</u>
                 </Link>
@@ -174,16 +206,12 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
                   10 - res.data.problemsByUserId.length > 3 ? 'info' : 'warning'
                 }
               >
-                <AlertTitle>
-                  You can create{' '}
-                  <strong>{10 - res.data.problemsByUserId.length}</strong> more
-                  questions!
-                </AlertTitle>
-                In the free plan, you can save up to 10 questions. <br />
-                If you want to save more questions, please upgrade to the paid
-                plan{' '}
+                <AlertTitle>{getAlertWarningTitle()}</AlertTitle>
+                {t('create.limitAlertContent1')}
+                <br />
+                {t('create.limitAlertContent2')}{' '}
                 <Link href={Path.Purchase}>
-                  <u style={{ color: 'blue' }}>here</u>
+                  <u style={{ color: 'link' }}>{t('create.upgradeLink')}</u>
                 </Link>
                 .
               </Alert>
@@ -198,7 +226,11 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
             onSubmit={methods.handleSubmit(onSubmit)}
             style={{ width: '100%' }}
           >
-            <ProblemListForm photo={photo} setPhoto={setPhoto} />
+            <ProblemListForm
+              photo={photo}
+              setPhoto={setPhoto}
+              locale={router.locale}
+            />
           </form>
         </FormProvider>
       </Paper>

@@ -14,6 +14,7 @@ import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { postService } from '@/services/postService'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 import { Problem } from '@/types/model/problem'
@@ -59,7 +60,7 @@ export const getServerSideProps = async (
 }
 
 export default function ProblemEdit({ problem, userStr }: Props) {
-  const user = JSON.parse(userStr || '{}')
+  const { user } = useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const router = useRouter()
   const [photo, setPhoto] = React.useState<string | File | undefined>()
@@ -101,7 +102,7 @@ export default function ProblemEdit({ problem, userStr }: Props) {
       const fileExt = compPhoto.name.split('.').pop()
 
       const res = await Storage.put(
-        `${user.sub}-${Date.now()}.${fileExt}`,
+        `${user?.id}-${Date.now()}.${fileExt}`,
         compPhoto,
       )
       key = res.key
@@ -119,7 +120,7 @@ export default function ProblemEdit({ problem, userStr }: Props) {
     const variables = {
       input: {
         problemId: problem.id,
-        userId: user.sub,
+        userId: user?.id,
         title: data.title,
         taskType: data.taskType,
         question: data.question,
@@ -137,12 +138,12 @@ export default function ProblemEdit({ problem, userStr }: Props) {
 
   return (
     <Layout
-      title="Problems"
-      description="a"
+      title={t('edit.title')}
+      description={t('edit.description')}
       breadcrumbs={[
-        { label: 'Problem List', href: Path.Problem },
-        { label: 'Problem Detail', href: `${Path.Problem}/${problem.id}` },
-        { label: 'Problem Edit', href: undefined },
+        { label: t('list.title'), href: Path.Problem },
+        { label: t('detail.title'), href: `${Path.Problem}/${problem.id}` },
+        { label: t('edit.title'), href: undefined },
       ]}
     >
       <TitleBox title="Problem Edit">
@@ -153,7 +154,7 @@ export default function ProblemEdit({ problem, userStr }: Props) {
             startIcon={<SaveIcon />}
             onClick={() => methods.handleSubmit(onSubmit)()}
           >
-            <b>Update</b>
+            <b>{t('edit.submitBtn')}</b>
           </Button>
         </Box>
       </TitleBox>
