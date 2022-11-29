@@ -18,9 +18,58 @@
     }
   },
   "Problem": {
-    "title": "問題一覧",
-    "description": "ライティングの問題一覧",
-    "addBtn": "新規作成",
-    "empty": "まだ問題がありません。"
+    "list": {
+      "title": "問題一覧",
+      "description": "問題の一覧ページ | IELTS Writing Helper",
+      "addBtn": "新規作成",
+      "empty": "問題がありません"
+    },
+    "detail": {
+      "title": "問題詳細",
+      "description": "問題の詳細ページ | IELTS Writing Helper",
+      "editBtn": "保存",
+      "deleteBtn": "削除",
+      "deleteConfirmTitle": "本当にこの問題を削除しますか？",
+      "deleteConfirmDescription": "この操作は取り消すことができません。 \n 問題とその問題に紐づく全てのエッセイが完全に削除されます。",
+      "deleteConfirmCancelBtn": "キャンセル",
+      "deleteConfirmDeleteBtn": "削除",
+      "answer": {
+        "list": {
+          "title": "回答一覧",
+          "addBtn": "回答する",
+          "empty": "まだ回答がありません。"
+        }
+      }
+    },
+    "create": {
+      "title": "問題作成",
+      "description": "問題を作成するページ | IELTS Writing Helper",
+      "submitBtn": "保存",
+      "limitAlertSnackbarTitle": "作成できる問題数の上限に達しました",
+      "limitAlertTitle": "これ以上問題を作成することができません！",
+      "limitAlertContent1": "フリープランでは10問まで問題を作成することができます。",
+      "limitAlertContent2": "問題数の制限を増やしたい場合はプレミアムプランにアップグレードしてください。",
+      "upgradeLink":"プレミアムプランにアップグレード"
+    },
+    "edit": {
+      "title": "問題編集",
+      "description": "問題を編集するページ | IELTS Writing Helper",
+      "submitBtn": "保存"
+    },
+    "form": {
+      "required": "必須",
+      "title": "タイトル",
+      "titleHelper": "問題集のタイトルやページ数(問題を識別するための名前)",
+      "titlePlaceHolder": "IELTS公式問題集13 P.29",
+      "taskType": "タスクのタイプ",
+      "question": "問題文",
+      "questionPlaceHolder": "The chart below shows the number of men and women in further education in Britain in three periods and whether they were studying fulltime or part-time. Summarize the information by selecting and reporting the main features, and make comparisons where relevant.",
+      "questionImage": "問題の画像",
+      "imageUploadButton": "画像をアップロード",
+      "imageHelper1": "※図の画像や問題全体の画像をアップロードできます。",
+      "imageHelper2": "※このファイルは他のユーザーに見られる可能性があります。",
+      "fileTypeError": "画像ファイルのみサポートされています. (許可されるファイルの拡張子: png, gif, bmp, svg or jpg)",
+      "fileSizeError": "ファイルサイズは10MBまでです。"
+    }
   }
 }
