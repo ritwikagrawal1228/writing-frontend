@@ -19,13 +19,6 @@ export const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
       main: colors.secondary.main,
       light: colors.secondary.light,
     },
-    warning: {
-      main: colors.warning.main,
-      light: colors.warning.light,
-    },
-    info: {
-      main: colors.base.black,
-    },
     background: {
       default: mode === 'dark' ? '' : colors.bg.highlighted,
     },
