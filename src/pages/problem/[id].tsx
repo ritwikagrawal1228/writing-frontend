@@ -91,6 +91,10 @@ export default function ProblemDetail({ problem, userStr }: Props) {
     setIsDeleting(false)
   }
 
+  const moveAnswerPage = (id: string) => {
+    router.push(`${Path.ProblemAnswer}/${id}`)
+  }
+
   return (
     <Layout
       title={problem.title}
@@ -236,6 +240,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 color="primary"
                 variant="contained"
                 startIcon={<BorderColorOutlinedIcon />}
+                onClick={() => moveAnswerPage(problem.id)}
               >
                 <b>{t('detail.answer.list.addBtn')}</b>
               </Button>

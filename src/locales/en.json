@@ -71,5 +71,10 @@
       "fileTypeError": "Only image files supported. (extensions: png, gif, bmp, svg or jpg)",
       "fileSizeError": "File size must be less than 10MB"
     }
+  },
+  "Answer": {
+    "create": {
+      "title": "Solve"
+    }
   }
 }
