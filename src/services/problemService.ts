@@ -61,7 +61,7 @@ const deleteProblemById = async (id: string, user: any): Promise<boolean> => {
   return axios.post(Path.APIGraphql, { query, variables })
 }
 
-export const postService = {
+export const problemService = {
   getProblemsByUserId,
   getProblemById,
   deleteProblemById,

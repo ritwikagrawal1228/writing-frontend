@@ -3,16 +3,25 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 
 import SendIcon from '@mui/icons-material/Send'
-import { Button, Grid, Paper, TextField, Typography } from '@mui/material'
+import {
+  Alert,
+  Button,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { Box } from '@mui/system'
 import { Storage, withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 import { Stopwatch } from '@/components/templates/common/Stopwatch'
+import { answerStatus } from '@/constants/AnswerStatus'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { postService } from '@/services/postService'
+import { answerService } from '@/services/answerService'
+import { problemService } from '@/services/problemService'
 import { fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
 
@@ -30,6 +39,7 @@ export default function Answer({ problem, userStr }: Props) {
   const [answer, setAnswer] = React.useState<string>('')
   const [time, setTime] = React.useState<number>(20)
   const [countDownSec, setCountDownSec] = React.useState<number>(0)
+  const [error, setError] = React.useState<string>('')
 
   useEffect(() => {
     if (problem.questionImageKey) {
@@ -43,13 +53,32 @@ export default function Answer({ problem, userStr }: Props) {
     }
   }, [problem])
 
+  const submitAnswer = async () => {
+    setError('')
+    if (!answer) {
+      setError('Answer is required')
+      return
+    }
+
+    const res = await answerService.createAnswer(
+      problem.id,
+      answer,
+      countDownSec,
+      answerStatus.completed,
+    )
+
+    if (res) {
+      router.push(`${Path.ProblemAnswerReview}/${problem.id}`)
+    }
+  }
+
   return (
     <Layout
       title={problem.title}
       description={problem.question}
       breadcrumbs={[
         { label: t('list.title'), href: Path.Problem },
-        { label: t('detail.title'), href: undefined },
+        { label: t('detail.title'), href: `${Path.Problem}/${problem.id}` },
         { label: ta('create.title'), href: undefined },
       ]}
     >
@@ -66,7 +95,12 @@ export default function Answer({ problem, userStr }: Props) {
           <Button color="inherit" variant="outlined" sx={{ mr: 2 }}>
             <b>Cancel</b>
           </Button>
-          <Button color="primary" variant="contained" startIcon={<SendIcon />}>
+          <Button
+            color="primary"
+            variant="contained"
+            startIcon={<SendIcon />}
+            onClick={() => submitAnswer()}
+          >
             <b>Submit</b>
           </Button>
         </Grid>
@@ -85,6 +119,11 @@ export default function Answer({ problem, userStr }: Props) {
             </Typography>
           </Paper>
         </Grid>
+        {error && (
+          <Grid item xs={12} sx={{ mt: 2 }}>
+            <Alert severity="error">{error}</Alert>
+          </Grid>
+        )}
       </Grid>
       <Grid container columnSpacing={2}>
         <Grid item xs={6}>
@@ -145,12 +184,12 @@ export const getServerSideProps = async (
   try {
     const user = await Auth.currentAuthenticatedUser()
 
-    const { id } = context.query
+    const { problemId: id } = context.query
     if (typeof id !== 'string') {
       return { notFound: true }
     }
 
-    const result = await postService.getProblemById(id, user)
+    const result = await problemService.getProblemById(id, user)
 
     return {
       props: {
