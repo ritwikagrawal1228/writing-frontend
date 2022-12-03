@@ -28,7 +28,7 @@ import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { postService } from '@/services/postService'
+import { problemService } from '@/services/problemService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
 
@@ -73,7 +73,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
     setIsAlertOpen(false)
     setIsDeleting(true)
 
-    postService
+    problemService
       .deleteProblemById(id, user)
       .then((res) => {
         console.log(res)
@@ -89,6 +89,10 @@ export default function ProblemDetail({ problem, userStr }: Props) {
 
   const closeBackdrop = () => {
     setIsDeleting(false)
+  }
+
+  const moveAnswerPage = (id: string) => {
+    router.push(`${Path.ProblemAnswer}/${id}`)
   }
 
   return (
@@ -236,6 +240,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 color="primary"
                 variant="contained"
                 startIcon={<BorderColorOutlinedIcon />}
+                onClick={() => moveAnswerPage(problem.id)}
               >
                 <b>{t('detail.answer.list.addBtn')}</b>
               </Button>
@@ -262,7 +267,7 @@ export const getServerSideProps = async (
       return { notFound: true }
     }
 
-    const result = await postService.getProblemById(id, user)
+    const result = await problemService.getProblemById(id, user)
 
     return {
       props: {

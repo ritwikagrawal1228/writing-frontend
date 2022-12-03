@@ -27,7 +27,7 @@ import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { postService } from '@/services/postService'
+import { problemService } from '@/services/problemService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
 import { roundSentence } from '@/utils/roundSentence'
@@ -51,7 +51,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
 
   const { data: res } = useSWR<ProblemsByUserId>(user?.id, (userId) =>
-    postService.getProblemsByUserId(userId),
+    problemService.getProblemsByUserId(userId),
   )
 
   const moveCreatePage = () => {

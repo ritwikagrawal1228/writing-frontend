@@ -25,7 +25,7 @@ import { TitleBox } from '@/components/templates/common/TitleBox'
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { postService } from '@/services/postService'
+import { problemService } from '@/services/problemService'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 import { Problem } from '@/types/model/problem'
 import { axios } from '@/utils/axios'
@@ -50,7 +50,7 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
   const [limitAlert, setLimitAlert] = useState(false)
 
   const { data: res } = useSWR<ProblemsByUserId>(user?.id, (userId) =>
-    postService.getProblemsByUserId(userId),
+    problemService.getProblemsByUserId(userId),
   )
 
   const methods = useForm<CreateProblemForm>({

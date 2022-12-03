@@ -15,7 +15,7 @@ import { TitleBox } from '@/components/templates/common/TitleBox'
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { postService } from '@/services/postService'
+import { problemService } from '@/services/problemService'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 import { Problem } from '@/types/model/problem'
 import { axios } from '@/utils/axios'
@@ -39,7 +39,7 @@ export const getServerSideProps = async (
       return { notFound: true }
     }
 
-    const result = await postService.getProblemById(id, user)
+    const result = await problemService.getProblemById(id, user)
 
     return {
       props: {
