@@ -6,6 +6,11 @@ import SendIcon from '@mui/icons-material/Send'
 import {
   Alert,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   Paper,
   TextField,
@@ -40,6 +45,7 @@ export default function Answer({ problem, userStr }: Props) {
   const [time, setTime] = React.useState<number>(20)
   const [countDownSec, setCountDownSec] = React.useState<number>(0)
   const [error, setError] = React.useState<string>('')
+  const [isCancelConfirm, setIsCancelConfirm] = React.useState<boolean>(false)
 
   useEffect(() => {
     if (problem.questionImageKey) {
@@ -72,6 +78,29 @@ export default function Answer({ problem, userStr }: Props) {
     }
   }
 
+  const handleCloseCancelConfirm = () => {
+    setIsCancelConfirm(false)
+  }
+
+  const handleCancel = async (isSave: boolean) => {
+    setIsCancelConfirm(false)
+    if (!isSave) {
+      router.push(`${Path.Problem}/${problem.id}`)
+      return
+    }
+
+    const res = await answerService.createAnswer(
+      problem.id,
+      answer,
+      countDownSec,
+      answerStatus.inProgress,
+    )
+
+    if (res) {
+      router.push(`${Path.Problem}/${problem.id}`)
+    }
+  }
+
   return (
     <Layout
       title={problem.title}
@@ -82,6 +111,37 @@ export default function Answer({ problem, userStr }: Props) {
         { label: ta('create.title'), href: undefined },
       ]}
     >
+      <Dialog open={isCancelConfirm} onClose={handleCloseCancelConfirm}>
+        <DialogTitle>Quit answering?</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 2 }}>
+            You can save your answer and continue later.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="inherit"
+            variant="outlined"
+            onClick={() => handleCancel(false)}
+          >
+            Quit without saving
+          </Button>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={() => handleCancel(true)}
+          >
+            Save and Quit
+          </Button>
+          <Button
+            color="inherit"
+            variant="outlined"
+            onClick={handleCloseCancelConfirm}
+          >
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Grid container alignItems="center">
         <Grid item xs={6}>
           <Typography fontSize={fontSizes.xxl} fontWeight="bold">
@@ -92,8 +152,13 @@ export default function Answer({ problem, userStr }: Props) {
           <Stopwatch time={time} countDownSec={countDownSec} />
         </Grid>
         <Grid item xs={3} textAlign="right">
-          <Button color="inherit" variant="outlined" sx={{ mr: 2 }}>
-            <b>Cancel</b>
+          <Button
+            color="inherit"
+            variant="outlined"
+            sx={{ mr: 2 }}
+            onClick={() => setIsCancelConfirm(true)}
+          >
+            <b>Quit</b>
           </Button>
           <Button
             color="primary"
