@@ -6,4 +6,9 @@ export const answerStatus: {
   inProgress: 'ANSWER_IN_PROGRESS',
 } as const
 
+export const answerStr = {
+  ANSWER_COMPLETED: 'Completed',
+  ANSWER_IN_PROGRESS: 'In Progress',
+}
+
 export type AnswerStatus = typeof answerStatus[keyof typeof answerStatus]
