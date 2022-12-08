@@ -1,14 +1,18 @@
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
 import EditIcon from '@mui/icons-material/Edit'
 import {
   Backdrop,
   Box,
   Button,
+  Card,
+  CardActions,
+  CardContent,
   Chip,
   CircularProgress,
   Dialog,
@@ -19,18 +23,22 @@ import {
   Grid,
   Paper,
   Typography,
+  useTheme,
 } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
+import { answerStatus, answerStr } from '@/constants/AnswerStatus'
 import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { problemService } from '@/services/problemService'
 import { colors, fontSizes } from '@/themes/globalStyles'
+import { Answer } from '@/types/model/answer'
 import { Problem } from '@/types/model/problem'
+import { roundSentence } from '@/utils/roundSentence'
 
 type Props = {
   problem: Problem
@@ -41,6 +49,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
   const { user } = useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const router = useRouter()
+  const theme = useTheme()
   const [img, setImg] = React.useState<string | undefined>()
   const [isAlertOpen, setIsAlertOpen] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
@@ -93,6 +102,14 @@ export default function ProblemDetail({ problem, userStr }: Props) {
 
   const moveAnswerPage = (id: string) => {
     router.push(`${Path.ProblemAnswer}/${id}`)
+  }
+
+  const redeemOrReview = (answer: Answer) => {
+    if (answer.status === answerStatus.completed) {
+      router.push(`${Path.ProblemAnswerReview}/${problem.id}`)
+    } else {
+      router.push(`${Path.ProblemAnswerRedeem}/${answer.id}`)
+    }
   }
 
   return (
@@ -246,7 +263,80 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               </Button>
             </Box>
           </TitleBox>
-          <Paper sx={{ width: '100%', minHeight: '600px' }}></Paper>
+          <Paper sx={{ width: '100%', minHeight: '600px', p: 3 }}>
+            {problem.answers.map((answer) => (
+              <Fragment key={answer.id}>
+                <Box>
+                  <Card
+                    sx={{
+                      mb: 2,
+                      backgroundColor:
+                        theme.palette.mode === 'dark'
+                          ? colors.base.gray
+                          : colors.disabled.light,
+                    }}
+                    onClick={() => redeemOrReview(answer)}
+                  >
+                    <CardContent>
+                      <Chip
+                        label={
+                          answerStr[answer.status as keyof typeof answerStr]
+                        }
+                        variant="outlined"
+                        color={
+                          answerStr[answer.status as keyof typeof answerStr] ===
+                          'Completed'
+                            ? 'primary'
+                            : 'secondary'
+                        }
+                      />
+                      <Typography sx={{ mt: 2 }} fontSize={fontSizes.m}>
+                        {roundSentence(answer.answer, 180)}
+                      </Typography>
+                    </CardContent>
+                    <CardActions disableSpacing>
+                      <Grid
+                        container
+                        sx={{
+                          p: 1,
+                          alignItems: 'end',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Grid item>
+                          <Button
+                            size="small"
+                            color="inherit"
+                            variant="outlined"
+                            sx={{ mr: 2 }}
+                            startIcon={<DoubleArrowIcon />}
+                            onClick={() => redeemOrReview(answer)}
+                          >
+                            {answer.status === answerStatus.completed
+                              ? 'Review'
+                              : 'Redeem'}
+                          </Button>
+                        </Grid>
+                        <Grid item>
+                          <Typography
+                            sx={{ fontSize: 14 }}
+                            color="text.secondary"
+                            gutterBottom
+                          >
+                            Answered:{' '}
+                            {answer.createdAt &&
+                              new Date(answer.createdAt).toLocaleString(
+                                router.locale,
+                              )}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </CardActions>
+                  </Card>
+                </Box>
+              </Fragment>
+            ))}
+          </Paper>
         </Grid>
       </Grid>
     </Layout>

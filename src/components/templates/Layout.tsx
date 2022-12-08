@@ -145,9 +145,11 @@ const Layout: FC<LayoutProps> = ({
   }
 
   const handleCloseLangMenu = (lang: string) => {
-    router.push(router.pathname, router.route, {
-      locale: lang,
-    })
+    router.push(
+      { pathname: router.pathname, query: router.query },
+      router.asPath,
+      { locale: lang },
+    )
     setOpen(false)
   }
 
