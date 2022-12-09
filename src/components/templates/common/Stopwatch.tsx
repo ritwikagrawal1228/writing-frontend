@@ -16,12 +16,17 @@ import {
 
 type Props = {
   time: number
+  setTime: React.Dispatch<React.SetStateAction<number>>
   countDownSec: number
+  setCountDownSec: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const Stopwatch: FC<Props> = () => {
-  const [time, setTime] = React.useState<number>(20)
-  const [countDownSec, setCountDownSec] = React.useState<number>(0)
+export const Stopwatch: FC<Props> = ({
+  time,
+  setTime,
+  countDownSec,
+  setCountDownSec,
+}) => {
   const [isStartConfirm, setIsStartConfirm] = React.useState<boolean>(false)
   const [isPauseConfirm, setIsPauseConfirm] = React.useState<boolean>(false)
   const [isResumeConfirm, setIsResumeConfirm] = React.useState<boolean>(false)

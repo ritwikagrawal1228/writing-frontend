@@ -106,7 +106,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
 
   const redeemOrReview = (answer: Answer) => {
     if (answer.status === answerStatus.completed) {
-      router.push(`${Path.ProblemAnswerReview}/${problem.id}`)
+      router.push(`${Path.ProblemAnswerReview}/${answer.id}`)
     } else {
       router.push(`${Path.ProblemAnswerRedeem}/${answer.id}`)
     }
@@ -323,9 +323,9 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                             color="text.secondary"
                             gutterBottom
                           >
-                            Answered:{' '}
+                            Last Answered:{' '}
                             {answer.createdAt &&
-                              new Date(answer.createdAt).toLocaleString(
+                              new Date(answer.updatedAt).toLocaleString(
                                 router.locale,
                               )}
                           </Typography>
