@@ -11,31 +11,36 @@ import { AnswerStatus } from '@/constants/AnswerStatus'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { answerService } from '@/services/answerService'
-import { problemService } from '@/services/problemService'
-import { Problem } from '@/types/model/problem'
+import { Answer } from '@/types/model/answer'
 
 type Props = {
-  problem: Problem
+  answerModel: Answer
   userStr: string
 }
 
-export default function Answer({ problem, userStr }: Props) {
+export default function AnswerRedeem({ answerModel, userStr }: Props) {
   const { user } = useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const ta = useTranslations('Answer')
   const router = useRouter()
-  const [answer, setAnswer] = React.useState<string>('')
-  const [time, setTime] = React.useState<number>(20)
-  const [countDownSec, setCountDownSec] = React.useState<number>(0)
+  const [answer, setAnswer] = React.useState<string>(answerModel.answer || '')
+  const [time, setTime] = React.useState<number>(
+    answerModel.time || answerModel.problem.taskType === 'Type_#Task1'
+      ? 20
+      : 40,
+  )
+  const [countDownSec, setCountDownSec] = React.useState<number>(
+    answerModel.answerSpentTime || 0,
+  )
 
   const handleSubmit = async (isSave: boolean, status: AnswerStatus) => {
     if (!isSave) {
-      router.push(`${Path.Problem}/${problem.id}`)
+      router.push(`${Path.Problem}/${answerModel.problem.id}`)
       return
     }
 
     const res = await answerService.createAnswer(
-      problem.id,
+      answerModel.problem.id,
       answer,
       countDownSec,
       time,
@@ -43,22 +48,25 @@ export default function Answer({ problem, userStr }: Props) {
     )
 
     if (res) {
-      router.push(`${Path.Problem}/${problem.id}`)
+      router.push(`${Path.Problem}/${answerModel.problem.id}`)
     }
   }
 
   return (
     <Layout
-      title={problem.title}
-      description={problem.question}
+      title={answerModel.problem.title}
+      description={answerModel.problem.question}
       breadcrumbs={[
         { label: t('list.title'), href: Path.Problem },
-        { label: t('detail.title'), href: `${Path.Problem}/${problem.id}` },
+        {
+          label: t('detail.title'),
+          href: `${Path.Problem}/${answerModel.problem.id}`,
+        },
         { label: ta('create.title'), href: undefined },
       ]}
     >
       <AnswerForm
-        problem={problem}
+        problem={answerModel.problem}
         answer={answer}
         setAnswer={setAnswer}
         countDownSec={countDownSec}
@@ -80,16 +88,16 @@ export const getServerSideProps = async (
   try {
     const user = await Auth.currentAuthenticatedUser()
 
-    const { problemId: id } = context.query
+    const { answerId: id } = context.query
     if (typeof id !== 'string') {
       return { notFound: true }
     }
 
-    const result = await problemService.getProblemById(id, user)
+    const result = await answerService.getAnswerById(id, user)
 
     return {
       props: {
-        problem: result.problem,
+        answerModel: result.answer,
         userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
       },
