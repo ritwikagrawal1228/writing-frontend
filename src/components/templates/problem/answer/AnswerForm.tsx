@@ -14,10 +14,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { Box } from '@mui/system'
 import { Storage } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
+import { ProblemDisplayPaper } from '../../common/ProblemDisplayPaper'
+
+import { ProblemDescriptionGrid } from '@/components/templates/common/ProblemDescriptionGrid'
 import { Stopwatch } from '@/components/templates/common/Stopwatch'
 import { AnswerStatus, answerStatus } from '@/constants/AnswerStatus'
 import { fontSizes } from '@/themes/globalStyles'
@@ -153,54 +155,15 @@ export const AnswerForm = memo(
             </Button>
           </Grid>
         </Grid>
-        <Grid container alignItems="center" sx={{ my: 2 }}>
-          <Grid item xs={12}>
-            <Paper sx={{ p: 3 }}>
-              <Typography fontWeight="bold" sx={{ pb: 2 }}>
-                {problem.taskType === 'Type_#Task1' ? 'Part1' : 'Part2'}
-              </Typography>
-              <Typography>
-                You should spend about{' '}
-                {problem.taskType === 'Type_#Task1' ? 20 : 40} minutes on this
-                task. Write {problem.taskType === 'Type_#Task1' ? 150 : 250}{' '}
-                words.
-              </Typography>
-            </Paper>
+        <ProblemDescriptionGrid problem={problem} />
+        {error && (
+          <Grid item xs={12} sx={{ my: 2 }}>
+            <Alert severity="error">{error}</Alert>
           </Grid>
-          {error && (
-            <Grid item xs={12} sx={{ mt: 2 }}>
-              <Alert severity="error">{error}</Alert>
-            </Grid>
-          )}
-        </Grid>
+        )}
         <Grid container columnSpacing={2}>
           <Grid item xs={6}>
-            <Paper sx={{ width: '100%', minHeight: '600px' }}>
-              <Box
-                sx={{
-                  p: 3,
-                  width: '100%',
-                }}
-              >
-                <Typography
-                  sx={{ ml: 3, mt: 1, wordWrap: 'break-word' }}
-                  fontWeight="bold"
-                >
-                  {problem.question}
-                </Typography>
-              </Box>
-              <Box sx={{ px: 3, pb: 3 }}>
-                <Box sx={{ mt: 1 }}>
-                  <img
-                    src={img}
-                    style={{
-                      width: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
-                </Box>
-              </Box>
-            </Paper>
+            <ProblemDisplayPaper problem={problem} img={img} />
           </Grid>
           <Grid item xs={6}>
             <Paper sx={{ width: '100%', minHeight: '600px', p: 3 }}>

@@ -47,13 +47,13 @@ type Props = {
 }
 
 export default function ProblemDetail({ problem, userStr }: Props) {
-  const { user } = useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const router = useRouter()
   const theme = useTheme()
   const [img, setImg] = React.useState<string | undefined>()
   const [isAlertOpen, setIsAlertOpen] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
+  const { user } = useGetAuthUser(userStr)
 
   useEffect(() => {
     if (problem.questionImageKey) {
@@ -280,80 +280,93 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               p: 3,
             }}
           >
-            {problem.answers.map((answer) => (
-              <Fragment key={answer.id}>
-                <Box>
-                  <Card
-                    sx={{
-                      mb: 2,
-                      backgroundColor:
-                        theme.palette.mode === 'dark'
-                          ? colors.base.gray
-                          : colors.disabled.light,
-                    }}
-                    onClick={() => redeemOrReview(answer)}
-                  >
-                    <CardActionArea>
-                      <CardContent>
-                        <Chip
-                          label={
-                            answerStr[answer.status as keyof typeof answerStr]
-                          }
-                          color={
-                            answerStr[
-                              answer.status as keyof typeof answerStr
-                            ] === 'Completed'
-                              ? 'primary'
-                              : 'secondary'
-                          }
-                        />
-                        <Typography sx={{ mt: 2 }} fontSize={fontSizes.m}>
-                          {roundSentence(answer.answer, 180)}
-                        </Typography>
-                      </CardContent>
-                      <CardActions disableSpacing>
-                        <Grid
-                          container
-                          sx={{
-                            p: 1,
-                            alignItems: 'end',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <Grid item>
-                            <Button
-                              size="small"
-                              color="inherit"
-                              variant="outlined"
-                              sx={{ mr: 2 }}
-                              startIcon={<DoubleArrowIcon />}
-                              onClick={() => redeemOrReview(answer)}
-                            >
-                              {answer.status === answerStatus.completed
-                                ? 'Review'
-                                : 'Redeem'}
-                            </Button>
+            {problem.answers.length > 0 ? (
+              problem.answers.map((answer) => (
+                <Fragment key={answer.id}>
+                  <Box>
+                    <Card
+                      sx={{
+                        mb: 2,
+                        backgroundColor:
+                          theme.palette.mode === 'dark'
+                            ? colors.base.gray
+                            : colors.disabled.light,
+                      }}
+                      onClick={() => redeemOrReview(answer)}
+                    >
+                      <CardActionArea>
+                        <CardContent>
+                          <Chip
+                            label={
+                              answerStr[answer.status as keyof typeof answerStr]
+                            }
+                            color={
+                              answerStr[
+                                answer.status as keyof typeof answerStr
+                              ] === 'Completed'
+                                ? 'primary'
+                                : 'secondary'
+                            }
+                          />
+                          <Typography sx={{ mt: 2 }} fontSize={fontSizes.m}>
+                            {roundSentence(answer.answer, 180)}
+                          </Typography>
+                        </CardContent>
+                        <CardActions disableSpacing>
+                          <Grid
+                            container
+                            sx={{
+                              p: 1,
+                              alignItems: 'end',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            <Grid item>
+                              <Button
+                                size="small"
+                                color="inherit"
+                                variant="outlined"
+                                sx={{ mr: 2 }}
+                                startIcon={<DoubleArrowIcon />}
+                                onClick={() => redeemOrReview(answer)}
+                              >
+                                {answer.status === answerStatus.completed
+                                  ? 'Review'
+                                  : 'Redeem'}
+                              </Button>
+                            </Grid>
+                            <Grid item>
+                              <Typography
+                                sx={{ fontSize: 14 }}
+                                color="text.secondary"
+                                gutterBottom
+                              >
+                                Last Answered:{' '}
+                                {answer.createdAt &&
+                                  new Date(answer.updatedAt).toLocaleString(
+                                    router.locale,
+                                  )}
+                              </Typography>
+                            </Grid>
                           </Grid>
-                          <Grid item>
-                            <Typography
-                              sx={{ fontSize: 14 }}
-                              color="text.secondary"
-                              gutterBottom
-                            >
-                              Last Answered:{' '}
-                              {answer.createdAt &&
-                                new Date(answer.updatedAt).toLocaleString(
-                                  router.locale,
-                                )}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </CardActions>
-                    </CardActionArea>
-                  </Card>
-                </Box>
-              </Fragment>
-            ))}
+                        </CardActions>
+                      </CardActionArea>
+                    </Card>
+                  </Box>
+                </Fragment>
+              ))
+            ) : (
+              <Box sx={{ width: '100%', textAlign: 'center', mt: 5 }}>
+                <Typography sx={{ mb: 2 }}>There is no answer yet.</Typography>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => moveAnswerPage(problem.id)}
+                >
+                  <b>{t('detail.answer.list.addBtn')}</b>
+                </Button>
+              </Box>
+            )}
           </Paper>
         </Grid>
       </Grid>

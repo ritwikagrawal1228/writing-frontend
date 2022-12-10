@@ -55,3 +55,13 @@ a {
   --amplify-components-tabs-item-disabled-background-color: var(--amplify-colors-neutral-90);
   --amplify-components-authenticator-state-inactive-background-color: var(--amplify-colors-background-tertiary);
 }
+
+::-moz-selection {
+  color: #fff;
+  background-color: #6019E3;
+}
+
+::selection {
+  color: #fff;
+  background-color: #6019E3;
+}
