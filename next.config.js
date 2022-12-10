@@ -8,7 +8,7 @@ const nextConfig = {
     localeDetection: false,
   },
   env: {
-    ENV_TEST: process.env.ENV_TEST,
+    API_URL: process.env.API_URL,
   },
 }
 
