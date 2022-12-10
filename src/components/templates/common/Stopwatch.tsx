@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import PauseIcon from '@mui/icons-material/Pause'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
@@ -32,6 +32,13 @@ export const Stopwatch: FC<Props> = ({
   const [isResumeConfirm, setIsResumeConfirm] = React.useState<boolean>(false)
   const [isPaused, setIsPaused] = React.useState<boolean>(false)
   const [isActive, setIsActive] = React.useState(false)
+
+  useEffect(() => {
+    if (countDownSec > 0) {
+      setIsActive(true)
+      setIsPaused(true)
+    }
+  }, [])
 
   React.useEffect(() => {
     let interval: NodeJS.Timer | undefined = undefined

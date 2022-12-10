@@ -28,6 +28,7 @@ export default async function handler(
       return { data: res, status: 200 }
     })
     .catch((err) => {
+      console.log(err)
       return { data: err.response.errors[0].message, status: 500 }
     })
 

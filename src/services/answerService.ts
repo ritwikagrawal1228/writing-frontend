@@ -36,10 +36,43 @@ const createAnswer = async (
   })
 }
 
+const updateAnswer = async (
+  answerId: string,
+  problemId: string,
+  answer: string,
+  answerSpentTime: number,
+  time: number,
+  status: AnswerStatus,
+) => {
+  const query = gql`
+    mutation ($input: UpdateAnswerInput!) {
+      updateAnswer(input: $input) {
+        id
+      }
+    }
+  `
+  const variables = {
+    input: {
+      answerId,
+      problemId,
+      answer,
+      answerSpentTime,
+      time,
+      status,
+    },
+  }
+
+  return await axios.post(Path.APIGraphql, {
+    query,
+    variables,
+  })
+}
+
 const getAnswerById = async (id: string, user: any) => {
   const query = gql`
     query ($id: String!) {
       answer(answerId: $id) {
+        id
         answer
         answerSpentTime
         time
@@ -70,5 +103,6 @@ const getAnswerById = async (id: string, user: any) => {
 
 export const answerService = {
   createAnswer,
+  updateAnswer,
   getAnswerById,
 }

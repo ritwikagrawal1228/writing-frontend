@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   Card,
+  CardActionArea,
   CardActions,
   CardContent,
   Chip,
@@ -180,7 +181,14 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               </Button>
             </Box>
           </TitleBox>
-          <Paper sx={{ width: '100%', minHeight: '600px' }}>
+          <Paper
+            sx={{
+              width: '100%',
+              minHeight: '600px',
+              maxHeight: '700px',
+              overflow: 'auto',
+            }}
+          >
             <Box
               sx={{
                 p: 3,
@@ -263,7 +271,15 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               </Button>
             </Box>
           </TitleBox>
-          <Paper sx={{ width: '100%', minHeight: '600px', p: 3 }}>
+          <Paper
+            sx={{
+              width: '100%',
+              minHeight: '600px',
+              maxHeight: '700px',
+              overflow: 'auto',
+              p: 3,
+            }}
+          >
             {problem.answers.map((answer) => (
               <Fragment key={answer.id}>
                 <Box>
@@ -277,61 +293,63 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                     }}
                     onClick={() => redeemOrReview(answer)}
                   >
-                    <CardContent>
-                      <Chip
-                        label={
-                          answerStr[answer.status as keyof typeof answerStr]
-                        }
-                        variant="outlined"
-                        color={
-                          answerStr[answer.status as keyof typeof answerStr] ===
-                          'Completed'
-                            ? 'primary'
-                            : 'secondary'
-                        }
-                      />
-                      <Typography sx={{ mt: 2 }} fontSize={fontSizes.m}>
-                        {roundSentence(answer.answer, 180)}
-                      </Typography>
-                    </CardContent>
-                    <CardActions disableSpacing>
-                      <Grid
-                        container
-                        sx={{
-                          p: 1,
-                          alignItems: 'end',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <Grid item>
-                          <Button
-                            size="small"
-                            color="inherit"
-                            variant="outlined"
-                            sx={{ mr: 2 }}
-                            startIcon={<DoubleArrowIcon />}
-                            onClick={() => redeemOrReview(answer)}
-                          >
-                            {answer.status === answerStatus.completed
-                              ? 'Review'
-                              : 'Redeem'}
-                          </Button>
+                    <CardActionArea>
+                      <CardContent>
+                        <Chip
+                          label={
+                            answerStr[answer.status as keyof typeof answerStr]
+                          }
+                          color={
+                            answerStr[
+                              answer.status as keyof typeof answerStr
+                            ] === 'Completed'
+                              ? 'primary'
+                              : 'secondary'
+                          }
+                        />
+                        <Typography sx={{ mt: 2 }} fontSize={fontSizes.m}>
+                          {roundSentence(answer.answer, 180)}
+                        </Typography>
+                      </CardContent>
+                      <CardActions disableSpacing>
+                        <Grid
+                          container
+                          sx={{
+                            p: 1,
+                            alignItems: 'end',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <Grid item>
+                            <Button
+                              size="small"
+                              color="inherit"
+                              variant="outlined"
+                              sx={{ mr: 2 }}
+                              startIcon={<DoubleArrowIcon />}
+                              onClick={() => redeemOrReview(answer)}
+                            >
+                              {answer.status === answerStatus.completed
+                                ? 'Review'
+                                : 'Redeem'}
+                            </Button>
+                          </Grid>
+                          <Grid item>
+                            <Typography
+                              sx={{ fontSize: 14 }}
+                              color="text.secondary"
+                              gutterBottom
+                            >
+                              Last Answered:{' '}
+                              {answer.createdAt &&
+                                new Date(answer.updatedAt).toLocaleString(
+                                  router.locale,
+                                )}
+                            </Typography>
+                          </Grid>
                         </Grid>
-                        <Grid item>
-                          <Typography
-                            sx={{ fontSize: 14 }}
-                            color="text.secondary"
-                            gutterBottom
-                          >
-                            Last Answered:{' '}
-                            {answer.createdAt &&
-                              new Date(answer.updatedAt).toLocaleString(
-                                router.locale,
-                              )}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    </CardActions>
+                      </CardActions>
+                    </CardActionArea>
                   </Card>
                 </Box>
               </Fragment>

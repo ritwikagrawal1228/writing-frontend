@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
@@ -24,14 +24,23 @@ export default function AnswerRedeem({ answerModel, userStr }: Props) {
   const ta = useTranslations('Answer')
   const router = useRouter()
   const [answer, setAnswer] = React.useState<string>(answerModel.answer || '')
-  const [time, setTime] = React.useState<number>(
-    answerModel.time || answerModel.problem.taskType === 'Type_#Task1'
-      ? 20
-      : 40,
-  )
+  const [time, setTime] = React.useState<number>(answerModel.time)
   const [countDownSec, setCountDownSec] = React.useState<number>(
-    answerModel.answerSpentTime || 0,
+    answerModel.answerSpentTime,
   )
+
+  useEffect(() => {
+    if (!answerModel) {
+      return
+    }
+    if (answerModel.time > 0) {
+      return
+    }
+
+    // Set default time if answer doesn't have time
+    const type = answerModel.problem.taskType === 'Type_#Task1' ? 20 : 40
+    setTime(type)
+  }, [answerModel])
 
   const handleSubmit = async (isSave: boolean, status: AnswerStatus) => {
     if (!isSave) {
@@ -39,7 +48,8 @@ export default function AnswerRedeem({ answerModel, userStr }: Props) {
       return
     }
 
-    const res = await answerService.createAnswer(
+    const res = await answerService.updateAnswer(
+      answerModel.id,
       answerModel.problem.id,
       answer,
       countDownSec,
