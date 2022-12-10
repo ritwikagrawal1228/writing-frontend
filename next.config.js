@@ -7,6 +7,9 @@ const nextConfig = {
     defaultLocale: 'en',
     localeDetection: false,
   },
+  env: {
+    ENV_TEST: process.env.ENV_TEST,
+  },
 }
 
 module.exports = nextConfig
