@@ -50,9 +50,13 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   const router = useRouter()
   const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
 
-  const { data: res } = useSWR<ProblemsByUserId>(user?.id, (userId) =>
+  const { data: res, error } = useSWR<ProblemsByUserId>(user?.id, (userId) =>
     problemService.getProblemsByUserId(userId),
   )
+
+  useEffect(() => {
+    console.error(error)
+  }, [error])
 
   const moveCreatePage = () => {
     router.push(Path.ProblemCreate)
