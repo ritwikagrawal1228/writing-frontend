@@ -55,7 +55,9 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   )
 
   useEffect(() => {
-    console.error(error)
+    if (error) {
+      console.error(error)
+    }
   }, [error])
 
   const moveCreatePage = () => {

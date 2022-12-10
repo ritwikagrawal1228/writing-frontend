@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { gql } from 'graphql-request'
 
 import { Path } from '@/constants/Path'
 import { Problem } from '@/types/model/problem'
+import { axios } from '@/utils/axios'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
 const getProblemsByUserId = async (userId: string) => {
