@@ -19,7 +19,6 @@ import { gql } from 'graphql-request'
 import { useTranslations } from 'next-intl'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
@@ -142,14 +141,15 @@ export default function ProblemCreate({
   }
 
   return (
-    <Layout
-      title={t('create.title')}
-      description={t('create.title')}
-      breadcrumbs={[
-        { label: t('list.title'), href: Path.Problem },
-        { label: t('create.title'), href: undefined },
-      ]}
-    >
+    // <Layout
+    //   title={t('create.title')}
+    //   description={t('create.title')}
+    //   breadcrumbs={[
+    //     { label: t('list.title'), href: Path.Problem },
+    //     { label: t('create.title'), href: undefined },
+    //   ]}
+    // >
+    <>
       <Snackbar
         open={limitAlert}
         autoHideDuration={6000}
@@ -225,7 +225,7 @@ export default function ProblemCreate({
           </form>
         </FormProvider>
       </Paper>
-    </Layout>
+    </>
   )
 }
 

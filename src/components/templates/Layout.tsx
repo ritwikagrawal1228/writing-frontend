@@ -66,7 +66,7 @@ const Layout: FC<LayoutProps> = ({
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('Nav')
   const router = useRouter()
-  const { user, signOut } = useAuthenticator((context) => [context.user])
+  const { user, signOut } = useAuthenticator()
   const theme = useTheme()
   const colorMode = React.useContext(ColorModeContext)
 

@@ -21,7 +21,6 @@ import {
 import { Storage, withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
@@ -72,11 +71,12 @@ export default function ProblemList({
   }, [problems])
 
   return (
-    <Layout
-      title={t('list.title')}
-      description={t('list.description')}
-      breadcrumbs={[{ label: t('list.title'), href: undefined }]}
-    >
+    // <Layout
+    //   title={t('list.title')}
+    //   description={t('list.description')}
+    //   breadcrumbs={[{ label: t('list.title'), href: undefined }]}
+    // >
+    <>
       <TitleBox title={t('list.title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
@@ -181,7 +181,8 @@ export default function ProblemList({
           </Box>
         )}
       </Paper>
-    </Layout>
+    </>
+    // </Layout>
   )
 }
 
