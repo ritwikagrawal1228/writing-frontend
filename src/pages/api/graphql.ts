@@ -25,6 +25,8 @@ export default async function handler(
   const result = await client
     .request<Data>(req.body.query, req.body.variables)
     .then((res) => {
+      console.log('------------------------res', res)
+
       return { data: res, status: 200 }
     })
     .catch((err) => {
