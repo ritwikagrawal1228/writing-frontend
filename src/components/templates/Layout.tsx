@@ -243,7 +243,7 @@ const Layout: FC<LayoutProps> = ({
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   {user?.attributes?.name ? (
                     <Avatar
-                      {...stringAvatar(user?.attributes?.name || 'User Name')}
+                      {...stringAvatar(user?.attributes?.name || 'E I')}
                     />
                   ) : (
                     <Avatar />
