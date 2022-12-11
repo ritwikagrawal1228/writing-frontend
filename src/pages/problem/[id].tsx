@@ -86,8 +86,6 @@ export default function ProblemDetail({ problem, userStr }: Props) {
     problemService
       .deleteProblemById(id, user)
       .then((res) => {
-        console.log(res)
-
         router.push(Path.Problem)
       })
       .catch((err) => {

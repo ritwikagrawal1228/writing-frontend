@@ -76,8 +76,6 @@ export default function ProblemList({ authenticated, userStr }: Props) {
     res.data.problemsByUserId.map((prob) => {
       if (prob.questionImageKey) {
         Storage.get(prob.questionImageKey).then((res) => {
-          console.log(res)
-
           // update images src
           setImages((prev) => [...prev, { id: prob.id, src: res }])
         })
@@ -110,7 +108,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
           <Box sx={{ p: 10 }}>
             <CircularProgress size={80} />
           </Box>
-        ) : res.data.problemsByUserId?.length > 0 ? (
+        ) : res.data?.problemsByUserId?.length > 0 ? (
           <Grid
             container
             spacing={5}

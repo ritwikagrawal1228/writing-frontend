@@ -4,7 +4,6 @@ export const getGraphQLClient = (user: any) => {
   const accessToken = user.signInUserSession.accessToken.jwtToken
   const IdToken = user.signInUserSession.idToken.jwtToken
   const uri = process.env.API_URL
-  console.log(uri)
 
   return new GraphQLClient(uri, {
     headers: {
