@@ -69,7 +69,11 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   }
 
   useEffect(() => {
-    if (!res) {
+    if (
+      !res ||
+      !res.data.problemsByUserId ||
+      res.data.problemsByUserId.length === 0
+    ) {
       return
     }
 
