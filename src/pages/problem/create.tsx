@@ -18,7 +18,6 @@ import imageCompression from 'browser-image-compression'
 import { gql } from 'graphql-request'
 import { useTranslations } from 'next-intl'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import useSWR from 'swr'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
@@ -33,6 +32,7 @@ import { axios } from '@/utils/axios'
 type Props = {
   userStr: string
   authenticated: boolean
+  problemsNum: number
 }
 
 type ProblemsByUserId = {
@@ -41,17 +41,17 @@ type ProblemsByUserId = {
   }
 }
 
-export default function ProblemCreate({ authenticated, userStr }: Props) {
+export default function ProblemCreate({
+  authenticated,
+  userStr,
+  problemsNum,
+}: Props) {
   const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const [photo, setPhoto] = useState<File | undefined>(undefined)
   const router = useRouter()
   const [limitAlert, setLimitAlert] = useState(false)
-
-  const { data: res } = useSWR<ProblemsByUserId>(user?.id, (userId) =>
-    problemService.getProblemsByUserId(userId),
-  )
 
   const methods = useForm<CreateProblemForm>({
     mode: 'onChange',
@@ -116,8 +116,7 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
   }
 
   const getAlertWarningTitle = (): React.ReactNode => {
-    const limit =
-      (res?.data?.problemsByUserId && res?.data?.problemsByUserId.length) || 0
+    const limit = problemsNum || 0
 
     let text: React.ReactNode
     switch (router.locale) {
@@ -171,19 +170,15 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
             variant="contained"
             startIcon={<SaveIcon />}
             onClick={() => methods.handleSubmit(onSubmit)()}
-            disabled={
-              user?.plan === 'FREE' &&
-              res?.data.problemsByUserId &&
-              res.data.problemsByUserId.length >= 10
-            }
+            disabled={user?.plan === 'FREE' && problemsNum >= 10}
           >
             <b>{t('create.submitBtn')}</b>
           </Button>
         </Box>
       </TitleBox>
-      {user?.plan === 'FREE' && res?.data.problemsByUserId && (
+      {user?.plan === 'FREE' && (
         <>
-          {res.data.problemsByUserId.length >= 10 ? (
+          {problemsNum >= 10 ? (
             <>
               <Alert severity="error">
                 <AlertTitle>
@@ -199,13 +194,9 @@ export default function ProblemCreate({ authenticated, userStr }: Props) {
               </Alert>
               <br />
             </>
-          ) : res.data?.problemsByUserId.length < 10 ? (
+          ) : problemsNum < 10 ? (
             <>
-              <Alert
-                severity={
-                  10 - res.data.problemsByUserId.length > 3 ? 'info' : 'warning'
-                }
-              >
+              <Alert severity={10 - problemsNum > 3 ? 'info' : 'warning'}>
                 <AlertTitle>{getAlertWarningTitle()}</AlertTitle>
                 {t('create.limitAlertContent1')}
                 <br />
@@ -244,12 +235,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const user = await Auth.currentAuthenticatedUser()
+    const { problemsByUserId } = await problemService.getProblemsByUserId(user)
 
     return {
       props: {
         authenticated: true,
         userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
+        problemsNum: problemsByUserId?.length || 0,
       },
     }
   } catch (err) {

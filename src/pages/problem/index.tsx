@@ -20,7 +20,6 @@ import {
 } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
-import useSWR from 'swr'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
@@ -35,30 +34,19 @@ import { roundSentence } from '@/utils/roundSentence'
 type Props = {
   userStr: string
   authenticated: boolean
+  problems: Problem[]
 }
 
-type ProblemsByUserId = {
-  data: {
-    problemsByUserId: Problem[] | []
-  }
-}
-
-export default function ProblemList({ authenticated, userStr }: Props) {
+export default function ProblemList({
+  authenticated,
+  userStr,
+  problems,
+}: Props) {
   const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
   const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
-
-  const { data: res, error } = useSWR<ProblemsByUserId>(user?.id, (userId) =>
-    problemService.getProblemsByUserId(userId),
-  )
-
-  useEffect(() => {
-    if (error) {
-      console.error(error)
-    }
-  }, [error])
 
   const moveCreatePage = () => {
     router.push(Path.ProblemCreate)
@@ -69,15 +57,11 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   }
 
   useEffect(() => {
-    if (
-      !res ||
-      !res.data.problemsByUserId ||
-      res.data.problemsByUserId.length === 0
-    ) {
+    if (!problems || problems.length === 0) {
       return
     }
 
-    res.data.problemsByUserId.map((prob) => {
+    problems.map((prob) => {
       if (prob.questionImageKey) {
         Storage.get(prob.questionImageKey).then((res) => {
           // update images src
@@ -85,7 +69,7 @@ export default function ProblemList({ authenticated, userStr }: Props) {
         })
       }
     })
-  }, [res])
+  }, [problems])
 
   return (
     <Layout
@@ -108,18 +92,18 @@ export default function ProblemList({ authenticated, userStr }: Props) {
       <Paper
         sx={{ minHeight: '460px', textAlign: 'center', pt: 5, pl: 5, pb: 5 }}
       >
-        {!res ? (
+        {!problems ? (
           <Box sx={{ p: 10 }}>
             <CircularProgress size={80} />
           </Box>
-        ) : res.data?.problemsByUserId?.length > 0 ? (
+        ) : problems.length > 0 ? (
           <Grid
             container
             spacing={5}
             sx={{ width: '100%', mr: 0 }}
             justifyContent="start"
           >
-            {res.data.problemsByUserId.map((problem: Problem) => (
+            {problems.map((problem: Problem) => (
               <Grid item key={problem.id}>
                 <Card
                   sx={{
@@ -208,11 +192,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const user = await Auth.currentAuthenticatedUser()
 
+    const { problemsByUserId } = await problemService.getProblemsByUserId(user)
+
     return {
       props: {
         authenticated: true,
         userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
+        problems: problemsByUserId,
       },
     }
   } catch (err) {

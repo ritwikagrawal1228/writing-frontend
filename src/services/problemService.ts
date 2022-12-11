@@ -5,13 +5,9 @@ import { Problem } from '@/types/model/problem'
 import { axios } from '@/utils/axios'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
-const getProblemsByUserId = async (userId: string) => {
-  if (!userId) {
-    return { data: { problemsByUserId: [] } }
-  }
-
+const getProblemsByUserId = async (user: any) => {
   const query = gql`query {
-    problemsByUserId(userId: "${userId}") {
+    problemsByUserId(userId: "${user.attributes.sub}") {
       id
       title
       question
@@ -21,7 +17,11 @@ const getProblemsByUserId = async (userId: string) => {
     }
   }`
 
-  return axios.post(Path.APIGraphql, { query })
+  const client = getGraphQLClient(user)
+
+  return await client
+    .request<{ problemsByUserId: Problem[] }>(query, {})
+    .then((res) => res)
 }
 
 const getProblemById = async (id: string, user: any) => {
