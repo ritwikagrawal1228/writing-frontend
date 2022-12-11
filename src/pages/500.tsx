@@ -1,13 +1,19 @@
+import Head from 'next/head'
 import React from 'react'
 
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import { Grid, Paper, Typography } from '@mui/material'
 
+import LpNavBar from '@/components/templates/LpNavBar'
 import { fontSizes, spaces } from '@/themes/globalStyles'
 
 export default function Page500() {
   return (
     <>
+      <Head>
+        <title>Error</title>
+      </Head>
+      <LpNavBar isOnlyLogo={true} />
       <Grid
         container
         alignItems="center"
@@ -25,13 +31,10 @@ export default function Page500() {
           <Paper sx={{ py: spaces.xxxxl }}>
             <ErrorOutlineIcon color="error" />
             <Typography fontSize={fontSizes.xxl} fontWeight="bold">
-              エラーが発生しました
-            </Typography>
-            <Typography fontSize={fontSizes.s} sx={{ mt: spaces.s }}>
-              申し訳ありません
+              Error
             </Typography>
             <Typography fontSize={fontSizes.s}>
-              しばらくお待ちいただくか、 システム管理者にお問い合わせください
+              Things are little unstable right now. Please try again later.
             </Typography>
           </Paper>
         </Grid>
