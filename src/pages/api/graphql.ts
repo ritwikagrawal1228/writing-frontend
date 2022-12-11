@@ -29,7 +29,7 @@ export default async function handler(
     })
     .catch((err) => {
       console.log(err)
-      return { data: err.response.errors[0].message, status: 500 }
+      return { data: err.response, status: 500 }
     })
 
   return res.status(result.status).json(result.data)
