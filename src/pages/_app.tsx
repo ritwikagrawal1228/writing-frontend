@@ -11,10 +11,14 @@ import {
 } from '@mui/material'
 import { Amplify } from 'aws-amplify'
 import { NextIntlProvider } from 'next-intl'
+import { ErrorBoundary } from 'react-error-boundary'
+
+import { Page500 } from './500'
 
 import awsExports from '@/aws-exports'
 import { ColorModeContext } from '@/context/ColorMode'
 import { getDesignTokens } from '@/themes/defaultTheme'
+import { onError } from '@/utils/onError'
 
 Amplify.configure(awsExports)
 
@@ -58,7 +62,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <ColorModeContext.Provider value={colorMode}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Component {...pageProps} />
+            <ErrorBoundary FallbackComponent={Page500} onError={onError}>
+              <Component {...pageProps} />
+            </ErrorBoundary>
           </ThemeProvider>
         </ColorModeContext.Provider>
       </Authenticator.Provider>
