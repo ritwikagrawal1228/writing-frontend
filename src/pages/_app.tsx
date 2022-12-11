@@ -13,7 +13,7 @@ import { Amplify } from 'aws-amplify'
 import { NextIntlProvider } from 'next-intl'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import { Page500 } from './500'
+import Page500 from './500'
 
 import awsExports from '@/aws-exports'
 import { ColorModeContext } from '@/context/ColorMode'

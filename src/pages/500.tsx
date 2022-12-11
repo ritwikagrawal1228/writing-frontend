@@ -1,11 +1,11 @@
-import React, { FC, memo } from 'react'
+import React from 'react'
 
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import { Grid, Paper, Typography } from '@mui/material'
 
 import { fontSizes, spaces } from '@/themes/globalStyles'
 
-export const Page500: FC = memo(() => {
+export default function Page500() {
   return (
     <>
       <Grid
@@ -38,6 +38,6 @@ export const Page500: FC = memo(() => {
       </Grid>
     </>
   )
-})
+}
 
 Page500.displayName = 'Page500'
