@@ -1,6 +1,8 @@
 import type { AppProps } from 'next/app'
+import Router from 'next/router'
 import React, { useEffect, useMemo } from 'react'
 import '@/styles/globals.css'
+import 'nprogress/nprogress.css'
 
 import { Authenticator } from '@aws-amplify/ui-react'
 import {
@@ -11,6 +13,7 @@ import {
 } from '@mui/material'
 import { Amplify } from 'aws-amplify'
 import { NextIntlProvider } from 'next-intl'
+import NProgress from 'nprogress'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import Page500 from './500'
@@ -21,6 +24,10 @@ import { getDesignTokens } from '@/themes/defaultTheme'
 import { onError } from '@/utils/onError'
 
 Amplify.configure(awsExports)
+
+Router.events.on('routeChangeStart', () => NProgress.start())
+Router.events.on('routeChangeComplete', () => NProgress.done())
+Router.events.on('routeChangeError', () => NProgress.done())
 
 export default function App({ Component, pageProps }: AppProps) {
   const [mode, setMode] = React.useState<'light' | 'dark'>('light')

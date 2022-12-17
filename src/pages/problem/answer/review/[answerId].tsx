@@ -19,6 +19,7 @@ import { useTranslations } from 'next-intl'
 import Layout from '@/components/templates/Layout'
 import { ProblemDescriptionGrid } from '@/components/templates/common/ProblemDescriptionGrid'
 import { ProblemDisplayPaper } from '@/components/templates/common/ProblemDisplayPaper'
+import { AnswerArea } from '@/components/templates/problem/answer/review/AnswerArea'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { answerService } from '@/services/answerService'
@@ -67,6 +68,10 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
     //
   }
 
+  const padTo2Digits = (num: number) => {
+    return num.toString().padStart(2, '')
+  }
+
   return (
     <Layout
       title={answerModel.problem.title}
@@ -108,7 +113,13 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
                 <TableBody>
                   <TableRow hover role="checkbox" tabIndex={-1}>
                     <TableCell>{answerModel.time} min</TableCell>
-                    <TableCell>{answerModel.answerSpentTime} min</TableCell>
+                    <TableCell>
+                      {`${padTo2Digits(
+                        Math.floor(answerModel.answerSpentTime / 60),
+                      )}min ${padTo2Digits(
+                        answerModel.answerSpentTime % 60,
+                      )}sec`}
+                    </TableCell>
                     <TableCell>
                       {answerModel.answer
                         ? answerModel.answer.trim().split(/\s+/).length
@@ -128,8 +139,10 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
           <ProblemDisplayPaper problem={answerModel.problem} img={img} />
         </Grid>
         <Grid item xs={6}>
-          <Paper sx={{ p: 3, width: '100%', minHeight: '600px' }}>
-            {answerModel.answer}
+          <Paper
+            sx={{ p: 3, width: '100%', minHeight: '600px', lineHeight: '40px' }}
+          >
+            <AnswerArea answer={answerModel.answer} />
           </Paper>
         </Grid>
       </Grid>

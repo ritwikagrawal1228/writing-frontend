@@ -91,6 +91,10 @@ rules:
       newlines-between: always
   "@typescript-eslint/no-unused-vars": off
   unused-imports/no-unused-imports-ts: warn
+  react/no-unknown-property:
+    - error
+    -
+      ignore: css
   prettier/prettier:
     - error
     -
