@@ -43,6 +43,8 @@ const defaultState: TextSelectionState = {}
 export function useTextSelection(target?: HTMLElement) {
   const [{ clientRect, isCollapsed, textContent }, setState] =
     useState<TextSelectionState>(defaultState)
+  const [startOffset, setStartOffset] = useState(0)
+  const [endOffset, setEndOffset] = useState(0)
 
   const reset = useCallback(() => {
     setState(defaultState)
@@ -74,6 +76,8 @@ export function useTextSelection(target?: HTMLElement) {
 
     if (contents.textContent != null) {
       newState.textContent = contents.textContent
+      setStartOffset(range.startOffset)
+      setEndOffset(range.endOffset)
     }
 
     const rects = range.getClientRects()
@@ -111,5 +115,7 @@ export function useTextSelection(target?: HTMLElement) {
     clientRect,
     isCollapsed,
     textContent,
+    startOffset,
+    endOffset,
   }
 }

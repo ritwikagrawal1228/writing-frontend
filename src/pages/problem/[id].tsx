@@ -295,6 +295,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                       <CardActionArea>
                         <CardContent>
                           <Chip
+                            variant="outlined"
                             label={
                               answerStr[answer.status as keyof typeof answerStr]
                             }
@@ -320,18 +321,13 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                             }}
                           >
                             <Grid item>
-                              <Button
-                                size="small"
-                                color="inherit"
-                                variant="outlined"
-                                sx={{ mr: 2 }}
-                                startIcon={<DoubleArrowIcon />}
-                                onClick={() => redeemOrReview(answer)}
+                              <Typography
+                                sx={{ fontSize: 14 }}
+                                color="text.secondary"
+                                gutterBottom
                               >
-                                {answer.status === answerStatus.completed
-                                  ? 'Review'
-                                  : 'Redeem'}
-                              </Button>
+                                Review comments: {'TODO'}
+                              </Typography>
                             </Grid>
                             <Grid item>
                               <Typography

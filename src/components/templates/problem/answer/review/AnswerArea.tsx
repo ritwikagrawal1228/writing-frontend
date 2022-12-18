@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useState } from 'react'
+import React, { FC, memo, useCallback, useEffect, useState } from 'react'
 
 import { Typography, Alert, Popover } from '@mui/material'
 import RateReviewIcon from '@mui/icons-material/RateReview'
@@ -10,24 +10,26 @@ type Props = {
 
 export const AnswerArea: FC<Props> = memo(({ answer }) => {
   const [target, setTarget] = useState<HTMLElement | undefined>()
+
   const ref = useCallback(
     (el: HTMLElement | null) => {
-      if (el != null) {
-        setTarget(el)
+      if (el !== null || el !== undefined) {
+        setTarget(el || undefined)
       } else {
         setTarget(undefined)
       }
     },
     [target],
   )
+
   return (
     <>
       <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
         Answer
       </Typography>
       <Alert severity="info" sx={{ width: '100%', mb: 1 }}>
-        Select the text you want to review.
-        <br /> And click the <RateReviewIcon
+        Select the text you want to review
+        <br /> and click the <RateReviewIcon
           color="primary"
           fontSize="small"
         />{' '}
