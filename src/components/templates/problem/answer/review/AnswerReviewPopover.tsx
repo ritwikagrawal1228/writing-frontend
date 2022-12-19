@@ -1,23 +1,10 @@
-import React, { FC, memo, useCallback, useState } from 'react'
+import React, { FC, useState } from 'react'
 
-import { css } from '@emotion/react'
-import {
-  Button,
-  PortalProps,
-  IconButton,
-  Typography,
-  Alert,
-  Popper,
-  Box,
-  useTheme,
-  TextField,
-  Popover,
-} from '@mui/material'
-import { createPortal } from 'react-dom'
 import RateReviewIcon from '@mui/icons-material/RateReview'
+import { PortalProps, IconButton, useTheme } from '@mui/material'
+import { createPortal } from 'react-dom'
 
 import { useTextSelection } from '@/hooks/useTextSelection'
-import { colors } from '@/themes/globalStyles'
 
 const Portal: FC<PortalProps> = ({ children }) => {
   return createPortal(children, document.body)

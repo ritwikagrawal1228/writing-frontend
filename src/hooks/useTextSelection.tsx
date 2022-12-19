@@ -3,11 +3,11 @@ import { useCallback, useLayoutEffect, useState } from 'react'
 type ClientRect = Record<keyof Omit<DOMRect, 'toJSON'>, number>
 
 function roundValues(_rect: ClientRect) {
-  const rect = {
+  const rect: ClientRect = {
     ..._rect,
   }
   for (const key of Object.keys(rect)) {
-    rect[key] = Math.round(rect[key])
+    rect[key as keyof ClientRect] = Math.round(rect[key as keyof ClientRect])
   }
   return rect
 }

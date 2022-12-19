@@ -1,7 +1,8 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react'
+import React, { FC, memo, useCallback, useState } from 'react'
 
-import { Typography, Alert, Popover } from '@mui/material'
 import RateReviewIcon from '@mui/icons-material/RateReview'
+import { Typography, Alert } from '@mui/material'
+
 import { AnswerReviewPopover } from './AnswerReviewPopover'
 
 type Props = {
