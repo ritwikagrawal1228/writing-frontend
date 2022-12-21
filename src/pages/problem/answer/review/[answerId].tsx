@@ -114,11 +114,13 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
                   <TableRow hover role="checkbox" tabIndex={-1}>
                     <TableCell>{answerModel.time} min</TableCell>
                     <TableCell>
-                      {`${padTo2Digits(
-                        Math.floor(answerModel.answerSpentTime / 60),
-                      )}min ${padTo2Digits(
-                        answerModel.answerSpentTime % 60,
-                      )}sec`}
+                      {answerModel.answerSpentTime !== 0
+                        ? `${padTo2Digits(
+                            Math.floor(answerModel.answerSpentTime / 60),
+                          )}min ${padTo2Digits(
+                            answerModel.answerSpentTime % 60,
+                          )}sec`
+                        : '--'}
                     </TableCell>
                     <TableCell>
                       {answerModel.answer
@@ -134,7 +136,7 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
         </Grid>
       </Grid>
       <ProblemDescriptionGrid problem={answerModel.problem} />
-      <Grid container columnSpacing={2}>
+      <Grid container columnSpacing={2} sx={{ pb: 4 }}>
         <Grid item xs={6}>
           <ProblemDisplayPaper problem={answerModel.problem} img={img} />
         </Grid>
@@ -142,7 +144,9 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
           <Paper
             sx={{ p: 3, width: '100%', minHeight: '600px', lineHeight: '40px' }}
           >
-            <AnswerArea answer={answerModel.answer} />
+            <AnswerArea
+              answerSentences={answerModel.completedAnswerSentences}
+            />
           </Paper>
         </Grid>
       </Grid>

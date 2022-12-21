@@ -1,27 +1,36 @@
-import React, { FC, memo, useCallback, useState } from 'react'
+import React, { FC, Fragment, memo } from 'react'
 
 import RateReviewIcon from '@mui/icons-material/RateReview'
-import { Typography, Alert } from '@mui/material'
+import {
+  Typography,
+  Alert,
+  List,
+  ListItem,
+  IconButton,
+  ListItemText,
+  Divider,
+  Popper,
+  Box,
+  useTheme,
+  TextField,
+} from '@mui/material'
 
-import { AnswerReviewPopover } from './AnswerReviewPopover'
+import { colors } from '@/themes/globalStyles'
+import { CompletedAnswerSentence } from '@/types/model/answer'
 
 type Props = {
-  answer: string
+  answerSentences: CompletedAnswerSentence[]
 }
 
-export const AnswerArea: FC<Props> = memo(({ answer }) => {
-  const [target, setTarget] = useState<HTMLElement | undefined>()
+export const AnswerArea: FC<Props> = memo(({ answerSentences }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const theme = useTheme()
 
-  const ref = useCallback(
-    (el: HTMLElement | null) => {
-      if (el !== null || el !== undefined) {
-        setTarget(el || undefined)
-      } else {
-        setTarget(undefined)
-      }
-    },
-    [target],
-  )
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget)
+  }
+
+  const open = Boolean(anchorEl)
 
   return (
     <>
@@ -37,8 +46,55 @@ export const AnswerArea: FC<Props> = memo(({ answer }) => {
         button to review.
       </Alert>
       <div>
-        <div ref={ref}>{answer}</div>
-        <AnswerReviewPopover target={target} />
+        <List dense={false}>
+          {answerSentences.map((answerSentence) => (
+            <Fragment key={answerSentence.num}>
+              <ListItem
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={handleClick}
+                  >
+                    <RateReviewIcon />
+                  </IconButton>
+                }
+              >
+                <ListItemText primary={answerSentence.sentence} />
+              </ListItem>
+              <Divider />
+              <Popper
+                id={answerSentence.num + answerSentence.sentence}
+                open={open}
+                anchorEl={anchorEl}
+                placement="bottom-end"
+                sx={{ width: '515px' }}
+              >
+                <Box
+                  sx={{
+                    border: 1,
+                    p: 1,
+                    backgroundColor:
+                      theme.palette.mode === 'dark'
+                        ? colors.base.gray
+                        : colors.disabled.light,
+                    color: theme.palette.text.primary,
+                    my: 1,
+                  }}
+                >
+                  <TextField
+                    id=""
+                    label=""
+                    color="secondary"
+                    multiline
+                    rows={4}
+                    fullWidth
+                  />
+                </Box>
+              </Popper>
+            </Fragment>
+          ))}
+        </List>
       </div>
     </>
   )
