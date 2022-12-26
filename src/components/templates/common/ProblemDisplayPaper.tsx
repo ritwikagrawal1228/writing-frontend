@@ -12,7 +12,7 @@ type Props = {
 export const ProblemDisplayPaper: FC<Props> = memo(({ problem, img }) => {
   return (
     <>
-      <Paper sx={{ width: '100%', minHeight: '600px' }}>
+      <Paper sx={{ width: '100%' }}>
         <Box
           sx={{
             p: 3,

@@ -1,6 +1,7 @@
-import React, { FC, Fragment, memo } from 'react'
+import React, { FC, Fragment, memo, useEffect, useState } from 'react'
 
 import RateReviewIcon from '@mui/icons-material/RateReview'
+import SendIcon from '@mui/icons-material/Send'
 import {
   Typography,
   Alert,
@@ -9,10 +10,13 @@ import {
   IconButton,
   ListItemText,
   Divider,
-  Popper,
-  Box,
   useTheme,
-  TextField,
+  OutlinedInput,
+  FormControl,
+  FormHelperText,
+  Collapse,
+  Button,
+  Grid,
 } from '@mui/material'
 
 import { colors } from '@/themes/globalStyles'
@@ -23,11 +27,47 @@ type Props = {
 }
 
 export const AnswerArea: FC<Props> = memo(({ answerSentences }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [corrections, setCorrections] = useState<CompletedAnswerSentence[]>([])
+  const [isOpens, setIsOpens] = useState<boolean[]>(
+    Array(answerSentences.length).fill(false),
+  )
   const theme = useTheme()
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget)
+  const handleClick = (i: number) => {
+    // Set isOpens
+    const newIsOpens = isOpens.map((isOpen, index) => {
+      if (index === i) {
+        return !isOpen
+      }
+      return isOpen
+    })
+    setIsOpens(newIsOpens)
+  }
+
+  useEffect(() => {
+    setCorrections(answerSentences)
+  }, [answerSentences])
+
+  useEffect(() => {
+    console.log('corrections', corrections)
+  }, [corrections])
+
+  useEffect(() => {
+    console.log('isOpens', isOpens)
+  }, [isOpens])
+
+  const onCorrectionChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    num: number,
+  ) => {
+    const newCorrections = corrections.map((correction) => {
+      if (correction.num === num) {
+        correction.sentence = event.target.value
+      }
+      return correction
+    })
+    setCorrections(newCorrections)
   }
 
   const open = Boolean(anchorEl)
@@ -38,60 +78,78 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences }) => {
         Answer
       </Typography>
       <Alert severity="info" sx={{ width: '100%', mb: 1 }}>
-        Select the text you want to review
-        <br /> and click the <RateReviewIcon
-          color="primary"
-          fontSize="small"
-        />{' '}
-        button to review.
+        Click the <RateReviewIcon fontSize="small" /> button to add corrections.
       </Alert>
       <div>
         <List dense={false}>
-          {answerSentences.map((answerSentence) => (
-            <Fragment key={answerSentence.num}>
+          {corrections.map((correction, i) => (
+            <Fragment key={correction.num}>
               <ListItem
                 secondaryAction={
                   <IconButton
                     edge="end"
                     aria-label="delete"
-                    onClick={handleClick}
+                    onClick={() => handleClick(i)}
                   >
                     <RateReviewIcon />
                   </IconButton>
                 }
               >
-                <ListItemText primary={answerSentence.sentence} />
+                <ListItemText
+                  primary={
+                    answerSentences.find((s) => s.num === correction.num)
+                      ?.sentence
+                  }
+                />
               </ListItem>
               <Divider />
-              <Popper
-                id={answerSentence.num + answerSentence.sentence}
-                open={open}
-                anchorEl={anchorEl}
-                placement="bottom-end"
-                sx={{ width: '515px' }}
+              <Collapse
+                in={isOpens[i]}
+                timeout="auto"
+                unmountOnExit
+                sx={{
+                  px: 2,
+                  pt: 2,
+                  backgroundColor:
+                    theme.palette.mode === 'dark'
+                      ? colors.base.gray
+                      : colors.disabled.light,
+                }}
               >
-                <Box
-                  sx={{
-                    border: 1,
-                    p: 1,
-                    backgroundColor:
-                      theme.palette.mode === 'dark'
-                        ? colors.base.gray
-                        : colors.disabled.light,
-                    color: theme.palette.text.primary,
-                    my: 1,
-                  }}
-                >
-                  <TextField
-                    id=""
-                    label=""
-                    color="secondary"
+                <FormControl variant="standard" fullWidth sx={{ mb: 2 }}>
+                  <OutlinedInput
+                    id={correction.num.toString()}
                     multiline
                     rows={4}
                     fullWidth
+                    value={correction.sentence}
+                    onChange={(e) => onCorrectionChange(e, correction.num)}
+                    color="secondary"
                   />
-                </Box>
-              </Popper>
+                  <Grid container sx={{ justifyContent: 'space-between' }}>
+                    <FormHelperText
+                      id="component-helper-text"
+                      sx={{ justifyContent: 'space-between' }}
+                    >
+                      ※ Just enter the correct sentence to show the diff
+                    </FormHelperText>
+                    <FormHelperText
+                      id="component-helper-text"
+                      sx={{ justifyContent: 'space-between' }}
+                    >
+                      <Button
+                        startIcon={<SendIcon />}
+                        color="secondary"
+                        variant="outlined"
+                        size="small"
+                        sx={{ ml: 3 }}
+                      >
+                        Submit
+                      </Button>
+                    </FormHelperText>
+                  </Grid>
+                </FormControl>
+              </Collapse>
             </Fragment>
           ))}
         </List>
