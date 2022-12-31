@@ -79,6 +79,10 @@ const getAnswerById = async (id: string, user: any) => {
         status
         createdAt
         updatedAt
+        completedAnswerSentences {
+          num
+          sentence
+        }
         problem {
           id
           title

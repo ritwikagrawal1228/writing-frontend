@@ -35,12 +35,6 @@ type Props = {
   problemsNum: number
 }
 
-type ProblemsByUserId = {
-  data: {
-    problemsByUserId: Problem[] | []
-  }
-}
-
 export default function ProblemCreate({
   authenticated,
   userStr,

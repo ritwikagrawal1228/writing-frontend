@@ -8,5 +8,11 @@ export type Answer = {
   status: string
   createdAt: string
   updatedAt: string
+  completedAnswerSentences: CompletedAnswerSentence[]
   problem: Problem
+}
+
+export type CompletedAnswerSentence = {
+  num: number
+  sentence: string
 }
