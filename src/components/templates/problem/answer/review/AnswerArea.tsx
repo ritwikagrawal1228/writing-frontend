@@ -17,16 +17,19 @@ import {
   Collapse,
   Button,
   Grid,
+  ListItemIcon,
 } from '@mui/material'
 
+import { correctionService } from '@/services/correctionService'
 import { colors } from '@/themes/globalStyles'
 import { CompletedAnswerSentence } from '@/types/model/answer'
 
 type Props = {
   answerSentences: CompletedAnswerSentence[]
+  answerId: string
 }
 
-export const AnswerArea: FC<Props> = memo(({ answerSentences }) => {
+export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [corrections, setCorrections] = useState<CompletedAnswerSentence[]>([])
   const [isOpens, setIsOpens] = useState<boolean[]>(
@@ -70,7 +73,19 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences }) => {
     setCorrections(newCorrections)
   }
 
-  const open = Boolean(anchorEl)
+  const submitCorrection = (num: number) => {
+    const correction = corrections.find((c) => c.num === num)
+
+    if (!correction) {
+      return
+    }
+
+    correctionService.createCorrection(
+      answerId,
+      correction?.num,
+      correction?.sentence,
+    )
+  }
 
   return (
     <>
@@ -95,6 +110,7 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences }) => {
                   </IconButton>
                 }
               >
+                <ListItemIcon>{correction.num}</ListItemIcon>
                 <ListItemText
                   primary={
                     answerSentences.find((s) => s.num === correction.num)
@@ -102,7 +118,7 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences }) => {
                   }
                 />
               </ListItem>
-              <Divider />
+              {!isOpens[i] && <Divider />}
               <Collapse
                 in={isOpens[i]}
                 timeout="auto"
@@ -140,9 +156,14 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences }) => {
                       <Button
                         startIcon={<SendIcon />}
                         color="secondary"
-                        variant="outlined"
+                        variant={
+                          theme.palette.mode === 'dark'
+                            ? 'contained'
+                            : 'outlined'
+                        }
                         size="small"
                         sx={{ ml: 3 }}
+                        onClick={() => submitCorrection(correction.num)}
                       >
                         Submit
                       </Button>

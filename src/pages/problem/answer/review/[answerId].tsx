@@ -17,7 +17,6 @@ import { Storage, withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
-import { ProblemDescriptionGrid } from '@/components/templates/common/ProblemDescriptionGrid'
 import { ProblemDisplayPaper } from '@/components/templates/common/ProblemDisplayPaper'
 import { AnswerArea } from '@/components/templates/problem/answer/review/AnswerArea'
 import { Path } from '@/constants/Path'
@@ -32,7 +31,7 @@ type Props = {
 }
 
 interface Column {
-  id: 'time' | 'answerSpentTime' | 'wordCount'
+  id: 'type' | 'words' | 'time' | 'answerSpentTime' | 'wordCount'
   label: string
   minWidth?: number
   align?: 'right'
@@ -40,6 +39,8 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
+  { id: 'type', label: 'Part', minWidth: 100 },
+  { id: 'words', label: 'Minimum Words', minWidth: 100 },
   { id: 'time', label: 'Time Limit', minWidth: 100 },
   { id: 'answerSpentTime', label: 'Spent time', minWidth: 100 },
   { id: 'wordCount', label: 'Word Count', minWidth: 100 },
@@ -112,6 +113,16 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
                 </TableHead>
                 <TableBody>
                   <TableRow hover role="checkbox" tabIndex={-1}>
+                    <TableCell>
+                      {answerModel.problem.taskType === 'Type_#Task1'
+                        ? 'Part1'
+                        : 'Part2'}
+                    </TableCell>
+                    <TableCell>
+                      {answerModel.problem.taskType === 'Type_#Task1'
+                        ? 150
+                        : 250}
+                    </TableCell>
                     <TableCell>{answerModel.time} min</TableCell>
                     <TableCell>
                       {answerModel.answerSpentTime !== 0
@@ -135,7 +146,6 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
           </Paper>
         </Grid>
       </Grid>
-      <ProblemDescriptionGrid problem={answerModel.problem} />
       <Grid container columnSpacing={2} sx={{ pb: 4 }}>
         <Grid item xs={6}>
           <ProblemDisplayPaper problem={answerModel.problem} img={img} />
@@ -146,6 +156,7 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
           >
             <AnswerArea
               answerSentences={answerModel.completedAnswerSentences}
+              answerId={answerModel.id}
             />
           </Paper>
         </Grid>
