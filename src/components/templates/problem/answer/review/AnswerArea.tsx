@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   IconButton,
-  ListItemText,
   Divider,
   useTheme,
   OutlinedInput,
@@ -18,8 +17,10 @@ import {
   Button,
   Grid,
   ListItemIcon,
+  Box,
 } from '@mui/material'
 
+import Diff from '@/components/diff'
 import { correctionService } from '@/services/correctionService'
 import { colors } from '@/themes/globalStyles'
 import { CompletedAnswerSentence } from '@/types/model/answer'
@@ -30,11 +31,14 @@ type Props = {
 }
 
 export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [corrections, setCorrections] = useState<CompletedAnswerSentence[]>([])
+  const [correctedSentences, setCorrectedSentences] = useState<
+    CompletedAnswerSentence[]
+  >([])
   const [isOpens, setIsOpens] = useState<boolean[]>(
     Array(answerSentences.length).fill(false),
   )
+  const [isUpdating, setIsUpdating] = useState<boolean>(false)
   const theme = useTheme()
 
   const handleClick = (i: number) => {
@@ -48,29 +52,46 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
     setIsOpens(newIsOpens)
   }
 
-  useEffect(() => {
-    setCorrections(answerSentences)
-  }, [answerSentences])
+  const fetchCorrections = async () => {
+    correctionService.getCorrectionByAnswerId(answerId).then((res) => {
+      const correctedSentences: CompletedAnswerSentence[] =
+        res.data.correctionByAnswerId.correctedAnswerSentences
+
+      const newCorrections: CompletedAnswerSentence[] = []
+      answerSentences.forEach((answerSentence) => {
+        const corrected = correctedSentences.find(
+          (c) => c.num === answerSentence.num,
+        )
+
+        if (corrected) {
+          const c = { ...corrected }
+          newCorrections.push(c)
+        } else {
+          newCorrections.push(answerSentence)
+        }
+      })
+      setCorrections(newCorrections)
+
+      setCorrectedSentences(correctedSentences)
+    })
+  }
 
   useEffect(() => {
-    console.log('corrections', corrections)
-  }, [corrections])
-
-  useEffect(() => {
-    console.log('isOpens', isOpens)
-  }, [isOpens])
+    fetchCorrections()
+  }, [])
 
   const onCorrectionChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     num: number,
   ) => {
-    const newCorrections = corrections.map((correction) => {
-      if (correction.num === num) {
-        correction.sentence = event.target.value
-      }
-      return correction
-    })
-    setCorrections(newCorrections)
+    setCorrections((current) =>
+      current.map((correction) => {
+        if (correction.num === num) {
+          correction.sentence = event.target.value
+        }
+        return correction
+      }),
+    )
   }
 
   const submitCorrection = (num: number) => {
@@ -80,11 +101,17 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
       return
     }
 
-    correctionService.createCorrection(
-      answerId,
-      correction?.num,
-      correction?.sentence,
-    )
+    setIsUpdating(true)
+    correctionService
+      .createCorrection(answerId, correction?.num, correction?.sentence)
+      .then(() =>
+        fetchCorrections().then(() =>
+          setIsOpens(Array(answerSentences.length).fill(false)),
+        ),
+      )
+      .finally(() => {
+        setIsUpdating(false)
+      })
   }
 
   return (
@@ -97,8 +124,8 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
       </Alert>
       <div>
         <List dense={false}>
-          {corrections.map((correction, i) => (
-            <Fragment key={correction.num}>
+          {answerSentences.map((sentence, i) => (
+            <Fragment key={sentence.num}>
               <ListItem
                 secondaryAction={
                   <IconButton
@@ -110,13 +137,30 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
                   </IconButton>
                 }
               >
-                <ListItemIcon>{correction.num}</ListItemIcon>
-                <ListItemText
-                  primary={
-                    answerSentences.find((s) => s.num === correction.num)
-                      ?.sentence
-                  }
-                />
+                <ListItemIcon>{sentence.num}</ListItemIcon>
+                <Typography>
+                  {sentence.sentence}
+                  <br />
+                  <Box
+                    component="span"
+                    sx={{
+                      display: 'inline',
+                      color: 'gray',
+                    }}
+                  >
+                    {correctedSentences.find((s) => s.num === sentence.num)
+                      ?.sentence && (
+                      <Diff
+                        string1={sentence.sentence}
+                        string2={
+                          correctedSentences.find((s) => s.num === sentence.num)
+                            ?.sentence || ''
+                        }
+                        mode="words"
+                      />
+                    )}
+                  </Box>
+                </Typography>
               </ListItem>
               {!isOpens[i] && <Divider />}
               <Collapse
@@ -124,6 +168,7 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
                 timeout="auto"
                 unmountOnExit
                 sx={{
+                  ml: 9,
                   px: 2,
                   pt: 2,
                   backgroundColor:
@@ -134,12 +179,14 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
               >
                 <FormControl variant="standard" fullWidth sx={{ mb: 2 }}>
                   <OutlinedInput
-                    id={correction.num.toString()}
+                    id={sentence.num.toString()}
                     multiline
                     rows={4}
                     fullWidth
-                    value={correction.sentence}
-                    onChange={(e) => onCorrectionChange(e, correction.num)}
+                    value={
+                      corrections.find((c) => c.num === sentence.num)?.sentence
+                    }
+                    onChange={(e) => onCorrectionChange(e, sentence.num)}
                     color="secondary"
                   />
                   <Grid container sx={{ justifyContent: 'space-between' }}>
@@ -162,8 +209,8 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
                             : 'outlined'
                         }
                         size="small"
-                        sx={{ ml: 3 }}
-                        onClick={() => submitCorrection(correction.num)}
+                        onClick={() => submitCorrection(sentence.num)}
+                        disabled={isUpdating}
                       >
                         Submit
                       </Button>
