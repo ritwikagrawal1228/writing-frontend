@@ -147,7 +147,7 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
           </Paper>
         </Grid>
         <Grid item xs={12}>
-          <ReviewArea answer={answerModel} />
+          <ReviewArea answer={answerModel} user={user} />
         </Grid>
       </Grid>
       <Grid container columnSpacing={2} sx={{ pb: 4 }}>
