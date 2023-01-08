@@ -27,14 +27,11 @@ const createReview = async (answerId: string, content: string) => {
 
 const getReviewByAnswerId = async (answerId: string) => {
   const query = gql`
-    query ($answerId: ID!) {
+    query ($answerId: String!) {
       reviewByAnswerId(answerId: $answerId) {
         id
-        comment
+        content
         user {
-          id
-        }
-        answer {
           id
         }
       }

@@ -1,4 +1,4 @@
-import React, { FC, Fragment, memo } from 'react'
+import React, { FC, Fragment, memo, useEffect } from 'react'
 
 import { Button, Paper, TextField, Typography } from '@mui/material'
 
@@ -24,26 +24,42 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
       .then(({ data }) => console.log(data.createReview))
   }
 
+  useEffect(() => {
+    reviewService.getReviewByAnswerId(answer.id).then(({ data }) => {
+      if (data.reviewByAnswerId.content) {
+        setReview(data.reviewByAnswerId.content)
+      }
+    })
+  }, [])
+
   return (
     <>
       <Paper sx={{ p: 2 }}>
         <Typography variant="h6" fontWeight="bold">
           Review
         </Typography>
-        <TextField
-          color="secondary"
-          fullWidth
-          multiline
-          rows={4}
-          id=""
-          label=""
-          value={review}
-          onChange={handleReviewChange}
-          placeholder="Write your review here"
-        />
-        <Button onClick={sendReview} variant="contained" color="secondary">
-          Send
-        </Button>
+        {review ? (
+          <>{review}</>
+        ) : user?.userType === 'TEACHER' ? (
+          <>
+            <TextField
+              color="secondary"
+              fullWidth
+              multiline
+              rows={4}
+              id=""
+              label=""
+              value={review}
+              onChange={handleReviewChange}
+              placeholder="Write your review here"
+            />
+            <Button onClick={sendReview} variant="contained" color="secondary">
+              Send
+            </Button>
+          </>
+        ) : (
+          <>Your teacher has not reviewed yet.</>
+        )}
       </Paper>
     </>
   )
