@@ -19,6 +19,7 @@ import { useTranslations } from 'next-intl'
 import Layout from '@/components/templates/Layout'
 import { ProblemDisplayPaper } from '@/components/templates/common/ProblemDisplayPaper'
 import { AnswerArea } from '@/components/templates/problem/answer/review/AnswerArea'
+import { ReviewArea } from '@/components/templates/problem/answer/review/ReviewArea'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { answerService } from '@/services/answerService'
@@ -93,7 +94,7 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
           </Typography>
         </Grid>
       </Grid>
-      <Grid container alignItems="center" sx={{ my: 2 }}>
+      <Grid container alignItems="center" sx={{ my: 2 }} rowSpacing={2}>
         <Grid item xs={12}>
           <Paper>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -144,6 +145,9 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
               </Table>
             </TableContainer>
           </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <ReviewArea answer={answerModel} user={user} />
         </Grid>
       </Grid>
       <Grid container columnSpacing={2} sx={{ pb: 4 }}>
