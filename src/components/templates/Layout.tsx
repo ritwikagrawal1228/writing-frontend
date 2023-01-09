@@ -8,9 +8,9 @@ import { useAuthenticator } from '@aws-amplify/ui-react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import MenuIcon from '@mui/icons-material/Menu'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
+import SettingsIcon from '@mui/icons-material/Settings'
 import TranslateIcon from '@mui/icons-material/Translate'
 import {
   AppBar,
@@ -86,7 +86,7 @@ const Layout: FC<LayoutProps> = ({
       key: 'profileSetting',
       text: t('profileMenu.profile'),
       type: 'text',
-      icon: <ManageAccountsIcon />,
+      icon: <SettingsIcon />,
     },
     {
       key: 'language',

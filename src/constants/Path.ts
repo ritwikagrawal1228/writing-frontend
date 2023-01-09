@@ -8,7 +8,9 @@ export enum Path {
   ProblemAnswer = '/problem/answer',
   ProblemAnswerRedeem = '/problem/answer/redeem',
   ProblemAnswerReview = '/problem/answer/review',
-  ProfileSettings = '/profile-settings',
+  ProfileSettings = '/settings/profile',
+  NotificationSettings = '/settings/notifications',
+  PaymentSettings = '/settings/payment',
   Tip = '/tip',
   Purchase = '/purchase',
 }
