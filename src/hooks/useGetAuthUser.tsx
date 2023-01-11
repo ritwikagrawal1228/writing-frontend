@@ -22,6 +22,7 @@ export const useGetAuthUser = (userStr: string) => {
       query ($userId: ID!) {
         user(userId: $userId) {
           id
+          name
           plan
           email
           userType
