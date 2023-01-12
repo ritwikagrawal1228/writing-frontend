@@ -15,6 +15,7 @@ import { ProfileSettingForm } from '@/components/templates/settings/profile/Prof
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { useProfileSettingDefaultFrom } from '@/hooks/useProfileSettingDefaultFrom'
+import { userService } from '@/services/userService'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
 
 type Props = {
@@ -22,7 +23,7 @@ type Props = {
 }
 
 export default function ProfileSetting({ userStr }: Props) {
-  const { user } = useGetAuthUser(userStr)
+  const { user, setUser } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
@@ -38,8 +39,12 @@ export default function ProfileSetting({ userStr }: Props) {
     methods.reset(profileSettingForm)
   }, [profileSettingForm])
 
-  const onSubmit: SubmitHandler<UpdateProfileSettingForm> = async (data) => {
-    // Send
+  const onSubmit: SubmitHandler<UpdateProfileSettingForm> = async (form) => {
+    const {
+      data: { updateUser },
+    } = await userService.updateProfile(form)
+
+    setUser(updateUser)
   }
 
   return (
@@ -53,7 +58,12 @@ export default function ProfileSetting({ userStr }: Props) {
     >
       <TitleBox title="Profile Setting">
         <Box sx={{ maxHeight: '36px' }}>
-          <Button color="primary" variant="contained" startIcon={<SaveIcon />}>
+          <Button
+            color="primary"
+            variant="contained"
+            startIcon={<SaveIcon />}
+            onClick={() => methods.handleSubmit(onSubmit)()}
+          >
             <b>{t('create.submitBtn')}</b>
           </Button>
         </Box>

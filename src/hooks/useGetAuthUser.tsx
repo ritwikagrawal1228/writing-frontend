@@ -45,5 +45,5 @@ export const useGetAuthUser = (userStr: string) => {
     setUser(data?.data.user)
   }, [data])
 
-  return { user }
+  return { user, setUser }
 }
