@@ -4,7 +4,6 @@ import React, { Fragment, useEffect } from 'react'
 
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
 import EditIcon from '@mui/icons-material/Edit'
 import {
   Backdrop,
@@ -119,6 +118,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
         { label: t('list.title'), href: Path.Problem },
         { label: t('detail.title'), href: undefined },
       ]}
+      user={user}
     >
       {isDeleting && (
         <Backdrop

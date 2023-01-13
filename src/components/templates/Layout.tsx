@@ -38,6 +38,7 @@ import { useTranslations } from 'next-intl'
 import { Path } from '@/constants/Path'
 import { ColorModeContext } from '@/context/ColorMode'
 import { colors } from '@/themes/globalStyles'
+import { User } from '@/types/model/user'
 import { stringAvatar } from '@/utils/avator'
 
 type LayoutProps = {
@@ -45,6 +46,7 @@ type LayoutProps = {
   description?: string
   children: React.ReactNode
   breadcrumbs?: { label: string; href?: string }[]
+  user?: User
 }
 
 const languages = {
@@ -62,11 +64,12 @@ const Layout: FC<LayoutProps> = ({
   title,
   description,
   breadcrumbs,
+  user,
 }) => {
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('Nav')
   const router = useRouter()
-  const { user, signOut } = useAuthenticator()
+  const { signOut } = useAuthenticator()
   const theme = useTheme()
   const colorMode = React.useContext(ColorModeContext)
 
@@ -241,10 +244,10 @@ const Layout: FC<LayoutProps> = ({
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {user?.attributes?.name ? (
-                    <Avatar
-                      {...stringAvatar(user?.attributes?.name || 'E I')}
-                    />
+                  {user?.profileImageUrl ? (
+                    <Avatar src={user.profileImageUrl}></Avatar>
+                  ) : user?.name ? (
+                    <Avatar {...stringAvatar(user?.name || 'E I')} />
                   ) : (
                     <Avatar />
                   )}

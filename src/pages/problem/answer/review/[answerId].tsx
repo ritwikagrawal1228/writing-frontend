@@ -86,6 +86,7 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
         },
         { label: 'Review Answer', href: undefined },
       ]}
+      user={user}
     >
       <Grid container alignItems="center">
         <Grid item xs={12}>

@@ -56,6 +56,7 @@ export default function Answer({ problem, userStr }: Props) {
         { label: t('detail.title'), href: `${Path.Problem}/${problem.id}` },
         { label: ta('create.title'), href: undefined },
       ]}
+      user={user}
     >
       <AnswerForm
         problem={problem}

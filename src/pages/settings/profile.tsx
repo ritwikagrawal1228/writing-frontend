@@ -3,8 +3,17 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
-import { Box, Button, Grid, Paper, useTheme } from '@mui/material'
-import { withSSRContext } from 'aws-amplify'
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Snackbar,
+  useTheme,
+} from '@mui/material'
+import { Storage, withSSRContext } from 'aws-amplify'
+import imageCompression from 'browser-image-compression'
 import { useTranslations } from 'next-intl'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -12,7 +21,6 @@ import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { ProfileSettingForm } from '@/components/templates/settings/profile/ProfileSettingForm'
-import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { useProfileSettingDefaultFrom } from '@/hooks/useProfileSettingDefaultFrom'
 import { userService } from '@/services/userService'
@@ -27,8 +35,9 @@ export default function ProfileSetting({ userStr }: Props) {
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
-  const [photo, setPhoto] = useState<File | undefined>(undefined)
+  const [photo, setPhoto] = useState<File | string | undefined>('')
   const { profileSettingForm } = useProfileSettingDefaultFrom(user)
+  const [isAlertShow, setIsAlertShow] = useState(false)
 
   const methods = useForm<UpdateProfileSettingForm>({
     mode: 'onChange',
@@ -36,26 +45,70 @@ export default function ProfileSetting({ userStr }: Props) {
   })
 
   useEffect(() => {
+    if (user && typeof photo === 'string') {
+      setPhoto(user?.profileImageUrl)
+    }
+  }, [user])
+
+  useEffect(() => {
     methods.reset(profileSettingForm)
   }, [profileSettingForm])
 
   const onSubmit: SubmitHandler<UpdateProfileSettingForm> = async (form) => {
-    const {
-      data: { updateUser },
-    } = await userService.updateProfile(form)
+    if (photo && typeof photo !== 'string') {
+      const compPhoto = await imageCompression(photo, {
+        maxSizeMB: 1,
+      })
+      const fileExt = compPhoto.name.split('.').pop()
+      const res = await Storage.put(
+        `${user?.id}-${Date.now()}.${fileExt}`,
+        compPhoto,
+      )
+      form.profileImageUrl = await Storage.get(res.key)
+    }
+
+    const { updateUser } = await userService
+      .updateProfile(form)
+      .then(({ data }) => {
+        setIsAlertShow(true)
+        return data
+      })
 
     setUser(updateUser)
+  }
+
+  const handleAlertClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setIsAlertShow(false)
   }
 
   return (
     <Layout
       title={t('create.title')}
       description={t('create.title')}
-      breadcrumbs={[
-        { label: t('list.title'), href: Path.Problem },
-        { label: t('create.title'), href: undefined },
-      ]}
+      breadcrumbs={[{ label: 'Profile Settings', href: undefined }]}
+      user={user}
     >
+      <Snackbar
+        open={isAlertShow}
+        autoHideDuration={600}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert
+          severity="success"
+          onClose={handleAlertClose}
+          sx={{ width: '100%' }}
+        >
+          Your profile successfully updated!
+        </Alert>
+      </Snackbar>
       <TitleBox title="Profile Setting">
         <Box sx={{ maxHeight: '36px' }}>
           <Button

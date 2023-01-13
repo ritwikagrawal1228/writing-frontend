@@ -31,6 +31,7 @@ export default function NotificationSetting({ userStr }: Props) {
         { label: t('list.title'), href: Path.Problem },
         { label: t('create.title'), href: undefined },
       ]}
+      user={user}
     >
       <TitleBox title="Notification Setting">
         <Box sx={{ maxHeight: '36px' }}>

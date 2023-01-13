@@ -7,7 +7,7 @@ import { axios } from '@/utils/axios'
 const updateProfile = async (form: UpdateProfileSettingForm) => {
   const query = gql`
     mutation ($input: UpdateUserProfileInput!) {
-      updateUser(input: $input) {
+      updateUserProfile(input: $input) {
         id
         name
         plan
@@ -27,7 +27,7 @@ const updateProfile = async (form: UpdateProfileSettingForm) => {
     input: {
       email: form.email,
       name: form.name,
-      studyTarget: form.studyTarget,
+      studyTarget: String(form.studyTarget),
       introduction: form.introduction,
       profileImageUrl: form.profileImageUrl,
     },

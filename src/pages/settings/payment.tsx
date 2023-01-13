@@ -31,6 +31,7 @@ export default function PaymentSetting({ userStr }: Props) {
         { label: t('list.title'), href: Path.Problem },
         { label: t('create.title'), href: undefined },
       ]}
+      user={user}
     >
       <TitleBox title="Payment Setting">
         <Box sx={{ maxHeight: '36px' }}>

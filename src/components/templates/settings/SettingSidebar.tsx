@@ -49,6 +49,7 @@ export const SettingSidebar = memo(() => {
               <ListItemButton
                 selected={router.pathname === item.path}
                 onClick={() => movePage(item.path)}
+                disabled={Path.NotificationSettings === item.path}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.label} />
