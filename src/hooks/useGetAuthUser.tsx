@@ -22,6 +22,7 @@ export const useGetAuthUser = (userStr: string) => {
       query ($userId: ID!) {
         user(userId: $userId) {
           id
+          name
           plan
           email
           userType
@@ -44,5 +45,5 @@ export const useGetAuthUser = (userStr: string) => {
     setUser(data?.data.user)
   }, [data])
 
-  return { user }
+  return { user, setUser }
 }

@@ -3,6 +3,7 @@ import { UserType } from '@/constants/UserType'
 
 export type User = {
   id: string
+  name: string
   plan: UserPlan
   email: string
   userType: UserType

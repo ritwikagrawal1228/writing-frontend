@@ -76,6 +76,7 @@ export default function ProblemList({
       title={t('list.title')}
       description={t('list.description')}
       breadcrumbs={[{ label: t('list.title'), href: undefined }]}
+      user={user}
     >
       <TitleBox title={t('list.title')}>
         <Box sx={{ maxHeight: '36px' }}>

@@ -145,6 +145,7 @@ export default function ProblemEdit({ problem, userStr }: Props) {
         { label: t('detail.title'), href: `${Path.Problem}/${problem.id}` },
         { label: t('edit.title'), href: undefined },
       ]}
+      user={user}
     >
       <TitleBox title="Problem Edit">
         <Box sx={{ maxHeight: '36px' }}>

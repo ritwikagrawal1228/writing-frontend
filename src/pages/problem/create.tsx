@@ -26,7 +26,6 @@ import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { problemService } from '@/services/problemService'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
-import { Problem } from '@/types/model/problem'
 import { axios } from '@/utils/axios'
 
 type Props = {
@@ -143,6 +142,7 @@ export default function ProblemCreate({
         { label: t('list.title'), href: Path.Problem },
         { label: t('create.title'), href: undefined },
       ]}
+      user={user}
     >
       <Snackbar
         open={limitAlert}

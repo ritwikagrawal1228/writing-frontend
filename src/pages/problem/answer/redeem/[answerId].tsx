@@ -74,6 +74,7 @@ export default function AnswerRedeem({ answerModel, userStr }: Props) {
         },
         { label: ta('create.title'), href: undefined },
       ]}
+      user={user}
     >
       <AnswerForm
         problem={answerModel.problem}
