@@ -6,5 +6,8 @@ declare namespace NodeJS {
     readonly NEXTAUTH_URL: string
     readonly NEXTAUTH_SECRET: string
     readonly API_URL: string
+    readonly SQUARE_APPLICATION_ID: string
+    readonly SQUARE_ACCESS_TOKEN: string
+    readonly SQUARE_LOCATION_ID: string
   }
 }

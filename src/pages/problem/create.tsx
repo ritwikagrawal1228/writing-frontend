@@ -181,7 +181,7 @@ export default function ProblemCreate({
                 {t('create.limitAlertContent1')}
                 <br />
                 {t('create.limitAlertContent2')}{' '}
-                <Link href={Path.Purchase}>
+                <Link href={Path.PaymentSubscription}>
                   <u style={{ color: 'link' }}>here</u>
                 </Link>
                 .
@@ -195,7 +195,7 @@ export default function ProblemCreate({
                 {t('create.limitAlertContent1')}
                 <br />
                 {t('create.limitAlertContent2')}{' '}
-                <Link href={Path.Purchase}>
+                <Link href={Path.PaymentSubscription}>
                   <u style={{ color: 'link' }}>{t('create.upgradeLink')}</u>
                 </Link>
                 .

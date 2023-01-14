@@ -82,6 +82,7 @@ const Layout: FC<LayoutProps> = ({
   const pages = [
     { label: t('menu.problem'), href: Path.Problem },
     { label: t('menu.tip'), href: Path.Tip },
+    { label: 'Upgrade', href: Path.PaymentSubscription },
   ]
 
   const settings = [
