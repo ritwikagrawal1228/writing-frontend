@@ -199,7 +199,7 @@ export const ProfileSettingForm: FC<Props> = memo(
                 name="questionImage"
                 onChange={handleFile}
                 hidden
-                disabled={photo}
+                disabled={!!photo}
               />
             </Button>
           </FormControl>
