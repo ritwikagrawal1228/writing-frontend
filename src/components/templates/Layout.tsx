@@ -12,6 +12,9 @@ import MenuIcon from '@mui/icons-material/Menu'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import SettingsIcon from '@mui/icons-material/Settings'
 import TranslateIcon from '@mui/icons-material/Translate'
+
+import { Path } from '@/constants/Path'
+
 import {
   AppBar,
   Avatar,
@@ -33,10 +36,11 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
+
+import { ColorModeContext } from '@/context/ColorMode'
+
 import { useTranslations } from 'next-intl'
 
-import { Path } from '@/constants/Path'
-import { ColorModeContext } from '@/context/ColorMode'
 import { colors } from '@/themes/globalStyles'
 import { User } from '@/types/model/user'
 import { stringAvatar } from '@/utils/avator'
@@ -82,6 +86,7 @@ const Layout: FC<LayoutProps> = ({
   const pages = [
     { label: t('menu.problem'), href: Path.Problem },
     { label: t('menu.tip'), href: Path.Tip },
+    { label: 'Upgrade', href: Path.PaymentSubscription },
   ]
 
   const settings = [

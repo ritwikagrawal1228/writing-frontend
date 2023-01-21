@@ -16,11 +16,15 @@ import {
 import { Storage, withSSRContext } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
 import { gql } from 'graphql-request'
-import { useTranslations } from 'next-intl'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
 import Layout from '@/components/templates/Layout'
+
+import { useTranslations } from 'next-intl'
+
 import { TitleBox } from '@/components/templates/common/TitleBox'
+
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
@@ -181,7 +185,7 @@ export default function ProblemCreate({
                 {t('create.limitAlertContent1')}
                 <br />
                 {t('create.limitAlertContent2')}{' '}
-                <Link href={Path.Purchase}>
+                <Link href={Path.PaymentSubscription}>
                   <u style={{ color: 'link' }}>here</u>
                 </Link>
                 .
@@ -195,7 +199,7 @@ export default function ProblemCreate({
                 {t('create.limitAlertContent1')}
                 <br />
                 {t('create.limitAlertContent2')}{' '}
-                <Link href={Path.Purchase}>
+                <Link href={Path.PaymentSubscription}>
                   <u style={{ color: 'link' }}>{t('create.upgradeLink')}</u>
                 </Link>
                 .

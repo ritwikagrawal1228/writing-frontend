@@ -12,5 +12,5 @@ export enum Path {
   NotificationSettings = '/settings/notifications',
   PaymentSettings = '/settings/payment',
   Tip = '/tip',
-  Purchase = '/purchase',
+  PaymentSubscription = '/payment/subscription',
 }
