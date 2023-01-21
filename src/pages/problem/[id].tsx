@@ -4,7 +4,13 @@ import React, { Fragment, useEffect } from 'react'
 
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+
+import Layout from '@/components/templates/Layout'
+
 import EditIcon from '@mui/icons-material/Edit'
+
+import { TitleBox } from '@/components/templates/common/TitleBox'
+
 import {
   Backdrop,
   Box,
@@ -25,13 +31,15 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
+
+import { answerStatus, answerStr } from '@/constants/AnswerStatus'
+
 import { Storage, withSSRContext } from 'aws-amplify'
+
+import { Path } from '@/constants/Path'
+
 import { useTranslations } from 'next-intl'
 
-import Layout from '@/components/templates/Layout'
-import { TitleBox } from '@/components/templates/common/TitleBox'
-import { answerStatus, answerStr } from '@/constants/AnswerStatus'
-import { Path } from '@/constants/Path'
 import { ProblemType } from '@/constants/ProblemType'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { problemService } from '@/services/problemService'

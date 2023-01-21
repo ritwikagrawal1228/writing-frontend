@@ -16,10 +16,11 @@ import { NextIntlProvider } from 'next-intl'
 import NProgress from 'nprogress'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import Page500 from './500'
-
 import awsExports from '@/aws-exports'
 import { ColorModeContext } from '@/context/ColorMode'
+
+import Page500 from './500'
+
 import { getDesignTokens } from '@/themes/defaultTheme'
 import { onError } from '@/utils/onError'
 

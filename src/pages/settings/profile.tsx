@@ -15,9 +15,11 @@ import {
 import { Storage, withSSRContext } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
 import { useTranslations } from 'next-intl'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
 import Layout from '@/components/templates/Layout'
+
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { ProfileSettingForm } from '@/components/templates/settings/profile/ProfileSettingForm'

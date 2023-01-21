@@ -14,12 +14,15 @@ import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import { useTranslations } from 'next-intl'
 
 import { Path } from '@/constants/Path'
+
+import Toolbar from '@mui/material/Toolbar'
+
 import { colors, fontSizes } from '@/themes/globalStyles'
+
+import Typography from '@mui/material/Typography'
+import { useTranslations } from 'next-intl'
 
 const pages = ['Products', 'Pricing', 'Blog']
 const languages = {
