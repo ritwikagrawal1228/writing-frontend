@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
 import {
@@ -18,14 +18,18 @@ import {
 import { TokenResult } from '@square/web-payments-sdk-types'
 import { withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
-import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
 import Layout from '@/components/templates/Layout'
+
+import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
+
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { squareService } from '@/services/squareService'
 import { fontSizes } from '@/themes/globalStyles'
+import { SquareCard } from '@/types/model/squareCard'
 
 type Props = {
   userStr: string
@@ -40,14 +44,22 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
+  const [card, setCard] = useState<SquareCard>()
   const submit = (token: TokenResult) => {
     if (token.token) {
       return
     }
   }
   useEffect(() => {
-    // TODO : GET user's card info
-  }, [])
+    if (!user || card) {
+      return
+    }
+    squareService.getSquareCard().then(({ data }) => {
+      if (data.getSquareCardByUserId) {
+        setCard(data.getSquareCardByUserId)
+      }
+    })
+  }, [user])
 
   return (
     <Layout
@@ -81,19 +93,23 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                   <TableCell sx={{ bgcolor: '#E3183714' }}>
                     Card number
                   </TableCell>
-                  <TableCell></TableCell>
+                  <TableCell>
+                    {card && `xxxx-xxxx-xxxx-${card.last4}`}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell sx={{ bgcolor: '#E3183714' }}>
                     Card expires
                   </TableCell>
-                  <TableCell></TableCell>
+                  <TableCell>
+                    {card && `${card.expYear}/${card.expMonth}`}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell sx={{ bgcolor: '#E3183714' }}>
                     Card brand
                   </TableCell>
-                  <TableCell></TableCell>
+                  <TableCell>{card && card.cardBrand}</TableCell>
                 </TableRow>
               </Table>
             </TableContainer>
