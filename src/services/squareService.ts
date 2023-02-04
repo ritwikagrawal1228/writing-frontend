@@ -7,8 +7,7 @@ import { SquareCard } from '@/types/model/squareCard'
 const getSquareCard = async () => {
   const query = gql`
     query () {
-      getSquareCardByUserId() {
-        id
+      getSquareCard {
         cardBrand
         last4
         expMonth
@@ -17,12 +16,10 @@ const getSquareCard = async () => {
     }
   `
 
-  return await axios.post<{ getSquareCardByUserId: SquareCard }>(
-    Path.APIGraphql,
-    {
-      query,
-    },
-  )
+  return await axios.post<{ getSquareCard: SquareCard }>(Path.APIGraphql, {
+    query,
+    variables: {},
+  })
 }
 
 export const squareService = {

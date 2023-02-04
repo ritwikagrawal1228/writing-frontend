@@ -1,11 +1,9 @@
 import { GetServerSideProps } from 'next'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
-import SaveIcon from '@mui/icons-material/Save'
 import {
-  Box,
-  Button,
   Grid,
   Paper,
   useTheme,
@@ -28,7 +26,7 @@ import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
-import { fontSizes } from '@/themes/globalStyles'
+import { colors, fontSizes } from '@/themes/globalStyles'
 import { SquareCard } from '@/types/model/squareCard'
 
 type Props = {
@@ -55,8 +53,10 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
       return
     }
     squareService.getSquareCard().then(({ data }) => {
-      if (data.getSquareCardByUserId) {
-        setCard(data.getSquareCardByUserId)
+      console.log(data.getSquareCard)
+
+      if (data.getSquareCard) {
+        setCard(data.getSquareCard)
       }
     })
   }, [user])
@@ -72,11 +72,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
       user={user}
     >
       <TitleBox title="Payment Setting">
-        <Box sx={{ maxHeight: '36px' }}>
-          <Button color="primary" variant="contained" startIcon={<SaveIcon />}>
-            <b>{t('create.submitBtn')}</b>
-          </Button>
-        </Box>
+        <></>
       </TitleBox>
       <Grid container columnSpacing={2}>
         <Grid item xs={3}>
@@ -84,7 +80,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
         </Grid>
         <Grid item xs={9}>
           <Paper sx={{ minHeight: 200, padding: 4 }}>
-            <Typography fontSize={fontSizes.l} sx={{ pb: 1 }}>
+            <Typography fontSize={fontSizes.l} sx={{ pb: 1 }} fontWeight="bold">
               Your Current Card
             </Typography>
             <TableContainer component={Paper}>
@@ -113,9 +109,22 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                 </TableRow>
               </Table>
             </TableContainer>
-            <Typography fontSize={fontSizes.l} sx={{ pb: 1, mt: 3 }}>
+            <Typography
+              fontSize={fontSizes.l}
+              sx={{ pb: 1, mt: 3 }}
+              fontWeight="bold"
+            >
               Change Payment Information
             </Typography>
+            <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
+              Card brand supported
+            </Typography>
+            <Image
+              src="/img/cardBrands.png"
+              alt="VISA/Mastercard/American Express/JCB/Diners Club/Discover"
+              width={300}
+              height={150}
+            />
             <PaymentForm
               applicationId={squareInfo.appId}
               cardTokenizeResponseReceived={(token, verifiedBuyer) => {
@@ -123,7 +132,11 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
               }}
               locationId={squareInfo.locationId}
             >
-              <CreditCard>Change Card</CreditCard>
+              <CreditCard
+                buttonProps={{ css: { backgroundColor: colors.primary.main } }}
+              >
+                Change Card
+              </CreditCard>
             </PaymentForm>
           </Paper>
         </Grid>
