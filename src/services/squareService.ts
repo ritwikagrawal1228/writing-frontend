@@ -22,6 +22,50 @@ const getSquareCard = async () => {
   })
 }
 
+const subscribePaidPlan = async (token: string) => {
+  const query = gql`
+    mutation ($input: SubscribePaidPlanInput!) {
+      subscribePaidPlan(input: $input)
+    }
+  `
+
+  const variables = {
+    input: {
+      token,
+    },
+  }
+
+  return await axios.post(Path.APIGraphql, {
+    query,
+    variables,
+  })
+}
+
+const updateSquareCard = async (token: string) => {
+  const query = gql`
+    mutation ($input: UpdateSquareCardInput!) {
+      updateSquareCard(input: $input) {
+        cardBrand
+        last4
+        expMonth
+        expYear
+      }
+    }
+  `
+  const variables = {
+    input: {
+      token,
+    },
+  }
+
+  return await axios.post(Path.APIGraphql, {
+    query,
+    variables,
+  })
+}
+
 export const squareService = {
   getSquareCard,
+  subscribePaidPlan,
+  updateSquareCard,
 }

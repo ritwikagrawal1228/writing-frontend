@@ -8,7 +8,7 @@ import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
 import Layout from '@/components/templates/Layout'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { userService } from '@/services/userService'
+import { squareService } from '@/services/squareService'
 
 type Props = {
   userStr: string
@@ -23,7 +23,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
 
   const submit = (token: TokenResult) => {
     if (token.token) {
-      userService.subscribePaidPlan(token.token)
+      squareService.subscribePaidPlan(token.token)
     }
   }
 

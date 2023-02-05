@@ -45,7 +45,12 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
   const [card, setCard] = useState<SquareCard>()
   const submit = (token: TokenResult) => {
     if (token.token) {
-      return
+      squareService.updateSquareCard(token.token).then(({ data }) => {
+        if (data.updateSquareCard) {
+          setCard(data.updateSquareCard)
+          alert('Card updated successfully')
+        }
+      })
     }
   }
   useEffect(() => {
@@ -53,8 +58,6 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
       return
     }
     squareService.getSquareCard().then(({ data }) => {
-      console.log(data.getSquareCard)
-
       if (data.getSquareCard) {
         setCard(data.getSquareCard)
       }
@@ -83,35 +86,37 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
             <Typography fontSize={fontSizes.l} sx={{ pb: 1 }} fontWeight="bold">
               Your Current Card
             </Typography>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableRow>
-                  <TableCell sx={{ bgcolor: '#E3183714' }}>
-                    Card number
-                  </TableCell>
-                  <TableCell>
-                    {card && `xxxx-xxxx-xxxx-${card.last4}`}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ bgcolor: '#E3183714' }}>
-                    Card expires
-                  </TableCell>
-                  <TableCell>
-                    {card && `${card.expYear}/${card.expMonth}`}
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell sx={{ bgcolor: '#E3183714' }}>
-                    Card brand
-                  </TableCell>
-                  <TableCell>{card && card.cardBrand}</TableCell>
-                </TableRow>
-              </Table>
-            </TableContainer>
+            {card && (
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableRow>
+                    <TableCell sx={{ bgcolor: '#E3183714' }}>
+                      Card number
+                    </TableCell>
+                    <TableCell>
+                      {card && `xxxx-xxxx-xxxx-${card.last4}`}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ bgcolor: '#E3183714' }}>
+                      Card expires
+                    </TableCell>
+                    <TableCell>
+                      {card && `${card.expYear}/${card.expMonth}`}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ bgcolor: '#E3183714' }}>
+                      Card brand
+                    </TableCell>
+                    <TableCell>{card && card.cardBrand}</TableCell>
+                  </TableRow>
+                </Table>
+              </TableContainer>
+            )}
             <Typography
               fontSize={fontSizes.l}
-              sx={{ pb: 1, mt: 3 }}
+              sx={{ pb: 1, mt: 5 }}
               fontWeight="bold"
             >
               Change Payment Information
