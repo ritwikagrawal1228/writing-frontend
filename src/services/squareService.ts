@@ -64,8 +64,25 @@ const updateSquareCard = async (token: string) => {
   })
 }
 
+const cancelSubscription = async () => {
+  const query = gql`
+    mutation {
+      cancelCurrentSubscription
+    }
+  `
+
+  return await axios.post<{ cancelCurrentSubscription: string }>(
+    Path.APIGraphql,
+    {
+      query,
+      variables: {},
+    },
+  )
+}
+
 export const squareService = {
   getSquareCard,
   subscribePaidPlan,
   updateSquareCard,
+  cancelSubscription,
 }

@@ -12,6 +12,13 @@ import {
   TableRow,
   TableCell,
   Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TableBody,
 } from '@mui/material'
 import { TokenResult } from '@square/web-payments-sdk-types'
 import { withSSRContext } from 'aws-amplify'
@@ -43,6 +50,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
   const t = useTranslations('Problem')
   const router = useRouter()
   const [card, setCard] = useState<SquareCard>()
+  const [isConfirmShow, setIsConfirmShow] = useState<boolean>(false)
   const submit = (token: TokenResult) => {
     if (token.token) {
       squareService.updateSquareCard(token.token).then(({ data }) => {
@@ -63,6 +71,21 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
       }
     })
   }, [user])
+
+  const handleCloseConfirm = () => {
+    setIsConfirmShow(false)
+  }
+
+  const handleConfirm = () => {
+    squareService
+      .cancelSubscription()
+      .then(({ data }) => {
+        alert(data.cancelCurrentSubscription)
+      })
+      .finally(() => {
+        setIsConfirmShow(false)
+      })
+  }
 
   return (
     <Layout
@@ -89,28 +112,30 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
             {card && (
               <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableRow>
-                    <TableCell sx={{ bgcolor: '#E3183714' }}>
-                      Card number
-                    </TableCell>
-                    <TableCell>
-                      {card && `xxxx-xxxx-xxxx-${card.last4}`}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ bgcolor: '#E3183714' }}>
-                      Card expires
-                    </TableCell>
-                    <TableCell>
-                      {card && `${card.expYear}/${card.expMonth}`}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ bgcolor: '#E3183714' }}>
-                      Card brand
-                    </TableCell>
-                    <TableCell>{card && card.cardBrand}</TableCell>
-                  </TableRow>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell sx={{ bgcolor: '#E3183714' }}>
+                        Card number
+                      </TableCell>
+                      <TableCell>
+                        {card && `xxxx-xxxx-xxxx-${card.last4}`}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ bgcolor: '#E3183714' }}>
+                        Card expires
+                      </TableCell>
+                      <TableCell>
+                        {card && `${card.expYear}/${card.expMonth}`}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell sx={{ bgcolor: '#E3183714' }}>
+                        Card brand
+                      </TableCell>
+                      <TableCell>{card && card.cardBrand}</TableCell>
+                    </TableRow>
+                  </TableBody>
                 </Table>
               </TableContainer>
             )}
@@ -144,8 +169,56 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
               </CreditCard>
             </PaymentForm>
           </Paper>
+          <Paper sx={{ minHeight: 200, padding: 4, mt: 4 }}>
+            <Typography fontSize={fontSizes.l} sx={{ pb: 1 }} fontWeight="bold">
+              Cancel Subscription
+            </Typography>
+            <Typography fontSize={fontSizes.m} sx={{ pb: 1 }} color="primary">
+              ※ If you cancel your subscription, you will not be able to see
+              your all tenth older problems.
+              <br />※ It will be changed to the free plan on the next payment
+              date
+            </Typography>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => setIsConfirmShow(true)}
+            >
+              Cancel Subscription
+            </Button>
+          </Paper>
         </Grid>
       </Grid>
+      <Dialog open={isConfirmShow} onClose={handleCloseConfirm}>
+        <DialogTitle>Are you sure you want to cancel subscription</DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            sx={{ mb: 2, pb: 1 }}
+            fontSize={fontSizes.m}
+            color="primary"
+          >
+            ※ If you cancel your subscription,
+            <br /> you will not be able to see your all tenth older problems.
+            <br />※ It will be changed to the free plan on the next payment date
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => handleConfirm()}
+          >
+            Yes
+          </Button>
+          <Button
+            color="inherit"
+            variant="outlined"
+            onClick={handleCloseConfirm}
+          >
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Layout>
   )
 }
