@@ -62,7 +62,6 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/auth\"],\"LogoutURLs\":[\"http://localhost:3000/\"]}",
     "parentStack": {
       "Ref": "AWS::StackId"
     },
@@ -70,6 +69,7 @@
     "userPoolGroups": false,
     "adminQueries": false,
     "thirdPartyAuth": false,
-    "authProviders": []
+    "authProviders": [],
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/auth\",\"https://dev.ielts-writing-helper.com/auth/\"],\"LogoutURLs\":[\"http://localhost:3000/\",\"https://dev.ielts-writing-helper.com/\"]}"
   }
-} 
+}
