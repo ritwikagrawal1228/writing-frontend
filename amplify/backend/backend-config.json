@@ -4,23 +4,23 @@
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL",
+          "NAME"
+        ],
         "socialProviders": [
           "GOOGLE"
         ],
         "usernameAttributes": [
           "EMAIL"
-        ],
-        "signupAttributes": [
-          "EMAIL",
-          "NAME"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyMinLength": 8,
-          "passwordPolicyCharacters": []
-        },
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
         ],
         "verificationMechanisms": [
           "EMAIL"
