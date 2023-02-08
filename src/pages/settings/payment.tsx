@@ -38,13 +38,9 @@ import { SquareCard } from '@/types/model/squareCard'
 
 type Props = {
   userStr: string
-  squareInfo: {
-    appId: string
-    locationId: string
-  }
 }
 
-export default function PaymentSetting({ userStr, squareInfo }: Props) {
+export default function PaymentSetting({ userStr }: Props) {
   const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
@@ -156,11 +152,11 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
               height={150}
             />
             <PaymentForm
-              applicationId={squareInfo.appId}
+              applicationId={process.env.SQUARE_APPLICATION_ID}
               cardTokenizeResponseReceived={(token, verifiedBuyer) => {
                 submit(token)
               }}
-              locationId={squareInfo.locationId}
+              locationId={process.env.SQUARE_LOCATION_ID}
             >
               <CreditCard
                 buttonProps={{ css: { backgroundColor: colors.primary.main } }}
@@ -229,17 +225,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const user = await Auth.currentAuthenticatedUser()
-    const squareInfo = {
-      appId: process.env.SQUARE_APPLICATION_ID || '',
-      locationId: process.env.SQUARE_LOCATION_ID || '',
-    }
 
     return {
       props: {
         authenticated: true,
         userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
-        squareInfo,
       },
     }
   } catch (err) {
