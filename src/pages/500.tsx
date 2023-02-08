@@ -48,22 +48,9 @@ export default function Page500() {
 
 Page500.displayName = 'Page500'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
-
-  try {
-    return {
-      props: {
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/auth',
-      },
-    }
+  return {
+    props: { messages: require(`@/locales/${locale}.json`) },
   }
 }
