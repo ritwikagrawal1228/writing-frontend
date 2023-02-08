@@ -12,9 +12,13 @@ import { squareService } from '@/services/squareService'
 
 type Props = {
   userStr: string
+  squareInfo: {
+    appId: string
+    locationId: string
+  }
 }
 
-export default function PaymentSubscribe({ userStr }: Props) {
+export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
   const { user } = useGetAuthUser(userStr)
 
   const submit = (token: TokenResult) => {
@@ -33,11 +37,11 @@ export default function PaymentSubscribe({ userStr }: Props) {
         user={user}
       >
         <PaymentForm
-          applicationId={process.env.SQUARE_APPLICATION_ID}
+          applicationId={squareInfo.appId}
           cardTokenizeResponseReceived={(token, verifiedBuyer) => {
             submit(token)
           }}
-          locationId={process.env.SQUARE_LOCATION_ID}
+          locationId={squareInfo.locationId}
         >
           <CreditCard />
         </PaymentForm>
@@ -52,12 +56,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const user = await Auth.currentAuthenticatedUser()
+    const squareInfo = {
+      appId: process.env.SQUARE_APPLICATION_ID || '',
+      locationId: process.env.SQUARE_LOCATION_ID || '',
+    }
 
     return {
       props: {
         authenticated: true,
         userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
+        squareInfo,
       },
     }
   } catch (err) {

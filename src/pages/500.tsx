@@ -1,13 +1,16 @@
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import React from 'react'
 
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import { Grid, Paper, Typography } from '@mui/material'
+import { useTranslations } from 'next-intl'
 
 import LpNavBar from '@/components/templates/LpNavBar'
 import { fontSizes, spaces } from '@/themes/globalStyles'
 
 export default function Page500() {
+  const t = useTranslations('Problem')
   return (
     <>
       <Head>
@@ -44,3 +47,23 @@ export default function Page500() {
 }
 
 Page500.displayName = 'Page500'
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
+
+  try {
+    return {
+      props: {
+        messages: require(`@/locales/${locale}.json`),
+      },
+    }
+  } catch (err) {
+    console.error(err)
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/auth',
+      },
+    }
+  }
+}
