@@ -56,6 +56,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const user = await Auth.currentAuthenticatedUser()
+    console.log(process.env.SQUARE_APPLICATION_ID)
+    console.log(process.env.SQUARE_LOCATION_ID)
+
     const squareInfo = {
       appId: process.env.SQUARE_APPLICATION_ID || '',
       locationId: process.env.SQUARE_LOCATION_ID || '',
