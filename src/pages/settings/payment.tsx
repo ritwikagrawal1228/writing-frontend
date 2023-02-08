@@ -31,6 +31,7 @@ import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { Path } from '@/constants/Path'
+import { userPlans } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
 import { colors, fontSizes } from '@/themes/globalStyles'
@@ -106,6 +107,17 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
         </Grid>
         <Grid item xs={9}>
           <Paper sx={{ minHeight: 200, padding: 4 }}>
+            <Typography fontSize={fontSizes.l} sx={{ pb: 1 }} fontWeight="bold">
+              Your Current Plan
+            </Typography>
+            <Typography fontSize={fontSizes.m} sx={{ pb: 1 }} fontWeight="bold">
+              {user?.plan === userPlans[0] ? 'Free' : 'Pro'}
+              {user?.subscriptionExpiresAt &&
+                `Valid until${new Date(
+                  user?.subscriptionExpiresAt,
+                ).toLocaleString(router.locale)}`}
+            </Typography>
+
             <Typography fontSize={fontSizes.l} sx={{ pb: 1 }} fontWeight="bold">
               Your Current Card
             </Typography>

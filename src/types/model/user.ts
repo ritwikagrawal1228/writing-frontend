@@ -11,6 +11,7 @@ export type User = {
   profileImageUrl: string
   studyTarget: string
   introduction: string
+  subscriptionExpiresAt: string
   isSubscribeEmail: boolean
   isSubscribePush: boolean
 }
