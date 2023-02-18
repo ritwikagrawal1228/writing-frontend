@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 
 import {
+  Divider,
   Grid,
   Paper,
   Table,
@@ -13,10 +14,14 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Switch from '@mui/material/Switch'
 import { Storage, withSSRContext } from 'aws-amplify'
-import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
+
+import { useTranslations } from 'next-intl'
+
 import { ProblemDisplayPaper } from '@/components/templates/common/ProblemDisplayPaper'
 import { AnswerArea } from '@/components/templates/problem/answer/review/AnswerArea'
 import { ReviewArea } from '@/components/templates/problem/answer/review/ReviewArea'
@@ -29,6 +34,7 @@ import { Answer } from '@/types/model/answer'
 type Props = {
   answerModel: Answer
   userStr: string
+  grammarlyClientId: string
 }
 
 interface Column {
@@ -47,12 +53,17 @@ const columns: readonly Column[] = [
   { id: 'wordCount', label: 'Word Count', minWidth: 100 },
 ]
 
-export default function AnswerReview({ answerModel, userStr }: Props) {
+export default function AnswerReview({
+  answerModel,
+  userStr,
+  grammarlyClientId,
+}: Props) {
   const { user } = useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const ta = useTranslations('Answer')
   const router = useRouter()
   const [img, setImg] = React.useState<string | undefined>()
+  const [isDiffView, setIsDiffView] = React.useState<boolean>(true)
 
   useEffect(() => {
     if (answerModel.problem.questionImageKey) {
@@ -66,8 +77,8 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
     }
   }, [answerModel.problem])
 
-  const handleSubmit = async (isSave: boolean) => {
-    //
+  const handleViewChange = async () => {
+    setIsDiffView(!isDiffView)
   }
 
   const padTo2Digits = (num: number) => {
@@ -159,10 +170,30 @@ export default function AnswerReview({ answerModel, userStr }: Props) {
           <Paper
             sx={{ p: 3, width: '100%', minHeight: '600px', lineHeight: '40px' }}
           >
-            <AnswerArea
-              answerSentences={answerModel.completedAnswerSentences}
-              answerId={answerModel.id}
+            <FormControlLabel
+              control={
+                <Switch checked={isDiffView} onChange={handleViewChange} />
+              }
+              label="See Diff"
+              sx={{ mb: 2 }}
             />
+            <Divider />
+            {isDiffView ? (
+              <AnswerArea
+                answerSentences={answerModel.completedAnswerSentences}
+                answerId={answerModel.id}
+                grammarlyClientId={grammarlyClientId}
+              />
+            ) : (
+              <>
+                <Typography variant="h6" fontWeight="bold" sx={{ my: 2 }}>
+                  Answer
+                </Typography>
+                <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+                  {answerModel.answer}
+                </Typography>
+              </>
+            )}
           </Paper>
         </Grid>
       </Grid>
@@ -191,6 +222,7 @@ export const getServerSideProps = async (
         answerModel: result.answer,
         userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
+        grammarlyClientId: process.env.GRAMMARLY_CLIENT_ID,
       },
     }
   } catch (err) {
