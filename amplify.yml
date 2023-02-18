@@ -12,13 +12,12 @@ frontend:
         - npm ci
     build:
       commands:
-        - env | grep \
-          -e API_URL \
-          -e SQUARE_APPLICATION_ID \
-          -e SQUARE_ACCESS_TOKEN \
-          -e SQUARE_LOCATION_ID \
-          -e GRAMMARLY_CLIENT_ID >> .env.production
-          - npm run dev-build
+        - env | grep -e API_URL >> .env.production
+        - env | grep -e SQUARE_APPLICATION_ID >> .env.production
+        - env | grep -e SQUARE_ACCESS_TOKEN >> .env.production
+        - env | grep -e SQUARE_LOCATION_ID >> .env.production
+        - env | grep -e GRAMMARLY_CLIENT_ID >> .env.production
+        - npm run dev-build
   artifacts:
     baseDirectory: .next
     files:
