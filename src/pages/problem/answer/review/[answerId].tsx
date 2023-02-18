@@ -172,11 +172,7 @@ export default function AnswerReview({
           >
             <FormControlLabel
               control={
-                <Switch
-                  defaultChecked
-                  checked={isDiffView}
-                  onChange={handleViewChange}
-                />
+                <Switch checked={isDiffView} onChange={handleViewChange} />
               }
               label="See Diff"
               sx={{ mb: 2 }}

@@ -20,21 +20,19 @@ const createReview = async (answerId: string, content: string) => {
     },
   }
 
-  return await axios.post(Path.APIGraphql, {
+  return await axios.post<{ createReview: Review }>(Path.APIGraphql, {
     query,
     variables,
   })
 }
 
-const getReviewByAnswerId = async (answerId: string) => {
+const getReviewsByAnswerId = async (answerId: string) => {
   const query = gql`
     query ($answerId: String!) {
-      reviewByAnswerId(answerId: $answerId) {
+      reviewsByAnswerId(answerId: $answerId) {
         id
         content
-        user {
-          id
-        }
+        userId
       }
     }
   `
@@ -43,7 +41,7 @@ const getReviewByAnswerId = async (answerId: string) => {
     answerId,
   }
 
-  return await axios.post(Path.APIGraphql, {
+  return await axios.post<{ reviewsByAnswerId: Review[] }>(Path.APIGraphql, {
     query,
     variables,
   })
@@ -60,7 +58,9 @@ const getAiReviewByAnswerId = async (answerId: string) => {
   `
 
   const variables = {
-    answerId,
+    input: {
+      answerId,
+    },
   }
 
   return await axios.post<{ createAiReview: Review }>(Path.APIGraphql, {
@@ -71,6 +71,6 @@ const getAiReviewByAnswerId = async (answerId: string) => {
 
 export const reviewService = {
   createReview,
-  getReviewByAnswerId,
+  getReviewsByAnswerId,
   getAiReviewByAnswerId,
 }
