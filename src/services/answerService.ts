@@ -6,6 +6,31 @@ import { Answer } from '@/types/model/answer'
 import { axios } from '@/utils/axios'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
+const getAnswersByProblemId = async (problemId: string) => {
+  const query = gql`
+    query ($problemId: String!) {
+      answersByProblemId(problemId: $problemId) {
+        id
+        problemId
+        answer
+        answerSpentTime
+        status
+        createdAt
+        updatedAt
+      }
+    }
+  `
+
+  const variables = {
+    problemId,
+  }
+
+  return await axios.post<{ answersByProblemId: Answer[] }>(Path.APIGraphql, {
+    query,
+    variables,
+  })
+}
+
 const createAnswer = async (
   problemId: string,
   answer: string,
@@ -109,4 +134,5 @@ export const answerService = {
   createAnswer,
   updateAnswer,
   getAnswerById,
+  getAnswersByProblemId,
 }

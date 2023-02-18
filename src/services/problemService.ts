@@ -34,15 +34,6 @@ const getProblemById = async (id: string, user: any) => {
         question
         questionImageKey
         createdAt
-        answers {
-          id
-          problemId
-          answer
-          answerSpentTime
-          status
-          createdAt
-          updatedAt
-        }
       }
     }
   `

@@ -3,13 +3,16 @@ import { useRouter } from 'next/router'
 import React, { Fragment, useEffect } from 'react'
 
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import Layout from '@/components/templates/Layout'
 
-import EditIcon from '@mui/icons-material/Edit'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import { TitleBox } from '@/components/templates/common/TitleBox'
+
+import EditIcon from '@mui/icons-material/Edit'
+
+import { answerStatus, answerStr } from '@/constants/AnswerStatus'
 
 import {
   Backdrop,
@@ -32,16 +35,16 @@ import {
   useTheme,
 } from '@mui/material'
 
-import { answerStatus, answerStr } from '@/constants/AnswerStatus'
+import { Path } from '@/constants/Path'
 
 import { Storage, withSSRContext } from 'aws-amplify'
 
-import { Path } from '@/constants/Path'
+import { ProblemType } from '@/constants/ProblemType'
 
 import { useTranslations } from 'next-intl'
 
-import { ProblemType } from '@/constants/ProblemType'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { answerService } from '@/services/answerService'
 import { problemService } from '@/services/problemService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'
@@ -60,9 +63,14 @@ export default function ProblemDetail({ problem, userStr }: Props) {
   const [img, setImg] = React.useState<string | undefined>()
   const [isAlertOpen, setIsAlertOpen] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
+  const [answerModels, setAnswerModels] = React.useState<Answer[]>([])
+  const [isAnswerLoading, setIsAnswerLoading] = React.useState(false)
   const { user } = useGetAuthUser(userStr)
 
   useEffect(() => {
+    if (!problem) {
+      return
+    }
     if (problem.questionImageKey) {
       Storage.get(problem.questionImageKey)
         .then((res) => {
@@ -72,6 +80,16 @@ export default function ProblemDetail({ problem, userStr }: Props) {
           console.error(err)
         })
     }
+
+    setIsAnswerLoading(true)
+    answerService
+      .getAnswersByProblemId(problem.id)
+      .then(({ data }) => {
+        setAnswerModels(data.answersByProblemId)
+      })
+      .finally(() => {
+        setIsAnswerLoading(false)
+      })
   }, [problem])
 
   const moveEditPage = (id: string) => {
@@ -286,8 +304,8 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               p: 3,
             }}
           >
-            {problem.answers.length > 0 ? (
-              problem.answers.map((answer) => (
+            {answerModels.length > 0 ? (
+              answerModels.map((answer) => (
                 <Fragment key={answer.id}>
                   <Box>
                     <Card
@@ -359,14 +377,22 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               ))
             ) : (
               <Box sx={{ width: '100%', textAlign: 'center', mt: 5 }}>
-                <Typography sx={{ mb: 2 }}>There is no answer yet.</Typography>
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  onClick={() => moveAnswerPage(problem.id)}
-                >
-                  <b>{t('detail.answer.list.addBtn')}</b>
-                </Button>
+                {isAnswerLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <>
+                    <Typography sx={{ mb: 2 }}>
+                      There is no answer yet.
+                    </Typography>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      onClick={() => moveAnswerPage(problem.id)}
+                    >
+                      <b>{t('detail.answer.list.addBtn')}</b>
+                    </Button>
+                  </>
+                )}
               </Box>
             )}
           </Paper>
