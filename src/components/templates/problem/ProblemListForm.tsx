@@ -30,6 +30,7 @@ export const ProblemListForm: FC<Props> = memo(
   ({ photo, setPhoto, locale = 'en' }) => {
     const {
       control,
+      watch,
       formState: { errors },
     } = useFormContext<CreateProblemForm>()
 
@@ -153,62 +154,66 @@ export const ProblemListForm: FC<Props> = memo(
           </Grid>
         </Grid>
         <br />
-        <Grid item xs={5}>
-          {(isFileSizeError || isFileTypeError) && (
-            <Alert severity="error">{showError()}</Alert>
-          )}
-          <FormControl sx={{ minWidth: formControlMinWidth['m'] }}>
-            <Grid>
-              <FormLabel
-                focused={false}
-                sx={{
-                  fontSize: fontSizes.s,
-                  fontWeight: 'bold',
-                  position: 'relative',
-                }}
-              >
-                {t('form.questionImage')}
-              </FormLabel>
-            </Grid>
-            <Button
-              variant="outlined"
-              color="secondary"
-              component="label"
-              startIcon={<AddPhotoAlternateOutlinedIcon />}
-              sx={{ width: '70%' }}
-              disabled={photo !== undefined}
-            >
-              {t('form.imageUploadButton')}
-              <input
-                type="file"
-                name="questionImage"
-                onChange={handleFile}
-                hidden
+        {watch('taskType') === 'Type_#Task1' && (
+          <Grid item xs={5}>
+            {(isFileSizeError || isFileTypeError) && (
+              <Alert severity="error">{showError()}</Alert>
+            )}
+            <FormControl sx={{ minWidth: formControlMinWidth['m'] }}>
+              <Grid>
+                <FormLabel
+                  focused={false}
+                  sx={{
+                    fontSize: fontSizes.s,
+                    fontWeight: 'bold',
+                    position: 'relative',
+                  }}
+                >
+                  {t('form.questionImage')}
+                </FormLabel>
+              </Grid>
+              <Button
+                variant="outlined"
+                color="secondary"
+                component="label"
+                startIcon={<AddPhotoAlternateOutlinedIcon />}
+                sx={{ width: '70%' }}
                 disabled={photo !== undefined}
-              />
-            </Button>
-            <FormHelperText sx={{ marginLeft: 0, fontSize: fontSizes.xs }}>
-              {t('form.imageHelper1')}
-              <br />
-              <span style={{ color: 'red' }}>{t('form.imageHelper2')}</span>
-            </FormHelperText>
-          </FormControl>
-          <br />
-          {photo && (
-            <>
-              <IconButton onClick={() => setPhoto(undefined)} color="primary">
-                <HighlightOffOutlinedIcon />
-              </IconButton>
-              <br />
-              <img
-                src={
-                  typeof photo === 'string' ? photo : URL.createObjectURL(photo)
-                }
-                height="300px"
-              />
-            </>
-          )}
-        </Grid>
+              >
+                {t('form.imageUploadButton')}
+                <input
+                  type="file"
+                  name="questionImage"
+                  onChange={handleFile}
+                  hidden
+                  disabled={photo !== undefined}
+                />
+              </Button>
+              <FormHelperText sx={{ marginLeft: 0, fontSize: fontSizes.xs }}>
+                {t('form.imageHelper1')}
+                <br />
+                <span style={{ color: 'red' }}>{t('form.imageHelper2')}</span>
+              </FormHelperText>
+            </FormControl>
+            <br />
+            {photo && (
+              <>
+                <IconButton onClick={() => setPhoto(undefined)} color="primary">
+                  <HighlightOffOutlinedIcon />
+                </IconButton>
+                <br />
+                <img
+                  src={
+                    typeof photo === 'string'
+                      ? photo
+                      : URL.createObjectURL(photo)
+                  }
+                  height="300px"
+                />
+              </>
+            )}
+          </Grid>
+        )}
       </>
     )
   },
