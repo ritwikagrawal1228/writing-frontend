@@ -5,7 +5,15 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-transform: none !important;
+}
+
+body:lang(ja) {
   font-family: 'Yu Gothic Medium', '游ゴシック Medium', 'YuGothic', '游ゴシック体', 'ヒラギノ角ゴ Pro W3', 'メイリオ', 'sans-serif';
+}
+
+body:lang(en) {
+  font-family: helvetica, sans-serif;
 }
 
 a {

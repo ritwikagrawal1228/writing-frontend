@@ -31,16 +31,10 @@ export const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
     },
   },
   typography: {
-    fontFamily: [
-      'Yu Gothic Medium',
-      '游ゴシック Medium',
-      'YuGothic',
-      '游ゴシック体',
-      'ヒラギノ角ゴ Pro W3',
-      'メイリオ',
-      'sans-serif',
-    ].join(','),
     fontSize: 16,
+    button: {
+      textTransform: 'none',
+    },
   },
   components: {
     /** Common style for OutlinedInput component  */

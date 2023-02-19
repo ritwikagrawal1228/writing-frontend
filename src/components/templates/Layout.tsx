@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { FC, Fragment } from 'react'
+import React, { FC, Fragment, useEffect } from 'react'
 
 import { useAuthenticator } from '@aws-amplify/ui-react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
@@ -11,9 +11,12 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import MenuIcon from '@mui/icons-material/Menu'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import SettingsIcon from '@mui/icons-material/Settings'
-import TranslateIcon from '@mui/icons-material/Translate'
 
 import { Path } from '@/constants/Path'
+
+import TranslateIcon from '@mui/icons-material/Translate'
+
+import { UserPlanFree } from '@/constants/UserPlans'
 
 import {
   AppBar,
@@ -70,8 +73,9 @@ const Layout: FC<LayoutProps> = ({
   breadcrumbs,
   user,
 }) => {
-  const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('Nav')
+  const problemMenuItems = { label: t('menu.problem'), href: Path.Problem }
+  const upgradeMenuItems = { label: 'Upgrade', href: Path.PaymentSubscription }
   const router = useRouter()
   const { signOut } = useAuthenticator()
   const theme = useTheme()
@@ -82,12 +86,16 @@ const Layout: FC<LayoutProps> = ({
     null,
   )
   const [open, setOpen] = React.useState(false)
+  const [menus, setMenus] = React.useState([problemMenuItems])
+  useEffect(() => {
+    if (!user) {
+      return
+    }
 
-  const pages = [
-    { label: t('menu.problem'), href: Path.Problem },
-    { label: t('menu.tip'), href: Path.Tip },
-    { label: 'Upgrade', href: Path.PaymentSubscription },
-  ]
+    if (user.plan === UserPlanFree) {
+      setMenus([problemMenuItems, upgradeMenuItems])
+    }
+  }, [user])
 
   const settings = [
     {
@@ -183,7 +191,7 @@ const Layout: FC<LayoutProps> = ({
               component="a"
               href="/"
               sx={{
-                mr: 10,
+                mr: 5,
                 ml: 2,
                 display: { xs: 'none', md: 'flex' },
                 fontWeight: 'bold',
@@ -223,26 +231,26 @@ const Layout: FC<LayoutProps> = ({
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
+                {menus.map((menu) => (
                   <MenuItem
-                    key={page.label}
+                    key={menu.label}
                     color="primary"
-                    onClick={() => handleCloseNavMenu(page.href)}
+                    onClick={() => handleCloseNavMenu(menu.href)}
                   >
-                    <Typography textAlign="center">{page.label}</Typography>
+                    <Typography textAlign="center">{menu.label}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
             </Box>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
+              {menus.map((menu) => (
                 <Button
-                  key={page.label}
-                  onClick={() => handleCloseNavMenu(page.href)}
+                  key={menu.label}
+                  onClick={() => handleCloseNavMenu(menu.href)}
                   color="inherit"
                   sx={{ display: 'block' }}
                 >
-                  {page.label}
+                  {menu.label}
                 </Button>
               ))}
             </Box>

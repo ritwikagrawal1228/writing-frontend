@@ -2,7 +2,9 @@ import { gql } from 'graphql-request'
 
 import { Path } from '@/constants/Path'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
+import { User } from '@/types/model/user'
 import { axios } from '@/utils/axios'
+import { getGraphQLClient } from '@/utils/graphqlClient'
 
 const updateProfile = async (form: UpdateProfileSettingForm) => {
   const query = gql`
@@ -39,6 +41,41 @@ const updateProfile = async (form: UpdateProfileSettingForm) => {
   })
 }
 
+const userQuery = gql`
+  query ($userId: ID!) {
+    user(userId: $userId) {
+      id
+      name
+      plan
+      email
+      userType
+      isAdmin
+      profileImageUrl
+      studyTarget
+      introduction
+      isSubscribeEmail
+      isSubscribePush
+    }
+  }
+`
+
+const getAuthUser = async () => {
+  return axios.post<{ user: User }>(Path.APIGraphql, {
+    query: userQuery,
+    variables: undefined,
+  })
+}
+
+const getAuthUserFromServer = async (user: any) => {
+  const client = getGraphQLClient(user)
+
+  return await client
+    .request<{ user: User }>(userQuery, { userId: user.attributes.sub })
+    .then((res) => res)
+}
+
 export const userService = {
   updateProfile,
+  getAuthUser,
+  getAuthUserFromServer,
 }

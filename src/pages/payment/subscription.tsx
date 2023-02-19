@@ -7,8 +7,11 @@ import { withSSRContext } from 'aws-amplify'
 import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
 import Layout from '@/components/templates/Layout'
+import { Path } from '@/constants/Path'
+import { UserPlanFree } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
+import { userService } from '@/services/userService'
 
 type Props = {
   userStr: string
@@ -55,16 +58,35 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { Auth } = withSSRContext({ req: context.req })
 
   try {
-    const user = await Auth.currentAuthenticatedUser()
+    const userData = await Auth.currentAuthenticatedUser()
     const squareInfo = {
       appId: process.env.SQUARE_APPLICATION_ID || '',
       locationId: process.env.SQUARE_LOCATION_ID || '',
+    }
+    const { user } = await userService.getAuthUserFromServer(userData)
+
+    if (!user) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: context.req.headers.referer || Path.Auth,
+        },
+      }
+    }
+
+    if (user.plan !== UserPlanFree) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: Path.Auth,
+        },
+      }
     }
 
     return {
       props: {
         authenticated: true,
-        userStr: JSON.stringify(user.attributes),
+        userStr: JSON.stringify(userData.attributes),
         messages: require(`@/locales/${locale}.json`),
         squareInfo,
       },
