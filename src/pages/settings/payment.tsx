@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
@@ -190,11 +189,10 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                     <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
                       Card brand supported
                     </Typography>
-                    <Image
+                    <img
                       src="/img/cardBrands.png"
-                      alt="VISA/Mastercard/American Express/JCB/Diners Club/Discover"
-                      width={300}
-                      height={150}
+                      alt="VISA/Mastercard/American Express/JCB/Discover"
+                      width="400px"
                     />
                     <PaymentForm
                       applicationId={squareInfo.appId}

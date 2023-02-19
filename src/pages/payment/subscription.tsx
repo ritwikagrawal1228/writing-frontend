@@ -1,17 +1,43 @@
 import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router'
 import Script from 'next/script'
-import React from 'react'
+import React, { useState } from 'react'
 
-import { TokenResult } from '@square/web-payments-sdk-types'
-import { withSSRContext } from 'aws-amplify'
-import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
+import {
+  Grid,
+  Paper,
+  Typography,
+  TableCell,
+  TableContainer,
+  TableRow,
+  useTheme,
+  Snackbar,
+  Alert,
+  AlertColor,
+  TableBody,
+} from '@mui/material'
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
+import Table from '@mui/material/Table'
 
 import Layout from '@/components/templates/Layout'
+import { TitleBox } from '@/components/templates/common/TitleBox'
+
+import { TokenResult } from '@square/web-payments-sdk-types'
+
 import { Path } from '@/constants/Path'
+
+import { withSSRContext } from 'aws-amplify'
+
+import { subtotal, taxRate } from '@/constants/Price'
+
+import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
+
 import { UserPlanFree } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
 import { userService } from '@/services/userService'
+import { colors, fontSizes } from '@/themes/globalStyles'
 
 type Props = {
   userStr: string
@@ -23,11 +49,37 @@ type Props = {
 
 export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
   const { user } = useGetAuthUser(userStr)
+  const theme = useTheme()
+  const [alertShow, setAlertShow] = useState<AlertColor>()
+  const router = useRouter()
+  const [open, setOpen] = React.useState(false)
 
-  const submit = (token: TokenResult) => {
-    if (token.token) {
-      squareService.subscribePaidPlan(token.token)
+  const submit = async (token: TokenResult) => {
+    if (!token.token) {
+      return
     }
+    setOpen(true)
+    const { data } = await squareService.subscribePaidPlan(token.token)
+    setOpen(false)
+    if (data.subscribePaidPlan) {
+      setAlertShow('success')
+      setTimeout(() => {
+        router.push(Path.ProblemCreate)
+      }, 3000)
+    } else {
+      setAlertShow('error')
+    }
+  }
+
+  const handleAlertClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setAlertShow(undefined)
   }
 
   return (
@@ -35,19 +87,123 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
       <Script src="https://sandbox.web.squarecdn.com/v1/square.js" />
       <Script></Script>
       <Layout
-        title="Payment Subscribe"
-        breadcrumbs={[{ label: 'Payment Subscribe', href: undefined }]}
+        title="Upgrade Plan"
+        breadcrumbs={[{ label: 'Upgrade Plan', href: undefined }]}
         user={user}
       >
-        <PaymentForm
-          applicationId={squareInfo.appId}
-          cardTokenizeResponseReceived={(token, verifiedBuyer) => {
-            submit(token)
-          }}
-          locationId={squareInfo.locationId}
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+          onClick={() => setOpen(false)}
         >
-          <CreditCard />
-        </PaymentForm>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <TitleBox title="Upgrade Plan">
+          <></>
+        </TitleBox>
+        <Paper sx={{ minHeight: '460px', p: 4 }}>
+          <Grid container columnSpacing={3}>
+            <Grid item xs={6}>
+              <Typography variant="h6" sx={{ mb: 3 }}>
+                Payment Details
+              </Typography>
+              <TableContainer sx={{ mb: 3 }}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableBody>
+                    <TableRow sx={{ 'td, th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">
+                        Subtotal
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        ¥{subtotal}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        Consumption Tax
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        ¥{(subtotal * taxRate) / 100}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        Total
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        ¥{subtotal + (subtotal * taxRate) / 100}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
+                Card brand supported
+              </Typography>
+              <img
+                src="/img/cardBrands.png"
+                alt="VISA/Mastercard/American Express/JCB/Discover"
+                width="400px"
+              />
+              <PaymentForm
+                applicationId={squareInfo.appId}
+                cardTokenizeResponseReceived={(token, verifiedBuyer) => {
+                  submit(token)
+                }}
+                locationId={squareInfo.locationId}
+              >
+                <CreditCard
+                  buttonProps={{
+                    css: { backgroundColor: colors.secondary.main },
+                  }}
+                >
+                  Proceed to Payment
+                </CreditCard>
+              </PaymentForm>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper
+                sx={{
+                  height: '100%',
+                  p: 4,
+                  backgroundColor: theme.palette.background.default,
+                  color: theme.palette.text.primary,
+                }}
+              >
+                <Typography variant="h6" sx={{ mb: 3 }}>
+                  👑 Professional Plan
+                </Typography>
+                <Typography variant="h4" sx={{ mb: 3 }}>
+                  {`¥${subtotal}`}
+                </Typography>
+                <Typography fontSize={fontSizes.l} sx={{ pb: 1 }}>
+                  ✨ You can store problems as much as you want
+                  <br />
+                  <br />✨ Ads will not be displayed at all
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Paper>
+        <Snackbar
+          open={!!alertShow}
+          autoHideDuration={6000}
+          onClose={handleAlertClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        >
+          <Alert
+            severity={alertShow}
+            onClose={handleAlertClose}
+            sx={{ width: '100%' }}
+          >
+            {alertShow === 'error' && (
+              <>Failed to subscript! Check your card information</>
+            )}
+            {alertShow === 'success' && <>Your profile successfully updated!</>}
+          </Alert>
+        </Snackbar>
       </Layout>
     </>
   )

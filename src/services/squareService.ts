@@ -35,7 +35,7 @@ const subscribePaidPlan = async (token: string) => {
     },
   }
 
-  return await axios.post(Path.APIGraphql, {
+  return await axios.post<{ subscribePaidPlan: boolean }>(Path.APIGraphql, {
     query,
     variables,
   })

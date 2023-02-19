@@ -377,7 +377,7 @@ const Layout: FC<LayoutProps> = ({
       <Box
         component="main"
         sx={{
-          minHeight: '100vh',
+          minHeight: 'calc(100vh - 64px)',
           backgroundColor: theme.palette.background.default,
           color: theme.palette.text.primary,
         }}
