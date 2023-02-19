@@ -19,6 +19,8 @@ import {
   DialogContentText,
   DialogTitle,
   TableBody,
+  CircularProgress,
+  Divider,
 } from '@mui/material'
 import { TokenResult } from '@square/web-payments-sdk-types'
 import { withSSRContext } from 'aws-amplify'
@@ -31,7 +33,7 @@ import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { Path } from '@/constants/Path'
-import { userPlans } from '@/constants/UserPlans'
+import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
 import { colors, fontSizes } from '@/themes/globalStyles'
@@ -51,6 +53,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
   const t = useTranslations('Problem')
   const router = useRouter()
   const [card, setCard] = useState<SquareCard>()
+  const [isCardLoading, setIsCardLoading] = useState<boolean>(true)
   const [isConfirmShow, setIsConfirmShow] = useState<boolean>(false)
   const submit = (token: TokenResult) => {
     if (token.token) {
@@ -66,11 +69,20 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
     if (!user || card) {
       return
     }
-    squareService.getSquareCard().then(({ data }) => {
-      if (data.getSquareCard) {
-        setCard(data.getSquareCard)
-      }
-    })
+    if (user.plan === UserPlanFree) {
+      return
+    }
+    setIsCardLoading(true)
+    squareService
+      .getSquareCard()
+      .then(({ data }) => {
+        if (data.getSquareCard) {
+          setCard(data.getSquareCard)
+        }
+      })
+      .finally(() => {
+        setIsCardLoading(false)
+      })
   }, [user])
 
   const handleCloseConfirm = () => {
@@ -102,104 +114,137 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
         <></>
       </TitleBox>
       <Grid container columnSpacing={2}>
-        <Grid item xs={3}>
-          <SettingSidebar />
-        </Grid>
-        <Grid item xs={9}>
-          <Paper sx={{ minHeight: 200, padding: 4 }}>
-            <Typography fontSize={fontSizes.l} sx={{ pb: 1 }} fontWeight="bold">
-              Your Current Plan
-            </Typography>
-            <Typography fontSize={fontSizes.m} sx={{ pb: 1 }} fontWeight="bold">
-              {user?.plan === userPlans[0] ? 'Free' : 'Pro'}
-              {user?.subscriptionExpiresAt &&
-                `Valid until${new Date(
-                  user?.subscriptionExpiresAt,
-                ).toLocaleString(router.locale)}`}
-            </Typography>
-
-            <Typography fontSize={fontSizes.l} sx={{ pb: 1 }} fontWeight="bold">
-              Your Current Card
-            </Typography>
-            {card && (
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell sx={{ bgcolor: '#E3183714' }}>
-                        Card number
-                      </TableCell>
-                      <TableCell>
-                        {card && `xxxx-xxxx-xxxx-${card.last4}`}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ bgcolor: '#E3183714' }}>
-                        Card expires
-                      </TableCell>
-                      <TableCell>
-                        {card && `${card.expYear}/${card.expMonth}`}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell sx={{ bgcolor: '#E3183714' }}>
-                        Card brand
-                      </TableCell>
-                      <TableCell>{card && card.cardBrand}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
+        <>
+          <Grid item xs={3}>
+            <SettingSidebar />
+          </Grid>
+          <Grid item xs={9}>
+            <Paper sx={{ minHeight: 200, padding: 4 }}>
+              <>
+                <Typography
+                  fontSize={fontSizes.l}
+                  sx={{ pb: 1 }}
+                  fontWeight="bold"
+                >
+                  Your Current Plan
+                </Typography>
+                <Typography fontSize={fontSizes.m} fontWeight="bold">
+                  {user?.plan === userPlans[0] ? 'Free' : 'Pro'}
+                  {user?.subscriptionExpiresAt &&
+                    `Valid until${new Date(
+                      user?.subscriptionExpiresAt,
+                    ).toLocaleString(router.locale)}`}
+                </Typography>
+                <Divider sx={{ my: 3 }} />
+                <Typography
+                  fontSize={fontSizes.l}
+                  sx={{ pb: 1 }}
+                  fontWeight="bold"
+                >
+                  Your Current Card
+                </Typography>
+                {card ? (
+                  <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                      <TableBody>
+                        <TableRow>
+                          <TableCell sx={{ bgcolor: '#E3183714' }}>
+                            Card number
+                          </TableCell>
+                          <TableCell>
+                            {card && `xxxx-xxxx-xxxx-${card.last4}`}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell sx={{ bgcolor: '#E3183714' }}>
+                            Card expires
+                          </TableCell>
+                          <TableCell>
+                            {card && `${card.expYear}/${card.expMonth}`}
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell sx={{ bgcolor: '#E3183714' }}>
+                            Card brand
+                          </TableCell>
+                          <TableCell>{card && card.cardBrand}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : isCardLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <>You do not have any card</>
+                )}
+                {card && user?.plan === UserPlanPro && (
+                  <>
+                    <Divider sx={{ my: 4 }} />
+                    <Typography
+                      fontSize={fontSizes.l}
+                      sx={{ pb: 1 }}
+                      fontWeight="bold"
+                    >
+                      Change Payment Information
+                    </Typography>
+                    <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
+                      Card brand supported
+                    </Typography>
+                    <Image
+                      src="/img/cardBrands.png"
+                      alt="VISA/Mastercard/American Express/JCB/Diners Club/Discover"
+                      width={300}
+                      height={150}
+                    />
+                    <PaymentForm
+                      applicationId={squareInfo.appId}
+                      cardTokenizeResponseReceived={(token, verifiedBuyer) => {
+                        submit(token)
+                      }}
+                      locationId={squareInfo.locationId}
+                    >
+                      <CreditCard
+                        buttonProps={{
+                          css: { backgroundColor: colors.primary.main },
+                        }}
+                      >
+                        Change Card
+                      </CreditCard>
+                    </PaymentForm>
+                  </>
+                )}
+              </>
+            </Paper>
+            {card && user?.plan === UserPlanPro && (
+              <Paper sx={{ minHeight: 200, padding: 4, mt: 4 }}>
+                <Typography
+                  fontSize={fontSizes.l}
+                  sx={{ pb: 1 }}
+                  fontWeight="bold"
+                >
+                  Cancel Subscription
+                </Typography>
+                <Typography
+                  fontSize={fontSizes.m}
+                  sx={{ pb: 1 }}
+                  color="primary"
+                >
+                  ※ If you cancel your subscription, you will not be able to see
+                  your all tenth older problems.
+                  <br />※ It will be changed to the free plan on the next
+                  payment date
+                </Typography>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => setIsConfirmShow(true)}
+                >
+                  Cancel Subscription
+                </Button>
+              </Paper>
             )}
-            <Typography
-              fontSize={fontSizes.l}
-              sx={{ pb: 1, mt: 5 }}
-              fontWeight="bold"
-            >
-              Change Payment Information
-            </Typography>
-            <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
-              Card brand supported
-            </Typography>
-            <Image
-              src="/img/cardBrands.png"
-              alt="VISA/Mastercard/American Express/JCB/Diners Club/Discover"
-              width={300}
-              height={150}
-            />
-            <PaymentForm
-              applicationId={squareInfo.appId}
-              cardTokenizeResponseReceived={(token, verifiedBuyer) => {
-                submit(token)
-              }}
-              locationId={squareInfo.locationId}
-            >
-              <CreditCard
-                buttonProps={{ css: { backgroundColor: colors.primary.main } }}
-              >
-                Change Card
-              </CreditCard>
-            </PaymentForm>
-          </Paper>
-          <Paper sx={{ minHeight: 200, padding: 4, mt: 4 }}>
-            <Typography fontSize={fontSizes.l} sx={{ pb: 1 }} fontWeight="bold">
-              Cancel Subscription
-            </Typography>
-            <Typography fontSize={fontSizes.m} sx={{ pb: 1 }} color="primary">
-              ※ If you cancel your subscription, you will not be able to see
-              your all tenth older problems.
-              <br />※ It will be changed to the free plan on the next payment
-              date
-            </Typography>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => setIsConfirmShow(true)}
-            >
-              Cancel Subscription
-            </Button>
-          </Paper>
-        </Grid>
+          </Grid>
+        </>
       </Grid>
       <Dialog open={isConfirmShow} onClose={handleCloseConfirm}>
         <DialogTitle>Are you sure you want to cancel subscription</DialogTitle>

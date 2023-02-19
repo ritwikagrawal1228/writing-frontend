@@ -172,6 +172,7 @@ export const ProblemListForm: FC<Props> = memo(
             </Grid>
             <Button
               variant="outlined"
+              color="secondary"
               component="label"
               startIcon={<AddPhotoAlternateOutlinedIcon />}
               sx={{ width: '70%' }}

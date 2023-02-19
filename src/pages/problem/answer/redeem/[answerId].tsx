@@ -39,6 +39,8 @@ export default function AnswerRedeem({ answerModel, userStr }: Props) {
 
     // Set default time if answer doesn't have time
     const type = answerModel.problem.taskType === 'Type_#Task1' ? 20 : 40
+    console.log(type)
+
     setTime(type)
   }, [answerModel])
 

@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
@@ -27,6 +27,16 @@ export default function Answer({ problem, userStr }: Props) {
   const [answer, setAnswer] = React.useState<string>('')
   const [time, setTime] = React.useState<number>(20)
   const [countDownSec, setCountDownSec] = React.useState<number>(0)
+
+  useEffect(() => {
+    if (!problem) {
+      return
+    }
+
+    // Set default time if answer doesn't have time
+    const type = problem.taskType === 'Type_#Task1' ? 20 : 40
+    setTime(type)
+  }, [])
 
   const handleSubmit = async (isSave: boolean, status: AnswerStatus) => {
     if (!isSave) {

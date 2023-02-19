@@ -10,13 +10,16 @@ import Brightness4Icon from '@mui/icons-material/Brightness4'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import MenuIcon from '@mui/icons-material/Menu'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
-import SettingsIcon from '@mui/icons-material/Settings'
 
 import { Path } from '@/constants/Path'
 
-import TranslateIcon from '@mui/icons-material/Translate'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 import { UserPlanFree } from '@/constants/UserPlans'
+
+import TranslateIcon from '@mui/icons-material/Translate'
+
+import { ColorModeContext } from '@/context/ColorMode'
 
 import {
   AppBar,
@@ -40,11 +43,10 @@ import {
   useTheme,
 } from '@mui/material'
 
-import { ColorModeContext } from '@/context/ColorMode'
+import { colors } from '@/themes/globalStyles'
 
 import { useTranslations } from 'next-intl'
 
-import { colors } from '@/themes/globalStyles'
 import { User } from '@/types/model/user'
 import { stringAvatar } from '@/utils/avator'
 
@@ -249,6 +251,7 @@ const Layout: FC<LayoutProps> = ({
                   onClick={() => handleCloseNavMenu(menu.href)}
                   color="inherit"
                   sx={{ display: 'block' }}
+                  variant="text"
                 >
                   {menu.label}
                 </Button>

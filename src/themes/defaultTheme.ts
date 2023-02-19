@@ -39,6 +39,9 @@ export const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
   components: {
     /** Common style for OutlinedInput component  */
     MuiOutlinedInput: {
+      defaultProps: {
+        color: 'secondary',
+      },
       styleOverrides: {
         root: {
           borderColor: colors.disabled.main,
@@ -48,6 +51,21 @@ export const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
             backgroundColor: colors.disabled.light,
           },
         },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        color: 'secondary',
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
+    },
+    MuiRadio: {
+      defaultProps: {
+        color: 'secondary',
       },
     },
   },
