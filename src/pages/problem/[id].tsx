@@ -2,17 +2,19 @@ import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import React, { Fragment, useEffect } from 'react'
 
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
-
 import Layout from '@/components/templates/Layout'
 
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 
 import { TitleBox } from '@/components/templates/common/TitleBox'
 
-import EditIcon from '@mui/icons-material/Edit'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 import { answerStatus, answerStr } from '@/constants/AnswerStatus'
+
+import EditIcon from '@mui/icons-material/Edit'
+
+import { Path } from '@/constants/Path'
 
 import {
   Backdrop,
@@ -34,12 +36,9 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-
-import { Path } from '@/constants/Path'
-
 import { Storage, withSSRContext } from 'aws-amplify'
 
-import { ProblemType } from '@/constants/ProblemType'
+import { ProblemType, ProblemType1 } from '@/constants/ProblemType'
 
 import { useTranslations } from 'next-intl'
 
@@ -262,22 +261,24 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 {problem.question}
               </Typography>
             </Box>
-            <Box
-              sx={{ p: 3, borderBottom: `1px solid${colors.disabled.light}` }}
-            >
-              <Typography fontSize={fontSizes.m} color="text.secondary">
-                {t('form.questionImage')}:{' '}
-              </Typography>
-              <Box sx={{ mt: 1 }}>
-                <img
-                  src={img}
-                  style={{
-                    width: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
+            {problem.taskType === ProblemType1 && (
+              <Box
+                sx={{ p: 3, borderBottom: `1px solid${colors.disabled.light}` }}
+              >
+                <Typography fontSize={fontSizes.m} color="text.secondary">
+                  {t('form.questionImage')}:{' '}
+                </Typography>
+                <Box sx={{ mt: 1 }}>
+                  <img
+                    src={img}
+                    style={{
+                      width: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </Box>
               </Box>
-            </Box>
+            )}
           </Paper>
         </Grid>
         <Grid item xs={7}>

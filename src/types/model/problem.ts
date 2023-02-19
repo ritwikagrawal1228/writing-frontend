@@ -1,7 +1,8 @@
+import { ProblemType1, ProblemType2 } from '@/constants/ProblemType'
 import { Answer } from '@/types/model/answer'
 import { User } from '@/types/model/user'
 
-export type TaskType = 'Type_#Task1' | 'Type_#Task2'
+export type TaskType = typeof ProblemType1 | typeof ProblemType2
 
 export type Problem = {
   id: string
