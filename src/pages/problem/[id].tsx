@@ -155,13 +155,12 @@ export default function ProblemDetail({ problem, userStr }: Props) {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      <Grid container columnSpacing={2}>
-        <Grid item xs={6}>
+      <Grid container columnSpacing={3}>
+        <Grid item xs={5}>
           <TitleBox title={t('detail.title')}>
             <Box sx={{ maxHeight: '36px' }}>
               <Button
                 color="primary"
-                variant="outlined"
                 startIcon={<DeleteForeverIcon />}
                 sx={{ mr: 2 }}
                 onClick={() => confirmDelete()}
@@ -197,7 +196,6 @@ export default function ProblemDetail({ problem, userStr }: Props) {
               </Dialog>
               <Button
                 color="secondary"
-                variant="outlined"
                 startIcon={<EditIcon />}
                 onClick={() => moveEditPage(problem.id)}
               >
@@ -282,7 +280,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={7}>
           <TitleBox title={t('detail.answer.list.title')}>
             <Box sx={{ maxHeight: '36px' }}>
               <Button

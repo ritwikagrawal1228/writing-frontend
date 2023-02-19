@@ -188,10 +188,11 @@ export const ProfileSettingForm: FC<Props> = memo(
             </Grid>
             <Button
               variant="outlined"
+              color="secondary"
               component="label"
               startIcon={<AddPhotoAlternateOutlinedIcon />}
               sx={{ width: '70%' }}
-              disabled={photo !== undefined}
+              disabled={!!photo}
             >
               {t('form.imageUploadButton')}
               <input

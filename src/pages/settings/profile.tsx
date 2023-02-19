@@ -99,7 +99,7 @@ export default function ProfileSetting({ userStr }: Props) {
     >
       <Snackbar
         open={isAlertShow}
-        autoHideDuration={600}
+        autoHideDuration={6000}
         onClose={handleAlertClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >

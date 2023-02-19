@@ -1,19 +1,20 @@
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 
 import AddIcon from '@mui/icons-material/Add'
 import {
+  Avatar,
   Box,
   Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
   Chip,
   CircularProgress,
-  Grid,
+  Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
   Paper,
   Typography,
   useTheme,
@@ -29,7 +30,6 @@ import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { problemService } from '@/services/problemService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
-import { roundSentence } from '@/utils/roundSentence'
 
 type Props = {
   userStr: string
@@ -90,81 +90,77 @@ export default function ProblemList({
           </Button>
         </Box>
       </TitleBox>
-      <Paper
-        sx={{ minHeight: '460px', textAlign: 'center', pt: 5, pl: 5, pb: 5 }}
-      >
+      <Paper sx={{ minHeight: '460px', textAlign: 'center', p: 4 }}>
         {!problems ? (
           <Box sx={{ p: 10 }}>
             <CircularProgress size={80} />
           </Box>
         ) : problems.length > 0 ? (
-          <Grid
-            container
-            spacing={5}
-            sx={{ width: '100%', mr: 0 }}
-            justifyContent="start"
+          <List
+            sx={{
+              width: '100%',
+              bgcolor:
+                theme.palette.mode === 'dark'
+                  ? colors.base.gray
+                  : colors.disabled.light,
+              borderRadius: 1,
+              py: 0,
+            }}
           >
-            {problems.map((problem: Problem) => (
-              <Grid item key={problem.id}>
-                <Card
-                  sx={{
-                    width: '324px',
-                    height: '400.4px',
-                    textAlign: 'left',
-                    backgroundColor:
-                      theme.palette.mode === 'dark'
-                        ? colors.base.gray
-                        : colors.disabled.light,
-                  }}
-                  key={problem.id}
-                >
-                  <CardActionArea onClick={() => moveDetail(problem.id)}>
-                    <CardMedia
-                      component="img"
-                      height="200.2px"
-                      image={
-                        images.find((image) => image.id === problem.id)?.src ||
-                        '/img/noImage.jpg'
+            {problems.map((problem: Problem, i: number) => (
+              <Fragment key={problem.id}>
+                <ListItem
+                  alignItems="flex-start"
+                  component="div"
+                  disablePadding
+                  secondaryAction={
+                    <Chip
+                      variant="outlined"
+                      label={ProblemType[problem.taskType]}
+                      color={
+                        ProblemType[problem.taskType] === 'Task 1'
+                          ? 'primary'
+                          : 'secondary'
                       }
                     />
-                    <CardContent sx={{ minHeight: '145.2px', p: 2 }}>
-                      <Typography
-                        gutterBottom
-                        fontSize={fontSizes.l}
-                        fontWeight="bold"
-                      >
-                        {roundSentence(problem.title, 55)}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Grid
-                        container
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Grid item>
-                          <Chip
-                            variant="outlined"
-                            label={ProblemType[problem.taskType]}
-                            color={
-                              ProblemType[problem.taskType] === 'Task 1'
-                                ? 'primary'
-                                : 'secondary'
-                            }
-                          />
-                        </Grid>
-                        <Grid item>
-                          <Typography fontSize={fontSizes.s}>
-                            {new Date(problem.createdAt).toLocaleDateString()}
+                  }
+                >
+                  <ListItemButton onClick={() => moveDetail(problem.id)}>
+                    <ListItemAvatar>
+                      <Avatar
+                        variant="rounded"
+                        alt={problem.title}
+                        src={
+                          images.find((image) => image.id === problem.id)
+                            ?.src || '/img/noImage.jpg'
+                        }
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      sx={{ mr: 5 }}
+                      primary={problem.title}
+                      secondary={
+                        <Fragment>
+                          <Typography
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {problem.question}
                           </Typography>
-                        </Grid>
-                      </Grid>
-                    </CardActions>
-                  </CardActionArea>
-                </Card>
-              </Grid>
+                          <Typography fontSize={fontSizes.s} sx={{ mt: 1 }}>
+                            {new Date(problem.createdAt).toLocaleDateString()}{' '}
+                          </Typography>
+                        </Fragment>
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+                {problems[i + 1] && <Divider variant="inset" component="li" />}
+              </Fragment>
             ))}
-          </Grid>
+          </List>
         ) : (
           <Box sx={{ p: 10 }}>
             <Typography variant="h6" fontWeight="bold">
