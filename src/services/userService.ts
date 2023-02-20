@@ -16,7 +16,7 @@ const updateProfile = async (form: UpdateProfileSettingForm) => {
         email
         userType
         isAdmin
-        profileImageUrl
+        profileImageKey
         studyTarget
         introduction
         isSubscribeEmail
@@ -31,7 +31,7 @@ const updateProfile = async (form: UpdateProfileSettingForm) => {
       name: form.name,
       studyTarget: String(form.studyTarget),
       introduction: form.introduction,
-      profileImageUrl: form.profileImageUrl,
+      profileImageKey: form.profileImageKey,
     },
   }
 
@@ -50,7 +50,7 @@ const userQuery = gql`
       email
       userType
       isAdmin
-      profileImageUrl
+      profileImageKey
       studyTarget
       introduction
       isSubscribeEmail

@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { FC, Fragment, useEffect } from 'react'
+import React, { FC, Fragment, useEffect, useState } from 'react'
 
 import { useAuthenticator } from '@aws-amplify/ui-react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
@@ -10,20 +10,16 @@ import Brightness4Icon from '@mui/icons-material/Brightness4'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import MenuIcon from '@mui/icons-material/Menu'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 import { Path } from '@/constants/Path'
 
-import SettingsIcon from '@mui/icons-material/Settings'
+import TranslateIcon from '@mui/icons-material/Translate'
 
 import { UserPlanFree } from '@/constants/UserPlans'
 
-import TranslateIcon from '@mui/icons-material/Translate'
-
-import { ColorModeContext } from '@/context/ColorMode'
-
 import {
   AppBar,
-  Avatar,
   Box,
   Breadcrumbs,
   Button,
@@ -43,12 +39,14 @@ import {
   useTheme,
 } from '@mui/material'
 
-import { colors } from '@/themes/globalStyles'
+import { ColorModeContext } from '@/context/ColorMode'
 
 import { useTranslations } from 'next-intl'
 
+import { colors } from '@/themes/globalStyles'
 import { User } from '@/types/model/user'
-import { stringAvatar } from '@/utils/avator'
+
+import { ProfileAvatar } from '../parts/common/ProfileAvatar'
 
 type LayoutProps = {
   title: string
@@ -83,12 +81,11 @@ const Layout: FC<LayoutProps> = ({
   const theme = useTheme()
   const colorMode = React.useContext(ColorModeContext)
 
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null,
-  )
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const [open, setOpen] = React.useState(false)
   const [menus, setMenus] = React.useState([problemMenuItems])
+
   useEffect(() => {
     if (!user) {
       return
@@ -260,13 +257,7 @@ const Layout: FC<LayoutProps> = ({
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {user?.profileImageUrl ? (
-                    <Avatar src={user.profileImageUrl}></Avatar>
-                  ) : user?.name ? (
-                    <Avatar {...stringAvatar(user?.name || 'E I')} />
-                  ) : (
-                    <Avatar />
-                  )}
+                  <ProfileAvatar user={user} />
                 </IconButton>
               </Tooltip>
               <Menu

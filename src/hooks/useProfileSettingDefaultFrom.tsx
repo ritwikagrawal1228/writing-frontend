@@ -14,7 +14,7 @@ export const useProfileSettingDefaultFrom = (user?: User) => {
         email: user.email,
         introduction: user.introduction,
         studyTarget: Number(user.studyTarget || 0) || 0,
-        profileImageUrl: user.profileImageUrl,
+        profileImageKey: user.profileImageKey,
       })
     }
   }, [user])

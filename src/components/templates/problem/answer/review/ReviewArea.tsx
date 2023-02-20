@@ -15,13 +15,13 @@ import {
   TextField,
 } from '@mui/material'
 
+import { ProfileAvatar } from '@/components/parts/common/ProfileAvatar'
 import { ProblemType1 } from '@/constants/ProblemType'
 import { reviewService } from '@/services/reviewService'
 import { fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'
 import { Review } from '@/types/model/review'
 import { User } from '@/types/model/user'
-import { stringAvatar } from '@/utils/avator'
 
 type Props = {
   answer: Answer
@@ -181,15 +181,7 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
                     {reviews.find((r) => r.userId === user?.id)?.content}
                   </Typography>
                 </Box>
-                <Avatar>
-                  {user?.profileImageUrl ? (
-                    <Avatar src={user.profileImageUrl}></Avatar>
-                  ) : user?.name ? (
-                    <Avatar {...stringAvatar(user?.name || 'E I')} />
-                  ) : (
-                    <Avatar />
-                  )}
-                </Avatar>
+                <ProfileAvatar user={user} />
               </Box>
             ) : isWaitingAiReview ? (
               <CircularProgress />

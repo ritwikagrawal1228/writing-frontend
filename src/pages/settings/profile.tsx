@@ -54,7 +54,13 @@ export default function ProfileSetting({ userStr }: Props) {
 
   useEffect(() => {
     if (user && typeof photo === 'string') {
-      setPhoto(user?.profileImageUrl)
+      Storage.get(user.profileImageKey)
+        .then((res) => {
+          setPhoto(res)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     }
   }, [user])
 
@@ -72,7 +78,7 @@ export default function ProfileSetting({ userStr }: Props) {
         `${user?.id}-${Date.now()}.${fileExt}`,
         compPhoto,
       )
-      form.profileImageUrl = await Storage.get(res.key)
+      form.profileImageKey = res.key
     }
 
     commonSlice.actions.updateIsBackdropShow(true)
@@ -100,7 +106,7 @@ export default function ProfileSetting({ userStr }: Props) {
 
   return (
     <Layout
-      title={t('create.title')}
+      title="Profile Setting"
       description={t('create.title')}
       breadcrumbs={[{ label: 'Profile Settings', href: undefined }]}
       user={user}
