@@ -14,24 +14,29 @@ import {
 } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
-import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslations } from 'next-intl'
 
 import { TitleBox } from '@/components/templates/common/TitleBox'
+
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
+
+import { useDispatch } from 'react-redux'
+
 import { ProfileSettingForm } from '@/components/templates/settings/profile/ProfileSettingForm'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { useProfileSettingDefaultFrom } from '@/hooks/useProfileSettingDefaultFrom'
 import { userService } from '@/services/userService'
+import { commonSlice } from '@/store/common'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
 
 type Props = {
   userStr: string
 }
-
 export default function ProfileSetting({ userStr }: Props) {
   const { user, setUser } = useGetAuthUser(userStr)
   const theme = useTheme()
@@ -40,6 +45,7 @@ export default function ProfileSetting({ userStr }: Props) {
   const [photo, setPhoto] = useState<File | string | undefined>('')
   const { profileSettingForm } = useProfileSettingDefaultFrom(user)
   const [isAlertShow, setIsAlertShow] = useState(false)
+  const dispatch = useDispatch()
 
   const methods = useForm<UpdateProfileSettingForm>({
     mode: 'onChange',
@@ -69,12 +75,14 @@ export default function ProfileSetting({ userStr }: Props) {
       form.profileImageUrl = await Storage.get(res.key)
     }
 
+    commonSlice.actions.updateIsBackdropShow(true)
     const { updateUser } = await userService
       .updateProfile(form)
       .then(({ data }) => {
         setIsAlertShow(true)
         return data
       })
+    commonSlice.actions.reset()
 
     setUser(updateUser)
   }
