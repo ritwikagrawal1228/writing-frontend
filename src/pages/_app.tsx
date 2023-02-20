@@ -36,9 +36,9 @@ Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
-const store = useStore()
-const persistor = persistStore(store)
 export default function App({ Component, pageProps }: AppProps) {
+  const store = useStore()
+  const persistor = persistStore(store)
   const [mode, setMode] = React.useState<'light' | 'dark'>('light')
   useEffect(() => {
     setMode(() => {

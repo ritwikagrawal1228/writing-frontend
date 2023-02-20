@@ -81,14 +81,20 @@ export default function ProfileSetting({ userStr }: Props) {
       form.profileImageKey = res.key
     }
 
-    commonSlice.actions.updateIsBackdropShow(true)
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
     const { updateUser } = await userService
       .updateProfile(form)
       .then(({ data }) => {
-        setIsAlertShow(true)
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: 'Your profile successfully updated!',
+            snackBarType: 'success',
+          }),
+        )
         return data
       })
-    commonSlice.actions.reset()
+    dispatch(commonSlice.actions.updateIsBackdropShow(false))
 
     setUser(updateUser)
   }
