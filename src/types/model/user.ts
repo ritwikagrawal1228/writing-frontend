@@ -8,7 +8,7 @@ export type User = {
   email: string
   userType: UserType
   isAdmin: boolean
-  profileImageUrl: string
+  profileImageKey: string
   studyTarget: string
   introduction: string
   subscriptionExpiresAt: string

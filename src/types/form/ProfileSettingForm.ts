@@ -3,5 +3,5 @@ export type UpdateProfileSettingForm = {
   email: string
   introduction: string
   studyTarget: number
-  profileImageUrl: string
+  profileImageKey: string
 }
