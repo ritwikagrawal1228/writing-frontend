@@ -35,7 +35,7 @@ const updateProfile = async (form: UpdateProfileSettingForm) => {
     },
   }
 
-  return await axios.post(Path.APIGraphql, {
+  return await axios.post<{ updateUserProfile: User }>(Path.APIGraphql, {
     query,
     variables,
   })

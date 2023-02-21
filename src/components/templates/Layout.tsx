@@ -51,11 +51,10 @@ import { RootState } from '@/store'
 import { useTranslations } from 'next-intl'
 
 import { commonSlice } from '@/store/common'
-import { colors } from '@/themes/globalStyles'
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import { User } from '@/types/model/user'
+import { colors } from '@/themes/globalStyles'
 
 import { ProfileAvatar } from '../parts/common/ProfileAvatar'
 
@@ -64,7 +63,6 @@ type LayoutProps = {
   description?: string
   children: React.ReactNode
   breadcrumbs?: { label: string; href?: string }[]
-  user?: User
 }
 
 const languages = {
@@ -82,7 +80,6 @@ const Layout: FC<LayoutProps> = ({
   title,
   description,
   breadcrumbs,
-  user,
 }) => {
   const t = useTranslations('Nav')
   const problemMenuItems = { label: t('menu.problem'), href: Path.Problem }
@@ -91,6 +88,7 @@ const Layout: FC<LayoutProps> = ({
   const { signOut } = useAuthenticator()
   const theme = useTheme()
   const dispatch = useDispatch()
+  const user = useSelector((state: RootState) => state.user.user)
 
   const colorMode = React.useContext(ColorModeContext)
   const snackBarState = useSelector(
@@ -404,24 +402,26 @@ const Layout: FC<LayoutProps> = ({
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Snackbar
-        open={snackBarState.isSnackbarShow}
-        autoHideDuration={6000}
-        onClose={(event?: React.SyntheticEvent | Event, reason?: string) =>
-          reason === 'clickaway' && dispatch(commonSlice.actions.reset())
-        }
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert
-          severity={snackBarState.snackBarType}
+      {snackBarState.isSnackbarShow && (
+        <Snackbar
+          open={snackBarState.isSnackbarShow}
+          autoHideDuration={6000}
           onClose={(event?: React.SyntheticEvent | Event, reason?: string) =>
             reason === 'clickaway' && dispatch(commonSlice.actions.reset())
           }
-          sx={{ width: '100%' }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          {snackBarState.snackBarMsg}
-        </Alert>
-      </Snackbar>
+          <Alert
+            severity={snackBarState.snackBarType}
+            onClose={(event?: React.SyntheticEvent | Event, reason?: string) =>
+              reason === 'clickaway' && dispatch(commonSlice.actions.reset())
+            }
+            sx={{ width: '100%' }}
+          >
+            {snackBarState.snackBarMsg}
+          </Alert>
+        </Snackbar>
+      )}
     </>
   )
 }

@@ -107,7 +107,6 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
         { label: t('list.title'), href: Path.Problem },
         { label: t('create.title'), href: undefined },
       ]}
-      user={user}
     >
       <TitleBox title="Payment Setting">
         <></>

@@ -143,7 +143,6 @@ export default function ProblemDetail({ problem, userStr }: Props) {
         { label: t('list.title'), href: Path.Problem },
         { label: t('detail.title'), href: undefined },
       ]}
-      user={user}
     >
       {isDeleting && (
         <Backdrop

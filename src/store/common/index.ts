@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export type snackBarState = {
   isSnackbarShow: boolean
   snackBarMsg: string
-  snackBarType: 'success' | 'error' | 'info' | 'warning'
+  snackBarType: 'success' | 'error' | 'info' | 'warning' | undefined
 }
 
 export type CommonState = {
@@ -19,7 +19,7 @@ const initialState: CommonState = {
   snackBarState: {
     isSnackbarShow: false,
     snackBarMsg: '',
-    snackBarType: 'success',
+    snackBarType: undefined,
   },
 }
 

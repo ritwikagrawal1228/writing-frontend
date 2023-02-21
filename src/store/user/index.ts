@@ -3,26 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { User } from '@/types/model/user'
 
 export type UserState = {
-  user: User
+  user?: User
 }
 
-export type UpdateUserPayload = User
+export type UpdateUserPayload = User | undefined
 
 const initialState: UserState = {
-  user: {
-    id: '',
-    name: '',
-    plan: 'FREE',
-    email: '',
-    userType: 'STUDENT',
-    isAdmin: false,
-    profileImageUrl: '',
-    studyTarget: '',
-    introduction: '',
-    subscriptionExpiresAt: '',
-    isSubscribeEmail: false,
-    isSubscribePush: false,
-  },
+  user: undefined,
 }
 
 export const userSlice = createSlice({

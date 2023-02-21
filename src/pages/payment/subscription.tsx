@@ -21,18 +21,18 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Table from '@mui/material/Table'
 
 import Layout from '@/components/templates/Layout'
-import { TitleBox } from '@/components/templates/common/TitleBox'
 
 import { TokenResult } from '@square/web-payments-sdk-types'
 
-import { Path } from '@/constants/Path'
+import { TitleBox } from '@/components/templates/common/TitleBox'
 
 import { withSSRContext } from 'aws-amplify'
 
-import { subtotal, taxRate } from '@/constants/Price'
+import { Path } from '@/constants/Path'
 
 import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
+import { subtotal, taxRate } from '@/constants/Price'
 import { UserPlanFree } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
@@ -48,7 +48,7 @@ type Props = {
 }
 
 export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
-  const { user } = useGetAuthUser(userStr)
+  useGetAuthUser(userStr)
   const theme = useTheme()
   const [alertShow, setAlertShow] = useState<AlertColor>()
   const router = useRouter()
@@ -89,7 +89,6 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
       <Layout
         title="Upgrade Plan"
         breadcrumbs={[{ label: 'Upgrade Plan', href: undefined }]}
-        user={user}
       >
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

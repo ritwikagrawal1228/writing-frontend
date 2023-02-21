@@ -19,7 +19,7 @@ type Props = {
 }
 
 export default function AnswerRedeem({ answerModel, userStr }: Props) {
-  const { user } = useGetAuthUser(userStr)
+  useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const ta = useTranslations('Answer')
   const router = useRouter()
@@ -76,7 +76,6 @@ export default function AnswerRedeem({ answerModel, userStr }: Props) {
         },
         { label: ta('create.title'), href: undefined },
       ]}
-      user={user}
     >
       <AnswerForm
         problem={answerModel.problem}
