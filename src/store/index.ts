@@ -21,13 +21,13 @@ import { userSlice } from '@/store/user'
 // https://github.com/vercel/next.js/discussions/15687#discussioncomment-45319
 const createNoopStorage = () => {
   return {
-    getItem(_key) {
+    getItem(_key: string) {
       return Promise.resolve(null)
     },
-    setItem(_key, value) {
+    setItem(_key: string, value: any) {
       return Promise.resolve(value)
     },
-    removeItem(_key) {
+    removeItem(_key: string) {
       return Promise.resolve()
     },
   }
