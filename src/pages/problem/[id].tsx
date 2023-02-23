@@ -17,7 +17,6 @@ import EditIcon from '@mui/icons-material/Edit'
 import { Path } from '@/constants/Path'
 
 import {
-  Backdrop,
   Box,
   Button,
   Card,
@@ -36,15 +35,21 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { Storage, withSSRContext } from 'aws-amplify'
 
 import { ProblemType, ProblemType1 } from '@/constants/ProblemType'
 
-import { useTranslations } from 'next-intl'
+import { Storage, withSSRContext } from 'aws-amplify'
 
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+
+import { useTranslations } from 'next-intl'
+
 import { answerService } from '@/services/answerService'
+
+import { useDispatch } from 'react-redux'
+
 import { problemService } from '@/services/problemService'
+import { commonSlice } from '@/store/common'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'
 import { Problem } from '@/types/model/problem'
@@ -61,10 +66,10 @@ export default function ProblemDetail({ problem, userStr }: Props) {
   const theme = useTheme()
   const [img, setImg] = React.useState<string | undefined>()
   const [isAlertOpen, setIsAlertOpen] = React.useState(false)
-  const [isDeleting, setIsDeleting] = React.useState(false)
   const [answerModels, setAnswerModels] = React.useState<Answer[]>([])
   const [isAnswerLoading, setIsAnswerLoading] = React.useState(false)
-  const { user } = useGetAuthUser(userStr)
+  const dispatch = useDispatch()
+  useGetAuthUser(userStr)
 
   useEffect(() => {
     if (!problem) {
@@ -105,22 +110,17 @@ export default function ProblemDetail({ problem, userStr }: Props) {
 
   const deleteProblem = async (id: string) => {
     setIsAlertOpen(false)
-    setIsDeleting(true)
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
 
-    problemService
-      .deleteProblemById(id, user)
+    await problemService
+      .deleteProblemById(id)
       .then((res) => {
         router.push(Path.Problem)
       })
       .catch((err) => {
         console.log(err)
-
-        setIsDeleting(false)
       })
-  }
-
-  const closeBackdrop = () => {
-    setIsDeleting(false)
+    dispatch(commonSlice.actions.updateIsBackdropShow(false))
   }
 
   const moveAnswerPage = (id: string) => {
@@ -144,15 +144,6 @@ export default function ProblemDetail({ problem, userStr }: Props) {
         { label: t('detail.title'), href: undefined },
       ]}
     >
-      {isDeleting && (
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={isDeleting}
-          onClick={closeBackdrop}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
       <Grid container columnSpacing={3}>
         <Grid item xs={5}>
           <TitleBox title={t('detail.title')}>

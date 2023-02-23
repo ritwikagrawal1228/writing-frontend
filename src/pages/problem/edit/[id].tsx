@@ -9,22 +9,22 @@ import imageCompression from 'browser-image-compression'
 
 import Layout from '@/components/templates/Layout'
 
-import { gql } from 'graphql-request'
+import { useTranslations } from 'next-intl'
 
 import { TitleBox } from '@/components/templates/common/TitleBox'
 
-import { useTranslations } from 'next-intl'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { problemService } from '@/services/problemService'
+import { commonSlice } from '@/store/common'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 import { Problem } from '@/types/model/problem'
-import { axios } from '@/utils/axios'
 
 type Props = {
   problem: Problem
@@ -74,6 +74,7 @@ export default function ProblemEdit({ problem, userStr }: Props) {
     mode: 'onChange',
     reValidateMode: 'onChange',
   })
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (!problem) {
@@ -95,7 +96,8 @@ export default function ProblemEdit({ problem, userStr }: Props) {
     }
   }, [problem])
 
-  const onSubmit: SubmitHandler<CreateProblemForm> = async (data) => {
+  const onSubmit: SubmitHandler<CreateProblemForm> = async (form) => {
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
     let key = ''
     if (photo && typeof photo !== 'string') {
       if (problem.questionImageKey) {
@@ -116,30 +118,10 @@ export default function ProblemEdit({ problem, userStr }: Props) {
       key = problem.questionImageKey || ''
     }
 
-    const uploadQuery = gql`
-      mutation ($input: UpdateProblemInput!) {
-        updateProblem(input: $input) {
-          id
-        }
-      }
-    `
-    const variables = {
-      input: {
-        problemId: problem.id,
-        userId: user?.id,
-        title: data.title,
-        taskType: data.taskType,
-        question: data.question,
-        questionImageKey: key,
-      },
-    }
+    const { data } = await problemService.updateProblem(problem.id, form, key)
+    dispatch(commonSlice.actions.updateIsBackdropShow(false))
 
-    const res = await axios.post(Path.APIGraphql, {
-      query: uploadQuery,
-      variables,
-    })
-
-    router.push(`${Path.Problem}/${res.data.updateProblem.id}`)
+    router.push(`${Path.Problem}/${data.updateProblem.id}`)
   }
 
   return (
