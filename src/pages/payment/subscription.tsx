@@ -58,7 +58,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
     }
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
     const { data } = await squareService.subscribePaidPlan(token.token)
-    dispatch(commonSlice.actions.updateIsBackdropShow(true))
+    dispatch(commonSlice.actions.updateIsBackdropShow(false))
     if (data.subscribePaidPlan) {
       dispatch(
         commonSlice.actions.updateSnackBar({
