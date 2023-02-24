@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 
 import { withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
+import { useDispatch } from 'react-redux'
 
 import Layout from '@/components/templates/Layout'
 import { AnswerForm } from '@/components/templates/problem/answer/AnswerForm'
@@ -11,6 +12,7 @@ import { AnswerStatus } from '@/constants/AnswerStatus'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { answerService } from '@/services/answerService'
+import { commonSlice } from '@/store/common'
 import { Answer } from '@/types/model/answer'
 
 type Props = {
@@ -28,6 +30,7 @@ export default function AnswerRedeem({ answerModel, userStr }: Props) {
   const [countDownSec, setCountDownSec] = React.useState<number>(
     answerModel.answerSpentTime,
   )
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (!answerModel) {
@@ -50,6 +53,7 @@ export default function AnswerRedeem({ answerModel, userStr }: Props) {
       return
     }
 
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
     const res = await answerService.updateAnswer(
       answerModel.id,
       answerModel.problem.id,
@@ -58,6 +62,7 @@ export default function AnswerRedeem({ answerModel, userStr }: Props) {
       time,
       status,
     )
+    dispatch(commonSlice.actions.updateIsBackdropShow(false))
 
     if (res) {
       router.push(`${Path.Problem}/${answerModel.problem.id}`)
