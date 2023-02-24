@@ -42,7 +42,7 @@ export default function ProblemList({
   userStr,
   problems,
 }: Props) {
-  const { user } = useGetAuthUser(userStr)
+  useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
@@ -76,7 +76,6 @@ export default function ProblemList({
       title={t('list.title')}
       description={t('list.description')}
       breadcrumbs={[{ label: t('list.title'), href: undefined }]}
-      user={user}
     >
       <TitleBox title={t('list.title')}>
         <Box sx={{ maxHeight: '36px' }}>

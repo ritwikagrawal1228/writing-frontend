@@ -15,40 +15,36 @@ import {
 } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
-import { gql } from 'graphql-request'
+import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 
-import { useTranslations } from 'next-intl'
-
-import { TitleBox } from '@/components/templates/common/TitleBox'
-
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 
+import { TitleBox } from '@/components/templates/common/TitleBox'
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
+
+import { useDispatch } from 'react-redux'
+
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { problemService } from '@/services/problemService'
+import { commonSlice } from '@/store/common'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
-import { axios } from '@/utils/axios'
 
 type Props = {
   userStr: string
-  authenticated: boolean
   problemsNum: number
 }
 
-export default function ProblemCreate({
-  authenticated,
-  userStr,
-  problemsNum,
-}: Props) {
+export default function ProblemCreate({ userStr, problemsNum }: Props) {
   const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const [photo, setPhoto] = useState<File | undefined>(undefined)
   const router = useRouter()
   const [limitAlert, setLimitAlert] = useState(false)
+  const dispatch = useDispatch()
 
   const methods = useForm<CreateProblemForm>({
     mode: 'onChange',
@@ -56,6 +52,8 @@ export default function ProblemCreate({
   })
 
   const onSubmit: SubmitHandler<CreateProblemForm> = async (data) => {
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
+
     let key = ''
     if (photo) {
       const compPhoto = await imageCompression(photo, {
@@ -69,36 +67,17 @@ export default function ProblemCreate({
       key = res.key
     }
 
-    const uploadQuery = gql`
-      mutation ($input: CreateProblemInput!) {
-        createProblem(input: $input) {
-          id
-        }
-      }
-    `
-    const variables = {
-      input: {
-        userId: user?.id,
-        title: data.title,
-        taskType: data.taskType,
-        question: data.question,
-        questionImageKey: key,
-      },
-    }
-
-    await axios
-      .post(Path.APIGraphql, {
-        query: uploadQuery,
-        variables,
-      })
-      .then((res) => {
-        router.push(`${Path.Problem}/${res.data.createProblem.id}`)
+    problemService
+      .createProblem(data, key)
+      .then(({ data }) => {
+        router.push(`${Path.Problem}/${data.createProblem.id}`)
       })
       .catch((err) => {
         if (err.response?.data === 'PROBLEM_COUNT_LIMIT') {
           setLimitAlert(true)
         }
       })
+      .finally(() => dispatch(commonSlice.actions.updateIsBackdropShow(false)))
   }
 
   const handleAlertClose = (
@@ -146,7 +125,6 @@ export default function ProblemCreate({
         { label: t('list.title'), href: Path.Problem },
         { label: t('create.title'), href: undefined },
       ]}
-      user={user}
     >
       <Snackbar
         open={limitAlert}

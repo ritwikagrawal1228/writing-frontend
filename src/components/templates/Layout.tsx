@@ -10,19 +10,25 @@ import Brightness4Icon from '@mui/icons-material/Brightness4'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import MenuIcon from '@mui/icons-material/Menu'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
-import SettingsIcon from '@mui/icons-material/Settings'
 
 import { Path } from '@/constants/Path'
 
-import TranslateIcon from '@mui/icons-material/Translate'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 import { UserPlanFree } from '@/constants/UserPlans'
 
+import TranslateIcon from '@mui/icons-material/Translate'
+
+import { ColorModeContext } from '@/context/ColorMode'
+
 import {
+  Alert,
   AppBar,
+  Backdrop,
   Box,
   Breadcrumbs,
   Button,
+  CircularProgress,
   Collapse,
   Container,
   CssBaseline,
@@ -33,18 +39,22 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Snackbar,
   Toolbar,
   Tooltip,
   Typography,
   useTheme,
 } from '@mui/material'
 
-import { ColorModeContext } from '@/context/ColorMode'
+import { RootState } from '@/store'
 
 import { useTranslations } from 'next-intl'
 
+import { commonSlice } from '@/store/common'
+
+import { useSelector, useDispatch } from 'react-redux'
+
 import { colors } from '@/themes/globalStyles'
-import { User } from '@/types/model/user'
 
 import { ProfileAvatar } from '../parts/common/ProfileAvatar'
 
@@ -53,7 +63,6 @@ type LayoutProps = {
   description?: string
   children: React.ReactNode
   breadcrumbs?: { label: string; href?: string }[]
-  user?: User
 }
 
 const languages = {
@@ -71,7 +80,6 @@ const Layout: FC<LayoutProps> = ({
   title,
   description,
   breadcrumbs,
-  user,
 }) => {
   const t = useTranslations('Nav')
   const problemMenuItems = { label: t('menu.problem'), href: Path.Problem }
@@ -79,8 +87,16 @@ const Layout: FC<LayoutProps> = ({
   const router = useRouter()
   const { signOut } = useAuthenticator()
   const theme = useTheme()
-  const colorMode = React.useContext(ColorModeContext)
+  const dispatch = useDispatch()
+  const user = useSelector((state: RootState) => state.user.user)
 
+  const colorMode = React.useContext(ColorModeContext)
+  const snackBarState = useSelector(
+    (state: RootState) => state.common.snackBarState,
+  )
+  const isBackdropShow = useSelector(
+    (state: RootState) => state.common.isBackdropShow,
+  )
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const [open, setOpen] = React.useState(false)
@@ -377,6 +393,35 @@ const Layout: FC<LayoutProps> = ({
           {children}
         </Container>
       </Box>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isBackdropShow}
+        onClick={() =>
+          dispatch(commonSlice.actions.updateIsBackdropShow(false))
+        }
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {snackBarState.isSnackbarShow && (
+        <Snackbar
+          open={snackBarState.isSnackbarShow}
+          autoHideDuration={6000}
+          onClose={(event?: React.SyntheticEvent | Event, reason?: string) =>
+            reason === 'clickaway' && dispatch(commonSlice.actions.reset())
+          }
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        >
+          <Alert
+            severity={snackBarState.snackBarType}
+            onClose={(event?: React.SyntheticEvent | Event, reason?: string) =>
+              reason === 'clickaway' && dispatch(commonSlice.actions.reset())
+            }
+            sx={{ width: '100%' }}
+          >
+            {snackBarState.snackBarMsg}
+          </Alert>
+        </Snackbar>
+      )}
     </>
   )
 }

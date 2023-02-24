@@ -23,18 +23,24 @@ import {
 } from '@mui/material'
 import { TokenResult } from '@square/web-payments-sdk-types'
 import { withSSRContext } from 'aws-amplify'
-import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 
-import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
+import { useTranslations } from 'next-intl'
 
 import { TitleBox } from '@/components/templates/common/TitleBox'
+
+import { useDispatch } from 'react-redux'
+
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
+
+import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
+
 import { Path } from '@/constants/Path'
 import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
+import { commonSlice } from '@/store/common'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { SquareCard } from '@/types/model/squareCard'
 
@@ -54,14 +60,35 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
   const [card, setCard] = useState<SquareCard>()
   const [isCardLoading, setIsCardLoading] = useState<boolean>(true)
   const [isConfirmShow, setIsConfirmShow] = useState<boolean>(false)
-  const submit = (token: TokenResult) => {
+  const dispatch = useDispatch()
+
+  const submit = async (token: TokenResult) => {
     if (token.token) {
-      squareService.updateSquareCard(token.token).then(({ data }) => {
-        if (data.updateSquareCard) {
-          setCard(data.updateSquareCard)
-          alert('Card updated successfully')
-        }
-      })
+      dispatch(commonSlice.actions.updateIsBackdropShow(true))
+      await squareService
+        .updateSquareCard(token.token)
+        .then(({ data }) => {
+          if (data.updateSquareCard) {
+            setCard(data.updateSquareCard)
+            dispatch(
+              commonSlice.actions.updateSnackBar({
+                isSnackbarShow: true,
+                snackBarMsg: 'Your card is updated successfully',
+                snackBarType: 'success',
+              }),
+            )
+          }
+        })
+        .catch(() => {
+          dispatch(
+            commonSlice.actions.updateSnackBar({
+              isSnackbarShow: true,
+              snackBarMsg: 'Failed to update your card',
+              snackBarType: 'error',
+            }),
+          )
+        })
+      dispatch(commonSlice.actions.updateIsBackdropShow(false))
     }
   }
   useEffect(() => {
@@ -89,14 +116,31 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
   }
 
   const handleConfirm = () => {
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
     squareService
       .cancelSubscription()
       .then(({ data }) => {
-        alert(data.cancelCurrentSubscription)
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: 'Your subscription is canceled successfully',
+            snackBarType: 'success',
+          }),
+        )
+      })
+      .catch(() => {
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: 'Failed to cancel your subscription',
+            snackBarType: 'error',
+          }),
+        )
       })
       .finally(() => {
         setIsConfirmShow(false)
       })
+    dispatch(commonSlice.actions.updateIsBackdropShow(false))
   }
 
   return (
@@ -107,7 +151,6 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
         { label: t('list.title'), href: Path.Problem },
         { label: t('create.title'), href: undefined },
       ]}
-      user={user}
     >
       <TitleBox title="Payment Setting">
         <></>
@@ -128,7 +171,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                   Your Current Plan
                 </Typography>
                 <Typography fontSize={fontSizes.m} fontWeight="bold">
-                  {user?.plan === userPlans[0] ? 'Free' : 'Pro'}
+                  {user?.plan === userPlans[0] ? 'Free' : '👑 Pro'}
                   {user?.subscriptionExpiresAt &&
                     `Valid until${new Date(
                       user?.subscriptionExpiresAt,

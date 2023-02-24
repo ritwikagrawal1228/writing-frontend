@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   Grid,
@@ -11,23 +11,21 @@ import {
   TableContainer,
   TableRow,
   useTheme,
-  Snackbar,
-  Alert,
-  AlertColor,
   TableBody,
 } from '@mui/material'
-import Backdrop from '@mui/material/Backdrop'
-import CircularProgress from '@mui/material/CircularProgress'
 import Table from '@mui/material/Table'
 
 import Layout from '@/components/templates/Layout'
-import { TitleBox } from '@/components/templates/common/TitleBox'
 
 import { TokenResult } from '@square/web-payments-sdk-types'
 
-import { Path } from '@/constants/Path'
+import { TitleBox } from '@/components/templates/common/TitleBox'
 
 import { withSSRContext } from 'aws-amplify'
+
+import { Path } from '@/constants/Path'
+
+import { useDispatch } from 'react-redux'
 
 import { subtotal, taxRate } from '@/constants/Price'
 
@@ -37,6 +35,7 @@ import { UserPlanFree } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
 import { userService } from '@/services/userService'
+import { commonSlice } from '@/store/common'
 import { colors, fontSizes } from '@/themes/globalStyles'
 
 type Props = {
@@ -48,38 +47,38 @@ type Props = {
 }
 
 export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
-  const { user } = useGetAuthUser(userStr)
+  useGetAuthUser(userStr)
   const theme = useTheme()
-  const [alertShow, setAlertShow] = useState<AlertColor>()
   const router = useRouter()
-  const [open, setOpen] = React.useState(false)
+  const dispatch = useDispatch()
 
   const submit = async (token: TokenResult) => {
     if (!token.token) {
       return
     }
-    setOpen(true)
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
     const { data } = await squareService.subscribePaidPlan(token.token)
-    setOpen(false)
+    dispatch(commonSlice.actions.updateIsBackdropShow(false))
     if (data.subscribePaidPlan) {
-      setAlertShow('success')
+      dispatch(
+        commonSlice.actions.updateSnackBar({
+          isSnackbarShow: true,
+          snackBarMsg: 'Your plan has been upgraded successfully.',
+          snackBarType: 'success',
+        }),
+      )
       setTimeout(() => {
         router.push(Path.ProblemCreate)
       }, 3000)
     } else {
-      setAlertShow('error')
+      dispatch(
+        commonSlice.actions.updateSnackBar({
+          isSnackbarShow: true,
+          snackBarMsg: 'Failed to upgrade your plan. Please try again later.',
+          snackBarType: 'error',
+        }),
+      )
     }
-  }
-
-  const handleAlertClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string,
-  ) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setAlertShow(undefined)
   }
 
   return (
@@ -89,15 +88,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
       <Layout
         title="Upgrade Plan"
         breadcrumbs={[{ label: 'Upgrade Plan', href: undefined }]}
-        user={user}
       >
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={open}
-          onClick={() => setOpen(false)}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
         <TitleBox title="Upgrade Plan">
           <></>
         </TitleBox>
@@ -187,23 +178,6 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
             </Grid>
           </Grid>
         </Paper>
-        <Snackbar
-          open={!!alertShow}
-          autoHideDuration={6000}
-          onClose={handleAlertClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        >
-          <Alert
-            severity={alertShow}
-            onClose={handleAlertClose}
-            sx={{ width: '100%' }}
-          >
-            {alertShow === 'error' && (
-              <>Failed to subscript! Check your card information</>
-            )}
-            {alertShow === 'success' && <>Your profile successfully updated!</>}
-          </Alert>
-        </Snackbar>
       </Layout>
     </>
   )

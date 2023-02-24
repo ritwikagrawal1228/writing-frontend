@@ -3,43 +3,44 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
-import {
-  Alert,
-  Box,
-  Button,
-  Grid,
-  Paper,
-  Snackbar,
-  useTheme,
-} from '@mui/material'
+import { Box, Button, Grid, Paper, useTheme } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
-import imageCompression from 'browser-image-compression'
-import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import imageCompression from 'browser-image-compression'
 
 import { TitleBox } from '@/components/templates/common/TitleBox'
+
+import { useTranslations } from 'next-intl'
+
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
+
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+
 import { ProfileSettingForm } from '@/components/templates/settings/profile/ProfileSettingForm'
+
+import { useDispatch } from 'react-redux'
+
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { useProfileSettingDefaultFrom } from '@/hooks/useProfileSettingDefaultFrom'
 import { userService } from '@/services/userService'
+import { commonSlice } from '@/store/common'
+import { userSlice } from '@/store/user'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
 
 type Props = {
   userStr: string
 }
-
 export default function ProfileSetting({ userStr }: Props) {
-  const { user, setUser } = useGetAuthUser(userStr)
+  const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
   const [photo, setPhoto] = useState<File | string | undefined>('')
   const { profileSettingForm } = useProfileSettingDefaultFrom(user)
   const [isAlertShow, setIsAlertShow] = useState(false)
+  const dispatch = useDispatch()
 
   const methods = useForm<UpdateProfileSettingForm>({
     mode: 'onChange',
@@ -75,14 +76,22 @@ export default function ProfileSetting({ userStr }: Props) {
       form.profileImageKey = res.key
     }
 
-    const { updateUser } = await userService
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
+    const { updateUserProfile } = await userService
       .updateProfile(form)
       .then(({ data }) => {
-        setIsAlertShow(true)
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: 'Your profile successfully updated!',
+            snackBarType: 'success',
+          }),
+        )
         return data
       })
+    dispatch(commonSlice.actions.updateIsBackdropShow(false))
 
-    setUser(updateUser)
+    dispatch(userSlice.actions.updateUser(updateUserProfile))
   }
 
   const handleAlertClose = (
@@ -101,22 +110,7 @@ export default function ProfileSetting({ userStr }: Props) {
       title="Profile Setting"
       description={t('create.title')}
       breadcrumbs={[{ label: 'Profile Settings', href: undefined }]}
-      user={user}
     >
-      <Snackbar
-        open={isAlertShow}
-        autoHideDuration={6000}
-        onClose={handleAlertClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert
-          severity="success"
-          onClose={handleAlertClose}
-          sx={{ width: '100%' }}
-        >
-          Your profile successfully updated!
-        </Alert>
-      </Snackbar>
       <TitleBox title="Profile Setting">
         <Box sx={{ maxHeight: '36px' }}>
           <Button

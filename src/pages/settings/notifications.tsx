@@ -18,7 +18,7 @@ type Props = {
 }
 
 export default function NotificationSetting({ userStr }: Props) {
-  const { user } = useGetAuthUser(userStr)
+  useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
@@ -31,7 +31,6 @@ export default function NotificationSetting({ userStr }: Props) {
         { label: t('list.title'), href: Path.Problem },
         { label: t('create.title'), href: undefined },
       ]}
-      user={user}
     >
       <TitleBox title="Notification Setting">
         <Box sx={{ maxHeight: '36px' }}>
