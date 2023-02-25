@@ -20,24 +20,31 @@ import {
   TableBody,
   CircularProgress,
   Divider,
+  Chip,
 } from '@mui/material'
 import { TokenResult } from '@square/web-payments-sdk-types'
 import { withSSRContext } from 'aws-amplify'
 
 import Layout from '@/components/templates/Layout'
 
-import { useTranslations } from 'next-intl'
+import { format } from 'date-fns'
 
 import { TitleBox } from '@/components/templates/common/TitleBox'
 
-import { useDispatch } from 'react-redux'
+import { ja, enUS } from 'date-fns/locale'
 
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 
-import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
+import { useTranslations } from 'next-intl'
 
 import { Path } from '@/constants/Path'
+
+import { useDispatch } from 'react-redux'
+
 import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
+
+import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
+
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
 import { commonSlice } from '@/store/common'
@@ -171,11 +178,22 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                   Your Current Plan
                 </Typography>
                 <Typography fontSize={fontSizes.m} fontWeight="bold">
-                  {user?.plan === userPlans[0] ? 'Free' : '👑 Pro'}
-                  {user?.subscriptionExpiresAt &&
-                    `Valid until${new Date(
-                      user?.subscriptionExpiresAt,
-                    ).toLocaleString(router.locale)}`}
+                  <Chip
+                    label={user?.plan === userPlans[0] ? 'Free' : '👑 Pro'}
+                    sx={{ mr: 2 }}
+                  />
+                  {user?.subscriptionExpiresAt && (
+                    <>
+                      Valid until{' '}
+                      {format(
+                        new Date(user?.subscriptionExpiresAt),
+                        'yyyy/M/d',
+                        {
+                          locale: router.locale === 'ja' ? ja : enUS,
+                        },
+                      )}
+                    </>
+                  )}
                 </Typography>
                 <Divider sx={{ my: 3 }} />
                 <Typography
@@ -219,7 +237,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                 ) : (
                   <>You do not have any card</>
                 )}
-                {card && user?.plan === UserPlanPro && (
+                {user?.plan === UserPlanPro && (
                   <>
                     <Divider sx={{ my: 4 }} />
                     <Typography
@@ -239,7 +257,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                     />
                     <PaymentForm
                       applicationId={squareInfo.appId}
-                      cardTokenizeResponseReceived={(token, verifiedBuyer) => {
+                      cardTokenizeResponseReceived={(token) => {
                         submit(token)
                       }}
                       locationId={squareInfo.locationId}
@@ -257,7 +275,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
               </>
             </Paper>
             {card && user?.plan === UserPlanPro && (
-              <Paper sx={{ minHeight: 200, padding: 4, mt: 4 }}>
+              <Paper sx={{ padding: 4, mt: 4 }}>
                 <Typography
                   fontSize={fontSizes.l}
                   sx={{ pb: 1 }}
@@ -265,23 +283,40 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                 >
                   Cancel Subscription
                 </Typography>
-                <Typography
-                  fontSize={fontSizes.m}
-                  sx={{ pb: 1 }}
-                  color="primary"
-                >
-                  ※ If you cancel your subscription, you will not be able to see
-                  your all tenth older problems.
-                  <br />※ It will be changed to the free plan on the next
-                  payment date
-                </Typography>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={() => setIsConfirmShow(true)}
-                >
-                  Cancel Subscription
-                </Button>
+                {!user.subscriptionExpiresAt ? (
+                  <>
+                    <Typography
+                      fontSize={fontSizes.m}
+                      sx={{ pb: 1 }}
+                      color="primary"
+                    >
+                      ※ If you cancel your subscription, you will not be able to
+                      see your all tenth older problems.
+                      <br />※ It will be changed to the free plan on the next
+                      payment date
+                    </Typography>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => setIsConfirmShow(true)}
+                    >
+                      Cancel Subscription
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
+                      Your subscription will be expired on{' '}
+                      {format(
+                        new Date(user?.subscriptionExpiresAt),
+                        'yyyy/M/d',
+                        {
+                          locale: router.locale === 'ja' ? ja : enUS,
+                        },
+                      )}
+                    </Typography>
+                  </>
+                )}
               </Paper>
             )}
           </Grid>

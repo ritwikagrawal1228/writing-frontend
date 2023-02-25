@@ -21,6 +21,7 @@ const updateProfile = async (form: UpdateProfileSettingForm) => {
         introduction
         isSubscribeEmail
         isSubscribePush
+        subscriptionExpiresAt
       }
     }
   `
@@ -55,6 +56,7 @@ const userQuery = gql`
       introduction
       isSubscribeEmail
       isSubscribePush
+      subscriptionExpiresAt
     }
   }
 `
