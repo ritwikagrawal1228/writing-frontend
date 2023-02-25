@@ -34,18 +34,16 @@ import { Problem } from '@/types/model/problem'
 type Props = {
   userStr: string
   authenticated: boolean
-  problems: Problem[]
 }
 
-export default function ProblemList({
-  authenticated,
-  userStr,
-  problems,
-}: Props) {
-  useGetAuthUser(userStr)
+export default function ProblemList({ authenticated, userStr }: Props) {
+  const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
+  const [isProblemsLoading, setIsProblemsLoading] =
+    React.useState<boolean>(true)
+  const [problems, setProblems] = React.useState<Problem[]>([])
   const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
 
   const moveCreatePage = () => {
@@ -55,6 +53,20 @@ export default function ProblemList({
   const moveDetail = (problemId: string) => {
     router.push(`${Path.Problem}/${problemId}`)
   }
+
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+    problemService
+      .getProblemsByUserId(user)
+      .then(({ data }) => {
+        setProblems(data.problemsByUserId)
+      })
+      .finally(() => {
+        setIsProblemsLoading(false)
+      })
+  }, [user])
 
   useEffect(() => {
     if (!problems || problems.length === 0) {
@@ -90,7 +102,7 @@ export default function ProblemList({
         </Box>
       </TitleBox>
       <Paper sx={{ minHeight: '460px', textAlign: 'center', p: 4 }}>
-        {!problems ? (
+        {isProblemsLoading ? (
           <Box sx={{ p: 10 }}>
             <CircularProgress size={80} />
           </Box>
@@ -188,14 +200,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const user = await Auth.currentAuthenticatedUser()
 
-    const { problemsByUserId } = await problemService.getProblemsByUserId(user)
-
     return {
       props: {
         authenticated: true,
         userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
-        problems: problemsByUserId,
       },
     }
   } catch (err) {
