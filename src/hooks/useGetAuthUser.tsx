@@ -12,7 +12,7 @@ export const useGetAuthUser = (userStr: string) => {
   const user = useSelector((state: RootState) => state.user.user)
   const dispatch = useDispatch()
 
-  const { data, error } = useSWR<{ data: { user: User } }>(userStr, (query) =>
+  const { data } = useSWR<{ data: { user: User } }>(userStr, (query) =>
     userService.getAuthUser(),
   )
 
