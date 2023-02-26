@@ -3,26 +3,32 @@ import { gql } from 'graphql-request'
 import { Path } from '@/constants/Path'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 import { Problem } from '@/types/model/problem'
+import { User } from '@/types/model/user'
 import { axios } from '@/utils/axios'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
-const getProblemsByUserId = async (user: any) => {
-  const query = gql`query {
-    problemsByUserId(userId: "${user.attributes.sub}") {
-      id
-      title
-      question
-      questionImageKey
-      taskType
-      createdAt
+const getProblemsByUserId = async (user: User) => {
+  const query = gql`
+    query ($userId: String!) {
+      problemsByUserId(userId: $userId) {
+        id
+        title
+        question
+        questionImageKey
+        taskType
+        createdAt
+      }
     }
-  }`
+  `
 
-  const client = getGraphQLClient(user)
+  const variables = {
+    userId: user.id,
+  }
 
-  return await client
-    .request<{ problemsByUserId: Problem[] }>(query, {})
-    .then((res) => res)
+  return await axios.post<{ problemsByUserId: Problem[] }>(Path.APIGraphql, {
+    query,
+    variables,
+  })
 }
 
 const getProblemById = async (id: string, user: any) => {

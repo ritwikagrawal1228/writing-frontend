@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 import Layout from '@/components/templates/Layout'
 
@@ -16,6 +16,10 @@ import EditIcon from '@mui/icons-material/Edit'
 
 import { Path } from '@/constants/Path'
 
+import MenuOpenIcon from '@mui/icons-material/MenuOpen'
+
+import { ProblemType, ProblemType1 } from '@/constants/ProblemType'
+
 import {
   Box,
   Button,
@@ -30,27 +34,34 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   Grid,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
   Paper,
+  Tooltip,
   Typography,
   useTheme,
 } from '@mui/material'
 
-import { ProblemType, ProblemType1 } from '@/constants/ProblemType'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 
 import { Storage, withSSRContext } from 'aws-amplify'
 
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { answerService } from '@/services/answerService'
 
 import { useTranslations } from 'next-intl'
 
-import { answerService } from '@/services/answerService'
+import { problemService } from '@/services/problemService'
 
 import { useDispatch } from 'react-redux'
 
-import { problemService } from '@/services/problemService'
 import { commonSlice } from '@/store/common'
-import { colors, fontSizes } from '@/themes/globalStyles'
+import { fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'
 import { Problem } from '@/types/model/problem'
 import { roundSentence } from '@/utils/roundSentence'
@@ -61,6 +72,7 @@ type Props = {
 }
 
 export default function ProblemDetail({ problem, userStr }: Props) {
+  useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const router = useRouter()
   const theme = useTheme()
@@ -69,7 +81,25 @@ export default function ProblemDetail({ problem, userStr }: Props) {
   const [answerModels, setAnswerModels] = React.useState<Answer[]>([])
   const [isAnswerLoading, setIsAnswerLoading] = React.useState(false)
   const dispatch = useDispatch()
-  useGetAuthUser(userStr)
+
+  const [anchorElMenu, setAnchorElMenu] = useState<null | HTMLElement>(null)
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElMenu(event.currentTarget)
+  }
+  const handleCloseUserMenu = (menu: string) => {
+    switch (menu) {
+      case 'edit':
+        moveEditPage()
+        break
+      case 'delete':
+        confirmDelete()
+        break
+      default:
+        break
+    }
+
+    setAnchorElMenu(null)
+  }
 
   useEffect(() => {
     if (!problem) {
@@ -96,8 +126,8 @@ export default function ProblemDetail({ problem, userStr }: Props) {
       })
   }, [problem])
 
-  const moveEditPage = (id: string) => {
-    router.push(`${Path.ProblemEdit}/${id}`)
+  const moveEditPage = () => {
+    router.push(`${Path.ProblemEdit}/${problem.id}`)
   }
 
   const confirmDelete = () => {
@@ -123,8 +153,8 @@ export default function ProblemDetail({ problem, userStr }: Props) {
     dispatch(commonSlice.actions.updateIsBackdropShow(false))
   }
 
-  const moveAnswerPage = (id: string) => {
-    router.push(`${Path.ProblemAnswer}/${id}`)
+  const moveAnswerPage = () => {
+    router.push(`${Path.ProblemAnswer}/${problem.id}`)
   }
 
   const redeemOrReview = (answer: Answer) => {
@@ -148,14 +178,50 @@ export default function ProblemDetail({ problem, userStr }: Props) {
         <Grid item xs={5}>
           <TitleBox title={t('detail.title')}>
             <Box sx={{ maxHeight: '36px' }}>
-              <Button
-                color="primary"
-                startIcon={<DeleteForeverIcon />}
-                sx={{ mr: 2 }}
-                onClick={() => confirmDelete()}
+              <Tooltip title="Open menu">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <MenuOpenIcon />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElMenu}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElMenu)}
+                onClose={handleCloseUserMenu}
               >
-                <b>{t('detail.deleteBtn')}</b>
-              </Button>
+                <List
+                  sx={{
+                    width: '100%',
+                    maxWidth: 360,
+                    bgcolor: 'background.paper',
+                  }}
+                  component="nav"
+                  aria-labelledby="nested-list-subheader"
+                >
+                  <ListItemButton onClick={() => handleCloseUserMenu('edit')}>
+                    <ListItemIcon>
+                      <EditIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Edit" />
+                  </ListItemButton>
+                  <ListItemButton onClick={() => handleCloseUserMenu('delete')}>
+                    <ListItemIcon>
+                      <DeleteForeverIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Delete" />
+                  </ListItemButton>
+                </List>
+              </Menu>
               <Dialog
                 open={isAlertOpen}
                 onClose={handleAlertClose}
@@ -183,13 +249,6 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                   </Button>
                 </DialogActions>
               </Dialog>
-              <Button
-                color="secondary"
-                startIcon={<EditIcon />}
-                onClick={() => moveEditPage(problem.id)}
-              >
-                <b>{t('detail.editBtn')}</b>
-              </Button>
             </Box>
           </TitleBox>
           <Paper
@@ -203,71 +262,89 @@ export default function ProblemDetail({ problem, userStr }: Props) {
             <Box
               sx={{
                 p: 3,
-                borderBottom: `1px solid${colors.disabled.light}`,
                 width: '100%',
               }}
             >
-              <Typography fontSize={fontSizes.m} color="text.secondary">
-                {t('form.title')}:{' '}
+              <Typography
+                fontSize={fontSizes.m}
+                color="text.secondary"
+                fontWeight="bold"
+              >
+                {t('form.title')}
               </Typography>
               <Typography
-                sx={{ ml: 3, mt: 1, wordWrap: 'break-word' }}
-                fontWeight="bold"
+                fontSize={fontSizes.m}
+                sx={{ mt: 2, wordWrap: 'break-word' }}
               >
                 {problem.title}
               </Typography>
             </Box>
-            <Box
-              sx={{ p: 3, borderBottom: `1px solid${colors.disabled.light}` }}
-            >
-              <Typography fontSize={fontSizes.m} color="text.secondary">
-                {t('form.taskType')}:{' '}
-              </Typography>
-              <Chip
-                sx={{ ml: 3, mt: 1 }}
-                label={ProblemType[problem.taskType]}
-                variant="outlined"
-                color={
-                  ProblemType[problem.taskType] === 'Task 1'
-                    ? 'primary'
-                    : 'secondary'
-                }
-              />
-            </Box>
+            <Divider sx={{ mx: 3 }} />
             <Box
               sx={{
                 p: 3,
-                borderBottom: `1px solid${colors.disabled.light}`,
                 width: '100%',
               }}
             >
-              <Typography fontSize={fontSizes.m} color="text.secondary">
-                {t('form.question')}:{' '}
-              </Typography>
               <Typography
-                sx={{ ml: 3, mt: 1, wordWrap: 'break-word' }}
+                fontSize={fontSizes.m}
+                color="text.secondary"
                 fontWeight="bold"
               >
+                {t('form.taskType')}
+              </Typography>
+              <Typography
+                fontSize={fontSizes.m}
+                sx={{ mt: 2, wordWrap: 'break-word' }}
+              >
+                <Chip
+                  sx={{ mt: 1 }}
+                  label={ProblemType[problem.taskType]}
+                  variant="outlined"
+                  color={
+                    ProblemType[problem.taskType] === 'Task 1'
+                      ? 'primary'
+                      : 'secondary'
+                  }
+                />
+              </Typography>
+            </Box>
+            <Divider sx={{ mx: 3 }} />
+            <Box
+              sx={{
+                p: 3,
+                width: '100%',
+              }}
+            >
+              <Typography
+                fontSize={fontSizes.m}
+                color="text.secondary"
+                fontWeight="bold"
+              >
+                {t('form.question')}
+              </Typography>
+              <Typography sx={{ mt: 2, wordWrap: 'break-word' }}>
                 {problem.question}
               </Typography>
             </Box>
-            {problem.taskType === ProblemType1 && (
-              <Box
-                sx={{ p: 3, borderBottom: `1px solid${colors.disabled.light}` }}
-              >
-                <Typography fontSize={fontSizes.m} color="text.secondary">
-                  {t('form.questionImage')}:{' '}
-                </Typography>
-                <Box sx={{ mt: 1 }}>
-                  <img
-                    src={img}
-                    style={{
-                      width: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
+            {problem.taskType === ProblemType1 && !!img && (
+              <>
+                <Divider sx={{ mx: 3 }} />
+                <Box sx={{ p: 3 }}>
+                  <Typography fontSize={fontSizes.m} color="text.secondary">
+                    {t('form.questionImage')}:{' '}
+                  </Typography>
+                  <Box sx={{ mt: 1 }}>
+                    <img
+                      src={img}
+                      style={{
+                        width: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  </Box>
                 </Box>
-              </Box>
+              </>
             )}
           </Paper>
         </Grid>
@@ -278,7 +355,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 color="primary"
                 variant="contained"
                 startIcon={<BorderColorOutlinedIcon />}
-                onClick={() => moveAnswerPage(problem.id)}
+                onClick={() => moveAnswerPage()}
               >
                 <b>{t('detail.answer.list.addBtn')}</b>
               </Button>
@@ -300,10 +377,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                     <Card
                       sx={{
                         mb: 2,
-                        backgroundColor:
-                          theme.palette.mode === 'dark'
-                            ? colors.base.gray
-                            : colors.disabled.light,
+                        backgroundColor: theme.palette.background.default,
                       }}
                       onClick={() => redeemOrReview(answer)}
                     >
@@ -341,15 +415,6 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                                 color="text.secondary"
                                 gutterBottom
                               >
-                                Review comments: {'TODO'}
-                              </Typography>
-                            </Grid>
-                            <Grid item>
-                              <Typography
-                                sx={{ fontSize: 14 }}
-                                color="text.secondary"
-                                gutterBottom
-                              >
                                 Last Answered:{' '}
                                 {answer.createdAt &&
                                   new Date(answer.updatedAt).toLocaleString(
@@ -376,7 +441,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                     <Button
                       color="primary"
                       variant="outlined"
-                      onClick={() => moveAnswerPage(problem.id)}
+                      onClick={() => moveAnswerPage()}
                     >
                       <b>{t('detail.answer.list.addBtn')}</b>
                     </Button>

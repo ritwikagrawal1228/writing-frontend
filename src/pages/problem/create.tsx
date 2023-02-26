@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
 import {
@@ -9,6 +9,7 @@ import {
   AlertTitle,
   Box,
   Button,
+  CircularProgress,
   Paper,
   Snackbar,
   useTheme,
@@ -34,22 +35,37 @@ import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 
 type Props = {
   userStr: string
-  problemsNum: number
 }
 
-export default function ProblemCreate({ userStr, problemsNum }: Props) {
+export default function ProblemCreate({ userStr }: Props) {
   const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
   const t = useTranslations('Problem')
   const [photo, setPhoto] = useState<File | undefined>(undefined)
   const router = useRouter()
+  const [problemsNum, setProblemsNum] = useState<number>(0)
+  const [isProblemsLoading, setIsProblemsLoading] =
+    React.useState<boolean>(true)
   const [limitAlert, setLimitAlert] = useState(false)
   const dispatch = useDispatch()
-
   const methods = useForm<CreateProblemForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   })
+
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+    problemService
+      .getProblemsByUserId(user)
+      .then(({ data }) => {
+        setProblemsNum(data.problemsByUserId.length)
+      })
+      .finally(() => {
+        setIsProblemsLoading(false)
+      })
+  }, [user])
 
   const onSubmit: SubmitHandler<CreateProblemForm> = async (data) => {
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
@@ -188,18 +204,24 @@ export default function ProblemCreate({ userStr, problemsNum }: Props) {
         </>
       )}
       <Paper sx={{ px: 5, py: 3, pb: 5 }}>
-        <FormProvider {...methods}>
-          <form
-            onSubmit={methods.handleSubmit(onSubmit)}
-            style={{ width: '100%' }}
-          >
-            <ProblemListForm
-              photo={photo}
-              setPhoto={setPhoto}
-              locale={router.locale}
-            />
-          </form>
-        </FormProvider>
+        {isProblemsLoading ? (
+          <Box sx={{ p: 10, textAlign: 'center' }}>
+            <CircularProgress size={80} />
+          </Box>
+        ) : (
+          <FormProvider {...methods}>
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              style={{ width: '100%' }}
+            >
+              <ProblemListForm
+                photo={photo}
+                setPhoto={setPhoto}
+                locale={router.locale}
+              />
+            </form>
+          </FormProvider>
+        )}
       </Paper>
     </Layout>
   )
@@ -211,14 +233,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const user = await Auth.currentAuthenticatedUser()
-    const { problemsByUserId } = await problemService.getProblemsByUserId(user)
 
     return {
       props: {
         authenticated: true,
         userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
-        problemsNum: problemsByUserId?.length || 0,
       },
     }
   } catch (err) {
