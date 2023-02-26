@@ -156,6 +156,12 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
                 <Alert severity="info" sx={{ width: '100%', mb: 1 }}>
                   On clicking the button below, AI will review your answer
                 </Alert>
+                <Alert severity="warning" sx={{ width: '100%', mb: 1 }}>
+                  ・May occasionally generate incorrect information <br />
+                  ・May occasionally produce harmful instructions or biased
+                  content <br />
+                  ・Limited knowledge of world and events after 2021
+                </Alert>
                 <Button
                   color="secondary"
                   variant="contained"
