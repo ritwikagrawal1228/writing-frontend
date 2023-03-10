@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React, { FC, Fragment, memo, useEffect } from 'react'
 
 import SmartToyIcon from '@mui/icons-material/SmartToy'
@@ -13,6 +14,7 @@ import {
   Avatar,
   useTheme,
 } from '@mui/material'
+import { useTranslations } from 'next-intl'
 
 import { MyReview } from './MyReview'
 
@@ -57,6 +59,8 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
+  const ta = useTranslations('Answer')
+  const router = useRouter()
   const [reviews, setReviews] = React.useState<Review[]>([])
   const theme = useTheme()
   const [value, setValue] = React.useState(
@@ -72,7 +76,7 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
   const sendReviewRequestToAI = () => {
     setIsWaitingAiReview(true)
     reviewService
-      .getAiReviewByAnswerId(answer.id)
+      .getAiReviewByAnswerId(answer.id, router.locale || 'ja')
       .then(({ data }) => {
         const rs = [...reviews]
         rs.push(data.createAiReview)
@@ -108,17 +112,17 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
               aria-label="basic tabs example"
             >
               <Tab
-                label="AI Review"
+                label={ta('review.tabMenuAi')}
                 disabled={answer.problem.taskType === ProblemType1}
                 {...a11yProps(0)}
               />
-              <Tab label="My Review" {...a11yProps(1)} />
+              <Tab label={ta('review.tabMenuMy')} {...a11yProps(1)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
             {reviews.find((r) => r.userId === 'AI') ? (
               <Box sx={{ display: 'flex' }}>
-                <Avatar>
+                <Avatar color="primary">
                   <SmartToyIcon />
                 </Avatar>
                 <Box
@@ -139,9 +143,12 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
             ) : (
               <>
                 <Alert severity="info" sx={{ width: '100%', mb: 1 }}>
-                  On clicking the button below, AI will review your answer
+                  {ta('review.tabContentInfo')}
                 </Alert>
                 <Alert severity="warning" sx={{ width: '100%', mb: 1 }}>
+                  ○ {ta('review.tabContentWarning1')} <br />○{' '}
+                  {ta('review.tabContentWarning2')} <br />○{' '}
+                  {ta('review.tabContentWarning3')} <br />
                   ・May occasionally generate incorrect information <br />
                   ・May occasionally produce harmful instructions or biased
                   content <br />
@@ -152,7 +159,7 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
                   variant="contained"
                   onClick={sendReviewRequestToAI}
                 >
-                  Request Open AI review
+                  {ta('review.tabContentRequestButton')}
                 </Button>
               </>
             )}

@@ -61,7 +61,7 @@ import { problemService } from '@/services/problemService'
 import { useDispatch } from 'react-redux'
 
 import { commonSlice } from '@/store/common'
-import { fontSizes } from '@/themes/globalStyles'
+import { colors, fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'
 import { Problem } from '@/types/model/problem'
 import { roundSentence } from '@/utils/roundSentence'
@@ -212,13 +212,13 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                     <ListItemIcon>
                       <EditIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Edit" />
+                    <ListItemText primary={t('detail.editMenu')} />
                   </ListItemButton>
                   <ListItemButton onClick={() => handleCloseUserMenu('delete')}>
                     <ListItemIcon>
                       <DeleteForeverIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Delete" />
+                    <ListItemText primary={t('detail.deleteMenu')} />
                   </ListItemButton>
                 </List>
               </Menu>
@@ -377,7 +377,10 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                     <Card
                       sx={{
                         mb: 2,
-                        backgroundColor: theme.palette.background.default,
+                        backgroundColor:
+                          theme.palette.mode === 'dark'
+                            ? colors.base.black
+                            : theme.palette.background.default,
                       }}
                       onClick={() => redeemOrReview(answer)}
                     >
@@ -386,7 +389,11 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                           <Chip
                             variant="outlined"
                             label={
-                              answerStr[answer.status as keyof typeof answerStr]
+                              answerStr[
+                                answer.status as keyof typeof answerStr
+                              ] === 'Completed'
+                                ? t('detail.answer.list.completed')
+                                : t('detail.answer.list.inProgress')
                             }
                             color={
                               answerStr[
@@ -415,7 +422,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                                 color="text.secondary"
                                 gutterBottom
                               >
-                                Last Answered:{' '}
+                                {`${t('detail.answer.list.lastAnswered')}: `}
                                 {answer.createdAt &&
                                   new Date(answer.updatedAt).toLocaleString(
                                     router.locale,
@@ -436,7 +443,7 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                 ) : (
                   <>
                     <Typography sx={{ mb: 2 }}>
-                      There is no answer yet.
+                      {t('detail.answer.list.empty')}
                     </Typography>
                     <Button
                       color="primary"

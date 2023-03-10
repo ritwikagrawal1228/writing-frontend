@@ -2,7 +2,6 @@ import React, { FC, Fragment, memo, useEffect, useState } from 'react'
 
 import { GrammarlyEditorPlugin } from '@grammarly/editor-sdk-react'
 import RateReviewIcon from '@mui/icons-material/RateReview'
-import SendIcon from '@mui/icons-material/Send'
 import {
   Typography,
   Alert,
@@ -20,6 +19,7 @@ import {
   ListItemIcon,
   Box,
 } from '@mui/material'
+import { useTranslations } from 'next-intl'
 
 import Diff from '@/components/diff'
 import { correctionService } from '@/services/correctionService'
@@ -40,6 +40,7 @@ export const AnswerArea: FC<Props> = memo(
     const [correctedSentences, setCorrectedSentences] = useState<
       CompletedAnswerSentence[]
     >([])
+    const ta = useTranslations('Answer')
     const [isOpens, setIsOpens] = useState<boolean[]>(
       Array(answerSentences.length).fill(false),
     )
@@ -125,11 +126,12 @@ export const AnswerArea: FC<Props> = memo(
     return (
       <>
         <Typography variant="h6" fontWeight="bold" sx={{ my: 2 }}>
-          Answer Diff
+          {ta('review.answerDiffTitle')}
         </Typography>
         <Alert severity="info" sx={{ width: '100%', mb: 1 }}>
-          Click the <RateReviewIcon fontSize="small" /> button to add
-          corrections.
+          {ta('review.answerDiffInfo', {
+            icon: '💬',
+          })}
         </Alert>
         <div>
           <List dense={false}>
@@ -207,14 +209,13 @@ export const AnswerArea: FC<Props> = memo(
                         id="component-helper-text"
                         sx={{ justifyContent: 'space-between' }}
                       >
-                        ※ Just enter the correct sentence to show the diff
+                        ※ {ta('review.answerDiffHelperText')}
                       </FormHelperText>
                       <FormHelperText
                         id="component-helper-text"
                         sx={{ justifyContent: 'space-between' }}
                       >
                         <Button
-                          startIcon={<SendIcon />}
                           color="secondary"
                           variant={
                             theme.palette.mode === 'dark'
@@ -225,7 +226,7 @@ export const AnswerArea: FC<Props> = memo(
                           onClick={() => submitCorrection(sentence.num)}
                           disabled={isUpdating}
                         >
-                          Submit
+                          {ta('review.answerDiffSubmitButton')}
                         </Button>
                       </FormHelperText>
                     </Grid>

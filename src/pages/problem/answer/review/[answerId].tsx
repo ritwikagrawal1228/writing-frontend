@@ -1,5 +1,4 @@
 import { GetServerSidePropsContext } from 'next'
-import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 
 import {
@@ -45,14 +44,6 @@ interface Column {
   format?: (value: number) => string
 }
 
-const columns: readonly Column[] = [
-  { id: 'type', label: 'Part', minWidth: 100 },
-  { id: 'words', label: 'Minimum Words', minWidth: 100 },
-  { id: 'time', label: 'Time Limit', minWidth: 100 },
-  { id: 'answerSpentTime', label: 'Spent time', minWidth: 100 },
-  { id: 'wordCount', label: 'Word Count', minWidth: 100 },
-]
-
 export default function AnswerReview({
   answerModel,
   userStr,
@@ -61,9 +52,15 @@ export default function AnswerReview({
   const { user } = useGetAuthUser(userStr)
   const t = useTranslations('Problem')
   const ta = useTranslations('Answer')
-  const router = useRouter()
   const [img, setImg] = React.useState<string | undefined>()
   const [isDiffView, setIsDiffView] = React.useState<boolean>(true)
+  const columns: readonly Column[] = [
+    { id: 'type', label: ta('review.colPart'), minWidth: 100 },
+    { id: 'words', label: ta('review.colWords'), minWidth: 100 },
+    { id: 'wordCount', label: ta('review.colWordCount'), minWidth: 100 },
+    { id: 'time', label: ta('review.colTime'), minWidth: 100 },
+    { id: 'answerSpentTime', label: ta('review.colSpentTime'), minWidth: 100 },
+  ]
 
   useEffect(() => {
     if (answerModel.problem.questionImageKey) {
@@ -87,15 +84,15 @@ export default function AnswerReview({
 
   return (
     <Layout
-      title={answerModel.problem.title}
-      description={answerModel.problem.question}
+      title={ta('review.title') + answerModel.problem.title}
+      description={ta('review.description')}
       breadcrumbs={[
         { label: t('list.title'), href: Path.Problem },
         {
           label: t('detail.title'),
           href: `${Path.Problem}/${answerModel.problem.id}`,
         },
-        { label: 'Review Answer', href: undefined },
+        { label: ta('review.title'), href: undefined },
       ]}
     >
       <Grid container alignItems="center">
@@ -105,7 +102,7 @@ export default function AnswerReview({
           </Typography>
         </Grid>
       </Grid>
-      <Grid container alignItems="center" sx={{ my: 2 }} rowSpacing={2}>
+      <Grid container alignItems="center" sx={{ mb: 2, mt: 1 }} rowSpacing={2}>
         <Grid item xs={12}>
           <Paper>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -133,23 +130,29 @@ export default function AnswerReview({
                     <TableCell>
                       {answerModel.problem.taskType === 'Type_#Task1'
                         ? 150
-                        : 250}
-                    </TableCell>
-                    <TableCell>{answerModel.time} min</TableCell>
-                    <TableCell>
-                      {answerModel.answerSpentTime !== 0
-                        ? `${padTo2Digits(
-                            Math.floor(answerModel.answerSpentTime / 60),
-                          )}min ${padTo2Digits(
-                            answerModel.answerSpentTime % 60,
-                          )}sec`
-                        : '--'}
+                        : 250}{' '}
+                      {ta('review.wordUnit')}
                     </TableCell>
                     <TableCell>
                       {answerModel.answer
                         ? answerModel.answer.trim().split(/\s+/).length
                         : 0}{' '}
-                      words
+                      {ta('review.wordUnit')}
+                    </TableCell>
+                    <TableCell>
+                      {answerModel.time + ta('review.minUnit')}{' '}
+                    </TableCell>
+                    <TableCell>
+                      {answerModel.answerSpentTime !== 0
+                        ? `${
+                            padTo2Digits(
+                              Math.floor(answerModel.answerSpentTime / 60),
+                            ) + ta('review.minUnit')
+                          } ${
+                            padTo2Digits(answerModel.answerSpentTime % 60) +
+                            ta('review.secUnit')
+                          }`
+                        : '--'}
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -173,7 +176,7 @@ export default function AnswerReview({
               control={
                 <Switch checked={isDiffView} onChange={handleViewChange} />
               }
-              label="See Diff"
+              label={ta('review.answerDiffToggle')}
               sx={{ mb: 2 }}
             />
             <Divider />
@@ -186,7 +189,7 @@ export default function AnswerReview({
             ) : (
               <>
                 <Typography variant="h6" fontWeight="bold" sx={{ my: 2 }}>
-                  Answer
+                  {ta('review.answerTitle')}
                 </Typography>
                 <Typography sx={{ whiteSpace: 'pre-wrap' }}>
                   {answerModel.answer}

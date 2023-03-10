@@ -23,6 +23,7 @@ import {
   DialogContentText,
   DialogActions,
 } from '@mui/material'
+import { useTranslations } from 'next-intl'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { ProfileAvatar } from '@/components/parts/common/ProfileAvatar'
@@ -42,6 +43,7 @@ type Props = {
 
 export const MyReview: FC<Props> = memo(
   ({ reviews, setReviews, isLoading, setIsLoading, answerId }) => {
+    const ta = useTranslations('Answer')
     const user = useSelector((state: RootState) => state.user.user)
     const theme = useTheme()
     const [myReviewValue, setMyReviewValue] = useState<string>('')
@@ -49,6 +51,7 @@ export const MyReview: FC<Props> = memo(
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [anchorElMenu, setAnchorElMenu] = useState<null | HTMLElement>(null)
     const dispatch = useDispatch()
+
     const saveOwnReview = () => {
       if (isEdit) {
         editOwnReview()
@@ -61,6 +64,22 @@ export const MyReview: FC<Props> = memo(
           const rs = [...reviews]
           rs.push(data.createReview)
           setReviews(rs)
+          dispatch(
+            commonSlice.actions.updateSnackBar({
+              isSnackbarShow: true,
+              snackBarMsg: ta('review.reviewSavedSuccessSnackbar'),
+              snackBarType: 'success',
+            }),
+          )
+        })
+        .catch(() => {
+          dispatch(
+            commonSlice.actions.updateSnackBar({
+              isSnackbarShow: true,
+              snackBarMsg: ta('review.reviewSavedFailedSnackbar'),
+              snackBarType: 'error',
+            }),
+          )
         })
         .finally(() => {
           setIsLoading(false)
@@ -83,6 +102,22 @@ export const MyReview: FC<Props> = memo(
             return r
           })
           setReviews(r)
+          dispatch(
+            commonSlice.actions.updateSnackBar({
+              isSnackbarShow: true,
+              snackBarMsg: ta('review.reviewEditedSuccessSnackbar'),
+              snackBarType: 'success',
+            }),
+          )
+        })
+        .catch(() => {
+          dispatch(
+            commonSlice.actions.updateSnackBar({
+              isSnackbarShow: true,
+              snackBarMsg: ta('review.reviewEditedFailedSnackbar'),
+              snackBarType: 'error',
+            }),
+          )
         })
         .finally(() => {
           setIsEdit(false)
@@ -136,7 +171,7 @@ export const MyReview: FC<Props> = memo(
           dispatch(
             commonSlice.actions.updateSnackBar({
               isSnackbarShow: true,
-              snackBarMsg: 'Your review has been deleted',
+              snackBarMsg: ta('review.reviewDeletedSuccessSnackbar'),
               snackBarType: 'success',
             }),
           )
@@ -145,7 +180,7 @@ export const MyReview: FC<Props> = memo(
           dispatch(
             commonSlice.actions.updateSnackBar({
               isSnackbarShow: true,
-              snackBarMsg: 'Failed to delete your review',
+              snackBarMsg: ta('review.reviewDeletedFailedSnackbar'),
               snackBarType: 'error',
             }),
           )
@@ -206,13 +241,17 @@ export const MyReview: FC<Props> = memo(
                   <ListItemIcon>
                     <EditIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Edit" />
+                  <ListItemText
+                    primary={ta('review.tabContentMyReviewEditButton')}
+                  />
                 </ListItemButton>
                 <ListItemButton onClick={() => handleCloseUserMenu('delete')}>
                   <ListItemIcon>
                     <DeleteForeverIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Delete" />
+                  <ListItemText
+                    primary={ta('review.tabContentMyReviewDeleteButton')}
+                  />
                 </ListItemButton>
               </List>
             </Menu>
@@ -222,22 +261,24 @@ export const MyReview: FC<Props> = memo(
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">Confirm</DialogTitle>
+              <DialogTitle id="alert-dialog-title">
+                {ta('review.tabContentMyReviewDeleteDialogTitle')}
+              </DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  Are you sure you want to delete this review?
+                  {ta('review.tabContentMyReviewDeleteDialogDescription')}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button color="inherit" onClick={handleAlertClose}>
-                  Cancel
+                  {ta('review.tabContentMyReviewDeleteDialogCancelButton')}
                 </Button>
                 <Button
                   onClick={() => deleteReview()}
                   variant="contained"
                   autoFocus
                 >
-                  Yes, Delete
+                  {ta('review.tabContentMyReviewDeleteDialogDeleteButton')}
                 </Button>
               </DialogActions>
             </Dialog>
@@ -254,14 +295,14 @@ export const MyReview: FC<Props> = memo(
               rows={5}
               value={myReviewValue}
               onChange={(e) => setMyReviewValue(e.target.value)}
-              placeholder="You can write feedback on your own answer."
+              placeholder={ta('review.tabContentMyReviewInputPlaceholder')}
             />
             <Button
               color="secondary"
               variant="contained"
               onClick={saveOwnReview}
             >
-              Save
+              {ta('review.tabContentMyReviewInputSaveButton')}
             </Button>
             {isEdit && (
               <Button
@@ -269,7 +310,7 @@ export const MyReview: FC<Props> = memo(
                 variant="contained"
                 onClick={() => setIsEdit(false)}
               >
-                Cancel
+                {ta('review.tabContentMyReviewInputCancelEditButton')}
               </Button>
             )}
           </>

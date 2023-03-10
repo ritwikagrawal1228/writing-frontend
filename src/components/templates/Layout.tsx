@@ -83,7 +83,10 @@ const Layout: FC<LayoutProps> = ({
 }) => {
   const t = useTranslations('Nav')
   const problemMenuItems = { label: t('menu.problem'), href: Path.Problem }
-  const upgradeMenuItems = { label: 'Upgrade', href: Path.PaymentSubscription }
+  const upgradeMenuItems = {
+    label: t('menu.upgrade'),
+    href: Path.PaymentSubscription,
+  }
   const router = useRouter()
   const { signOut } = useAuthenticator()
   const theme = useTheme()

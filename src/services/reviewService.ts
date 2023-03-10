@@ -48,7 +48,7 @@ const getReviewsByAnswerId = async (answerId: string) => {
   })
 }
 
-const getAiReviewByAnswerId = async (answerId: string) => {
+const getAiReviewByAnswerId = async (answerId: string, locale: string) => {
   const query = gql`
     mutation ($input: CreateAiReviewInput!) {
       createAiReview(input: $input) {
@@ -61,6 +61,7 @@ const getAiReviewByAnswerId = async (answerId: string) => {
   const variables = {
     input: {
       answerId,
+      locale,
     },
   }
 
