@@ -9,6 +9,7 @@ const createReview = async (answerId: string, content: string) => {
     mutation ($input: CreateReviewInput!) {
       createReview(input: $input) {
         id
+        userId
         content
       }
     }
@@ -69,8 +70,50 @@ const getAiReviewByAnswerId = async (answerId: string) => {
   })
 }
 
+const updateReview = async (reviewId: string, content: string) => {
+  const query = gql`
+    mutation ($input: UpdateReviewInput!) {
+      updateReview(input: $input) {
+        id
+        content
+      }
+    }
+  `
+
+  const variables = {
+    input: {
+      reviewId,
+      content,
+    },
+  }
+
+  return await axios.post<{ updateReview: Review }>(Path.APIGraphql, {
+    query,
+    variables,
+  })
+}
+
+const deleteReview = async (reviewId: string) => {
+  const query = gql`
+    mutation ($id: ID!) {
+      deleteReview(id: $id)
+    }
+  `
+
+  const variables = {
+    id: reviewId,
+  }
+
+  return await axios.post<{ deleteReview: Review }>(Path.APIGraphql, {
+    query,
+    variables,
+  })
+}
+
 export const reviewService = {
   createReview,
   getReviewsByAnswerId,
   getAiReviewByAnswerId,
+  updateReview,
+  deleteReview,
 }

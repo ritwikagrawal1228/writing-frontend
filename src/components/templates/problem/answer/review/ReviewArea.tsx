@@ -1,4 +1,4 @@
-import React, { FC, Fragment, memo, useEffect, useState } from 'react'
+import React, { FC, Fragment, memo, useEffect } from 'react'
 
 import SmartToyIcon from '@mui/icons-material/SmartToy'
 import {
@@ -12,13 +12,12 @@ import {
   Typography,
   Avatar,
   useTheme,
-  TextField,
 } from '@mui/material'
 
-import { ProfileAvatar } from '@/components/parts/common/ProfileAvatar'
+import { MyReview } from './MyReview'
+
 import { ProblemType1 } from '@/constants/ProblemType'
 import { reviewService } from '@/services/reviewService'
-import { fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'
 import { Review } from '@/types/model/review'
 import { User } from '@/types/model/user'
@@ -59,29 +58,15 @@ function TabPanel(props: TabPanelProps) {
 
 export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
   const [reviews, setReviews] = React.useState<Review[]>([])
-  const [myReviewValue, setMyReviewValue] = useState<string>('')
   const theme = useTheme()
   const [value, setValue] = React.useState(
     answer.problem.taskType === ProblemType1 ? 1 : 0,
   )
   const [isWaitingAiReview, setIsWaitingAiReview] = React.useState(false)
+  const [isLoadingOwnReview, setIsLoadingOwnReview] = React.useState(false)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
-  }
-
-  const saveOwnReview = () => {
-    setIsWaitingAiReview(true)
-    reviewService
-      .createReview(answer.id, myReviewValue)
-      .then(({ data }) => {
-        const rs = [...reviews]
-        rs.push(data.createReview)
-        setReviews(rs)
-      })
-      .finally(() => {
-        setIsWaitingAiReview(false)
-      })
   }
 
   const sendReviewRequestToAI = () => {
@@ -173,45 +158,13 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
             )}
           </TabPanel>
           <TabPanel value={value} index={1}>
-            {reviews.find((r) => r.userId === user?.id) ? (
-              <Box sx={{ display: 'flex' }}>
-                <Box
-                  sx={{
-                    backgroundColor: `${theme.palette.primary.main}14`,
-                    mr: 2,
-                    borderRadius: 4,
-                    padding: 2,
-                  }}
-                >
-                  <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                    {reviews.find((r) => r.userId === user?.id)?.content}
-                  </Typography>
-                </Box>
-                <ProfileAvatar user={user} />
-              </Box>
-            ) : isWaitingAiReview ? (
-              <CircularProgress />
-            ) : (
-              <>
-                <TextField
-                  inputProps={{ style: { fontSize: fontSizes.m } }}
-                  color="secondary"
-                  fullWidth
-                  multiline
-                  rows={5}
-                  value={myReviewValue}
-                  onChange={(e) => setMyReviewValue(e.target.value)}
-                  placeholder="You can write feedback on your own answer."
-                />
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  onClick={saveOwnReview}
-                >
-                  Save
-                </Button>
-              </>
-            )}
+            <MyReview
+              reviews={reviews}
+              setReviews={setReviews}
+              isLoading={isLoadingOwnReview}
+              setIsLoading={setIsLoadingOwnReview}
+              answerId={answer.id}
+            />
           </TabPanel>
         </Box>
       </Paper>
