@@ -64,8 +64,8 @@ export default function Answer({ problem, userStr }: Props) {
 
   return (
     <Layout
-      title={problem.title}
-      description={problem.question}
+      title={`${ta('create.title')} | ${problem.title}`}
+      description={ta('create.description')}
       breadcrumbs={[
         { label: t('list.title'), href: Path.Problem },
         { label: t('detail.title'), href: `${Path.Problem}/${problem.id}` },

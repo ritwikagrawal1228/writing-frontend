@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { Fragment, memo } from 'react'
 
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
+// import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
 import PaymentIcon from '@mui/icons-material/Payment'
 import {
   List,
@@ -11,30 +11,30 @@ import {
   ListItemText,
   Paper,
 } from '@mui/material'
+import { useTranslations } from 'next-intl'
 
 import { Path } from '@/constants/Path'
 
-const settingList = [
-  {
-    label: 'Profile Setting',
-    icon: <ManageAccountsIcon />,
-    path: Path.ProfileSettings,
-  },
-  {
-    label: 'Notification Setting',
-    icon: <NotificationsActiveIcon />,
-    path: Path.NotificationSettings,
-  },
-  {
-    label: 'Payment Setting',
-    icon: <PaymentIcon />,
-    path: Path.PaymentSettings,
-  },
-]
-
 export const SettingSidebar = memo(() => {
-  const [selectedIndex, setSelectedIndex] = React.useState(1)
   const router = useRouter()
+  const t = useTranslations('Setting')
+  const settingList = [
+    {
+      label: t('sidebar.labelProfile'),
+      icon: <ManageAccountsIcon />,
+      path: Path.ProfileSettings,
+    },
+    // {
+    //   label: t('sidebar.labelNotification'),
+    //   icon: <NotificationsActiveIcon />,
+    //   path: Path.NotificationSettings,
+    // },
+    {
+      label: t('sidebar.labelPayment'),
+      icon: <PaymentIcon />,
+      path: Path.PaymentSettings,
+    },
+  ]
 
   const movePage = (path: string) => {
     router.push(path)

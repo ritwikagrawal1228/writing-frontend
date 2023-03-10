@@ -8,7 +8,9 @@
   "Nav": {
     "menu": {
       "problem": "Problem List",
-      "tip": "Tips"
+      "upgrade": "Upgrade",
+      "tip": "Tips",
+      "descriptors": "Descriptors"
     },
     "profileMenu": {
       "profile": "Settings",
@@ -29,6 +31,8 @@
       "description": "Detail of Problem",
       "editBtn": "Edit",
       "deleteBtn": "Delete",
+      "editMenu": "Edit",
+      "deleteMenu": "Delete",
       "deleteConfirmTitle": "Are you sure you want to delete this problem?",
       "deleteConfirmDescription": "You can not undo this action. \n The problem and essays associated with it will be permanently deleted.",
       "deleteConfirmCancelBtn": "Cancel",
@@ -37,7 +41,10 @@
         "list": {
           "title": "Answer List",
           "addBtn": "Answer",
-          "empty": "There is no answer yet."
+          "empty": "There is no answer yet.",
+          "completed": "Completed",
+          "inProgress": "In Progress",
+          "lastAnswered": "Last Answered"
         }
       }
     },
@@ -73,8 +80,127 @@
     }
   },
   "Answer": {
+    "form": {
+      "startButton": "start",
+      "startDialogTitle": "Do you want to start answering?",
+      "startDialogDescription": "You can pause and resume after starting.\nWould you like to start answering this question?",
+      "startMinUnit": "Minutes",
+      "startDialogCancelButton": "Cancel",
+      "startDialogStartButton": "Start",
+      "startDialogInputLabel": "Answer time",
+      "pauseDialogTitle": "Do you want to pause answering?",
+      "pauseDialogDescription": "You can resume it at any time.",
+      "pauseDialogCancelButton": "Cancel",
+      "pauseDialogPauseButton": "Pause",
+      "resumeDialogTitle": "Resume answer?",
+      "resumeDialogDescription": "You can pause at any time.",
+      "resumeDialogCancelButton": "Cancel",
+      "resumeDialogResumeButton": "Resume",
+      "quitButton": "Quit",
+      "quitDialogTitle": "Are you sure you want to quit answering?",
+      "quitDialogDescription": "Save allows you to resume your answer.\nAborting without saving will delete your answer.",
+      "quitDialogWithoutSavingButton": "quit without saving",
+      "quitDialogSavingButton": "Save and Quit",
+      "quitDialogCancelButton": "No"
+    },
     "create": {
-      "title": "Solve"
+      "title": "Answer",
+      "description": "Answer writing page | IELTS Writing Helper"
+    },
+    "review": {
+      "title": "Review",
+      "description": "Answer review page | IELTS Writing Helper",
+      "colPart": "part",
+      "colWords": "Required number of words",
+      "colWordCount": "word count",
+      "colTime": "Set time",
+      "colSpentTime": "Elapsed time",
+      "wordUnit": "word",
+      "minUnit": "Minutes",
+      "secUnit": "seconds",
+      "tabMenuAi": "AI Review",
+      "tabContentInfo": "AI will start reviewing by clicking the button below. It may take up to 5 minutes.",
+      "tabContentWarning1": "May occasionally generate incorrect information",
+      "tabContentWarning2": "May occasionally produce harmful instructions or biased",
+      "tabContentWarning3": "Limited knowledge of world and events after 2021",
+      "tabContentRequestButton": "Ask AI for review",
+      "tabMenuMy": "My Reviews",
+      "tabContentMyReviewInputPlaceholder": "You can enter a review for your own response",
+      "tabContentMyReviewInputSaveButton": "Save",
+      "tabContentMyReviewInputCancelEditButton": "Finish editing",
+      "tabContentMyReviewEditButton": "Edit",
+      "tabContentMyReviewDeleteButton": "Delete",
+      "tabContentMyReviewDeleteDialogTitle": "Review",
+      "tabContentMyReviewDeleteDialogDescription": "Do you want to delete this review?",
+      "tabContentMyReviewDeleteDialogCancelButton": "No",
+      "tabContentMyReviewDeleteDialogDeleteButton": "Delete",
+      "reviewSavedSuccessSnackbar": "Review saved",
+      "reviewSavedFailedSnackbar": "Failed to save review",
+      "reviewEditedSuccessSnackbar": "Review edited",
+      "reviewEditedFailedSnackbar": "Failed to edit review",
+      "reviewDeletedSuccessSnackbar": "Review deleted",
+      "reviewDeletedFailedSnackbar": "Review saved",
+      "answerTitle": "Answer",
+      "answerDiffTitle": "Answer & Correction Diff",
+      "answerDiffToggle": "Show diff with correction",
+      "answerDiffInfo": "Click the {icon} to enter corrections.",
+      "answerDiffHelperText": "Enter the correct sentence to diff",
+      "answerDiffSubmitButton": "Save"
+    }
+  },
+  "Payment": {
+    "title": "Upgrade",
+    "description": "Choose a plan and upgrade | IELTS Writing Helper",
+    "paymentDetail": "Payment Details",
+    "subtotal": "subtotal",
+    "consumptionTax": "consumption tax",
+    "total": "Total",
+    "cardBrandsSupported": "Card brands supported for payment",
+    "proceedToPayment": "Payment",
+    "proPlanTitle": "Professional Plan",
+    "proFeature1": "You can submit unlimited problems",
+    "proFeature2": "No Ads",
+    "proFeature3": "Enables AI Task2 review",
+    "paymentSuccess": "Payment completed",
+    "paymentFailed": "Payment failed"
+  },
+  "Setting": {
+    "sidebar": {
+      "labelProfile": "Profile settings",
+      "labelNotification": "Notification settings",
+      "labelPayment": "Payment settings"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "description": "Profile settings page",
+      "saveButton": "Save"
+    },
+    "payments": {
+      "title": "Payment Settings",
+      "description": "Payment settings page",
+      "saveButton": "Save",
+      "currentPlan": "current plan",
+      "planExpiresAt": "Valid until {data}",
+      "currentCard": "Currently registered card",
+      "noCard": "No card registered",
+      "cardNumber": "card number",
+      "cardExpiry": "Expiry date",
+      "cardBrand": "CardBrand",
+      "changeCardInfo": "Change card info",
+      "changeCardSupportedBrand": "Supported card brands",
+      "changeCardButton": "Change card information",
+      "updateSuccessMessage": "Your card information has been updated",
+      "updateFailedMessage": "Failed to update card",
+      "cancelSubscription": "Cancel subscription",
+      "cancelSubscriptionWarning1": "If you cancel, you will not be able to view the 10th and subsequent questions that are currently registered.",
+      "cancelSubscriptionWarning2": "If you cancel, your subscription will be changed to the free plan on the next payment date.",
+      "cancelSubscriptionButton": "Cancel",
+      "cancelSubscriptionMessage": "Your subscription will be canceled on {date}",
+      "cancelSubscriptionDialogTitle": "Are you sure you want to cancel?",
+      "cancelYesButton": "Yes",
+      "cancelNoButton": "No",
+      "cancelSuccessMessage": "Subscription canceled",
+      "cancelFailedMessage": "Failed to cancel subscription"
     }
   }
 }

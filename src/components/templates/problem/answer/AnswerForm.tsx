@@ -2,7 +2,6 @@ import React, { memo, useEffect } from 'react'
 
 import SendIcon from '@mui/icons-material/Send'
 import {
-  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -16,12 +15,15 @@ import {
 } from '@mui/material'
 import { Storage } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
+import { useDispatch } from 'react-redux'
+
+import { ProblemDescriptionGrid } from '@/components/templates/common/ProblemDescriptionGrid'
 
 import { ProblemDisplayPaper } from '../../common/ProblemDisplayPaper'
 
-import { ProblemDescriptionGrid } from '@/components/templates/common/ProblemDescriptionGrid'
 import { Stopwatch } from '@/components/templates/common/Stopwatch'
 import { AnswerStatus, answerStatus } from '@/constants/AnswerStatus'
+import { commonSlice } from '@/store/common'
 import { fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
 
@@ -50,8 +52,8 @@ export const AnswerForm = memo(
     const t = useTranslations('Problem')
     const ta = useTranslations('Answer')
     const [img, setImg] = React.useState<string | undefined>()
-    const [error, setError] = React.useState<string>('')
     const [isCancelConfirm, setIsCancelConfirm] = React.useState<boolean>(false)
+    const dispatch = useDispatch()
 
     useEffect(() => {
       if (problem.questionImageKey) {
@@ -66,9 +68,14 @@ export const AnswerForm = memo(
     }, [problem])
 
     const submitAnswer = async () => {
-      setError('')
       if (!answer) {
-        setError('Answer is required')
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: 'Answer is required',
+            snackBarType: 'error',
+          }),
+        )
         return
       }
 
@@ -92,10 +99,10 @@ export const AnswerForm = memo(
     return (
       <>
         <Dialog open={isCancelConfirm} onClose={handleCloseCancelConfirm}>
-          <DialogTitle>Quit answering?</DialogTitle>
+          <DialogTitle>{ta('form.quitDialogTitle')}</DialogTitle>
           <DialogContent>
             <DialogContentText sx={{ mb: 2 }}>
-              You can save your answer and continue later.
+              {ta('form.quitDialogDescription')}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -104,21 +111,17 @@ export const AnswerForm = memo(
               variant="outlined"
               onClick={() => handleCancel(false)}
             >
-              Quit without saving
+              {ta('form.quitDialogWithoutSavingButton')}
             </Button>
-            <Button
-              color="secondary"
-              variant="outlined"
-              onClick={() => handleCancel(true)}
-            >
-              Save and Quit
+            <Button color="secondary" onClick={() => handleCancel(true)}>
+              {ta('form.quitDialogSavingButton')}
             </Button>
             <Button
               color="inherit"
               variant="outlined"
               onClick={handleCloseCancelConfirm}
             >
-              No
+              {ta('form.quitDialogCancelButton')}
             </Button>
           </DialogActions>
         </Dialog>
@@ -143,7 +146,7 @@ export const AnswerForm = memo(
               sx={{ mr: 2 }}
               onClick={() => setIsCancelConfirm(true)}
             >
-              <b>Quit</b>
+              <b>{ta('form.quitButton')}</b>
             </Button>
             <Button
               color="primary"
@@ -156,11 +159,6 @@ export const AnswerForm = memo(
           </Grid>
         </Grid>
         <ProblemDescriptionGrid problem={problem} />
-        {error && (
-          <Grid item xs={12} sx={{ my: 2 }}>
-            <Alert severity="error">{error}</Alert>
-          </Grid>
-        )}
         <Grid container columnSpacing={2}>
           <Grid item xs={6}>
             <ProblemDisplayPaper problem={problem} img={img} />

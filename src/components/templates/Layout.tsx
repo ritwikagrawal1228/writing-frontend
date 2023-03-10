@@ -83,7 +83,14 @@ const Layout: FC<LayoutProps> = ({
 }) => {
   const t = useTranslations('Nav')
   const problemMenuItems = { label: t('menu.problem'), href: Path.Problem }
-  const upgradeMenuItems = { label: 'Upgrade', href: Path.PaymentSubscription }
+  const upgradeMenuItems = {
+    label: t('menu.upgrade'),
+    href: Path.PaymentSubscription,
+  }
+  const descriptorItems = {
+    label: t('menu.descriptors'),
+    href: Path.Descriptors,
+  }
   const router = useRouter()
   const { signOut } = useAuthenticator()
   const theme = useTheme()
@@ -100,7 +107,7 @@ const Layout: FC<LayoutProps> = ({
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const [open, setOpen] = React.useState(false)
-  const [menus, setMenus] = React.useState([problemMenuItems])
+  const [menus, setMenus] = React.useState([problemMenuItems, descriptorItems])
 
   useEffect(() => {
     if (!user) {
@@ -108,7 +115,7 @@ const Layout: FC<LayoutProps> = ({
     }
 
     if (user.plan === UserPlanFree) {
-      setMenus([problemMenuItems, upgradeMenuItems])
+      setMenus([problemMenuItems, descriptorItems, upgradeMenuItems])
     }
   }, [user])
 

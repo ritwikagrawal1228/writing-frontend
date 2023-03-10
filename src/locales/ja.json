@@ -8,7 +8,9 @@
   "Nav": {
     "menu": {
       "problem": "問題",
-      "tip": "ヒント"
+      "upgrade": "アップグレード",
+      "tip": "ヒント",
+      "descriptors": "スコアリング基準"
     },
     "profileMenu": {
       "profile": "設定",
@@ -29,6 +31,8 @@
       "description": "問題の詳細ページ | IELTS Writing Helper",
       "editBtn": "保存",
       "deleteBtn": "削除",
+      "editMenu": "編集",
+      "deleteMenu": "削除",
       "deleteConfirmTitle": "本当にこの問題を削除しますか？",
       "deleteConfirmDescription": "この操作は取り消すことができません。 \n 問題とその問題に紐づく全てのエッセイが完全に削除されます。",
       "deleteConfirmCancelBtn": "キャンセル",
@@ -37,7 +41,10 @@
         "list": {
           "title": "回答一覧",
           "addBtn": "回答する",
-          "empty": "まだ回答がありません。"
+          "empty": "まだ回答がありません。",
+          "completed": "完了",
+          "inProgress": "進行中",
+          "lastAnswered": "最終回答日"
         }
       }
     },
@@ -61,7 +68,7 @@
       "title": "タイトル",
       "titleHelper": "問題集のタイトルやページ数(問題を識別するための名前)",
       "titlePlaceHolder": "IELTS公式問題集13 P.29",
-      "taskType": "タスクのタイプ",
+      "taskType": "タイプ",
       "question": "問題文",
       "questionPlaceHolder": "The chart below shows the number of men and women in further education in Britain in three periods and whether they were studying fulltime or part-time. Summarize the information by selecting and reporting the main features, and make comparisons where relevant.",
       "questionImage": "問題の画像",
@@ -70,6 +77,130 @@
       "imageHelper2": "※このファイルは他のユーザーに見られる可能性があります。",
       "fileTypeError": "画像ファイルのみサポートされています. (許可されるファイルの拡張子: png, gif, bmp, svg or jpg)",
       "fileSizeError": "ファイルサイズは10MBまでです。"
+    }
+  },
+  "Answer": {
+    "form": {
+      "startButton": "開始",
+      "startDialogTitle": "回答を開始しますか？",
+      "startDialogDescription": "開始後も一時停止・再開できます。 \n この問題に対する回答を開始しますか？",
+      "startMinUnit": "分",
+      "startDialogCancelButton": "キャンセル",
+      "startDialogStartButton": "開始",
+      "startDialogInputLabel": "回答時間",
+      "pauseDialogTitle": "回答を一時停止しますか？",
+      "pauseDialogDescription": "いつでも再開できます。",
+      "pauseDialogCancelButton": "キャンセル",
+      "pauseDialogPauseButton": "一時停止",
+      "resumeDialogTitle": "回答を再開しますか？",
+      "resumeDialogDescription": "いつでも一時停止できます。",
+      "resumeDialogCancelButton": "キャンセル",
+      "resumeDialogResumeButton": "再開",
+      "quitButton": "中止",
+      "quitDialogTitle": "回答を中止しますか？",
+      "quitDialogDescription": "保存すると、回答を再開できます。 \n 保存せずに中止すると、回答は削除されます。",
+      "quitDialogWithoutSavingButton": "保存せずに中止",
+      "quitDialogSavingButton": "保存して中止",
+      "quitDialogCancelButton": "いいえ"
+    },
+    "create": {
+      "title": "回答",
+      "description": "回答を作成するページ | IELTS Writing Helper"
+    },
+    "review": {
+      "title": "レビュー",
+      "description": "回答のレビューページ | IELTS Writing Helper",
+      "colPart": "パート",
+      "colWords": "必要単語数",
+      "colWordCount": "単語数",
+      "colTime": "設定時間",
+      "colSpentTime": "経過時間",
+      "wordUnit": "単語",
+      "minUnit": "分",
+      "secUnit": "秒",
+      "tabMenuAi": "AIのレビュー",
+      "tabContentInfo": "下記のボタンクリックでAIがレビューを開始します。遅い場合で5分程度要します。",
+      "tabContentWarning1": "まれに誤った情報を発信することがあります。",
+      "tabContentWarning2": "有害な指示や偏った内容を出すことがあります。",
+      "tabContentWarning3": "2021年以降の世界や出来事に関する知識が乏しいです。",
+      "tabContentRequestButton": "AIにレビューを依頼する",
+      "tabMenuMy": "自分のレビュー",
+      "tabContentMyReviewInputPlaceholder": "自分の回答のレビューを入力できます",
+      "tabContentMyReviewInputSaveButton": "保存",
+      "tabContentMyReviewInputCancelEditButton": "編集終了",
+      "tabContentMyReviewEditButton": "編集",
+      "tabContentMyReviewDeleteButton": "削除",
+      "tabContentMyReviewDeleteDialogTitle": "確認",
+      "tabContentMyReviewDeleteDialogDescription": "このレビューを削除しますか？",
+      "tabContentMyReviewDeleteDialogCancelButton": "いいえ",
+      "tabContentMyReviewDeleteDialogDeleteButton": "削除",
+      "reviewSavedSuccessSnackbar": "レビューを保存しました",
+      "reviewSavedFailedSnackbar": "レビューを保存できませんでした",
+      "reviewEditedSuccessSnackbar": "レビューを編集しました",
+      "reviewEditedFailedSnackbar": "レビューを編集できませんでした",
+      "reviewDeletedSuccessSnackbar": "レビューを削除しました",
+      "reviewDeletedFailedSnackbar": "レビューを保存しました",
+      "answerTitle": "回答",
+      "answerDiffTitle": "回答&訂正の差分",
+      "answerDiffToggle": "訂正との差分を表示",
+      "answerDiffInfo": "{icon}をクリックして訂正文を入力できます。",
+      "answerDiffHelperText": "差分を出すため正しい文を入力してください",
+      "answerDiffSubmitButton": "保存"
+    }
+  },
+  "Payment": {
+    "title": "アップグレード",
+    "description": "プランを選択してアップグレードできます | IELTS Writing Helper",
+    "paymentDetail": "支払い詳細",
+    "subtotal":  "小計",
+    "consumptionTax": "消費税",
+    "total": "合計",
+    "cardBrandsSupported": "支払いに対応しているカードブランド",
+    "proceedToPayment": "お支払い",
+    "proPlanTitle": "プロフェッショナルプラン",
+    "proFeature1": "無制限に問題を登録できます",
+    "proFeature2": "広告が表示されません",
+    "proFeature3": "AIのTask2のレビューが可能になります",
+    "paymentSuccess": "お支払いが完了しました",
+    "paymentFailed": "お支払いに失敗しました"
+  },
+  "Setting": {
+    "sidebar": {
+      "labelProfile": "プロフィール設定",
+      "labelNotification": "通知設定",
+      "labelPayment": "支払い設定"
+    },
+    "profile": {
+      "title": "プロフィール設定",
+      "description": "プロフィール設定のページ",
+      "saveButton": "保存"
+    },
+    "payment": {
+      "title": "支払い設定",
+      "description": "支払い設定のページ",
+      "saveButton": "保存",
+      "currentPlan": "現在のプラン",
+      "planExpiresAt": "{data}まで有効",
+      "currentCard": "現在登録中のカード",
+      "noCard": "カードが登録されていません",
+      "cardNumber": "カード番号",
+      "cardExpiry": "有効期限",
+      "cardBrand": "カードブランド",
+      "changeCardInfo": "カード情報の変更",
+      "changeCardSupportedBrand": "対応しているカードブランド",
+      "changeCardButton": "カード情報を変更する",
+      "updateSuccessMessage": "カード情報を更新しました",
+      "updateFailedMessage": "カードの更新に失敗しました",
+      "cancelSubscription": "サブスクリプションのキャンセル",
+      "cancelSubscriptionWarning1": "キャンセルすると、現在登録中の問題のうちの10件目以降の問題が閲覧不可能になります。",
+      "cancelSubscriptionWarning2": "キャンセルすると、次回お支払日にフリープランに変更されます。",
+      "cancelSubscriptionButton": "キャンセルする",
+      "cancelSubscriptionMessage": "サブスクリプションは{date}にキャンセルされます",
+      "cancelSubscriptionDialogTitle": "本当にキャンセルしますか？",
+      "cancelYesButton": "はい",
+      "cancelNoButton": "いいえ",
+      "cancelSuccessMessage": "サブスクリプションをキャンセルしました",
+      "cancelFailedMessage": "サブスクリプションのキャンセルに失敗しました"
     }
   }
 }
