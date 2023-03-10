@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import Script from 'next/script'
 import React from 'react'
 
 import {
@@ -25,6 +24,7 @@ import { withSSRContext } from 'aws-amplify'
 
 import { Path } from '@/constants/Path'
 
+import { useTranslations } from 'next-intl'
 import { useDispatch } from 'react-redux'
 
 import { subtotal, taxRate } from '@/constants/Price'
@@ -48,6 +48,7 @@ type Props = {
 
 export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
   useGetAuthUser(userStr)
+  const t = useTranslations('Payment')
   const theme = useTheme()
   const router = useRouter()
   const dispatch = useDispatch()
@@ -63,7 +64,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
       dispatch(
         commonSlice.actions.updateSnackBar({
           isSnackbarShow: true,
-          snackBarMsg: 'Your plan has been upgraded successfully.',
+          snackBarMsg: t('paymentSuccess'),
           snackBarType: 'success',
         }),
       )
@@ -74,7 +75,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
       dispatch(
         commonSlice.actions.updateSnackBar({
           isSnackbarShow: true,
-          snackBarMsg: 'Failed to upgrade your plan. Please try again later.',
+          snackBarMsg: t('paymentFailed'),
           snackBarType: 'error',
         }),
       )
@@ -83,27 +84,26 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
 
   return (
     <>
-      <Script src="https://sandbox.web.squarecdn.com/v1/square.js" />
-      <Script></Script>
       <Layout
-        title="Upgrade Plan"
-        breadcrumbs={[{ label: 'Upgrade Plan', href: undefined }]}
+        title={t('title')}
+        description={t('description')}
+        breadcrumbs={[{ label: t('title'), href: undefined }]}
       >
-        <TitleBox title="Upgrade Plan">
+        <TitleBox title={t('title')}>
           <></>
         </TitleBox>
         <Paper sx={{ minHeight: '460px', p: 4 }}>
           <Grid container columnSpacing={3}>
             <Grid item xs={6}>
               <Typography variant="h6" sx={{ mb: 3 }}>
-                Payment Details
+                {t('paymentDetail')}
               </Typography>
               <TableContainer sx={{ mb: 3 }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableBody>
                     <TableRow sx={{ 'td, th': { border: 0 } }}>
                       <TableCell component="th" scope="row">
-                        Subtotal
+                        {t('subtotal')}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         ¥{subtotal}
@@ -111,7 +111,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
                     </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        Consumption Tax
+                        {t('consumptionTax')}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         ¥{(subtotal * taxRate) / 100}
@@ -121,7 +121,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        Total
+                        {t('total')}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         ¥{subtotal + (subtotal * taxRate) / 100}
@@ -131,7 +131,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
                 </Table>
               </TableContainer>
               <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
-                Card brand supported
+                {t('cardBrandsSupported')}
               </Typography>
               <img
                 src="/img/cardBrands.png"
@@ -150,7 +150,7 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
                     css: { backgroundColor: colors.secondary.main },
                   }}
                 >
-                  Proceed to Payment
+                  {t('proceedToPayment')}
                 </CreditCard>
               </PaymentForm>
             </Grid>
@@ -164,15 +164,17 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
                 }}
               >
                 <Typography variant="h6" sx={{ mb: 3 }}>
-                  👑 Professional Plan
+                  👑 {t('proPlanTitle')}
                 </Typography>
                 <Typography variant="h4" sx={{ mb: 3 }}>
                   {`¥${subtotal}`}
                 </Typography>
                 <Typography fontSize={fontSizes.l} sx={{ pb: 1 }}>
-                  ✨ You can store problems as much as you want
+                  ✨ {t('proFeature1')}
                   <br />
-                  <br />✨ Ads will not be displayed at all
+                  <br />✨ {t('proFeature2')}
+                  <br />
+                  <br />✨ {t('proFeature3')}
                 </Typography>
               </Paper>
             </Grid>

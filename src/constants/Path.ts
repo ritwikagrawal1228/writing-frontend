@@ -13,4 +13,5 @@ export enum Path {
   PaymentSettings = '/settings/payment',
   Tip = '/tip',
   PaymentSubscription = '/payment/subscription',
+  Descriptors = '/descriptors/task2',
 }

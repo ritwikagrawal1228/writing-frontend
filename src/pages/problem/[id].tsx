@@ -237,7 +237,11 @@ export default function ProblemDetail({ problem, userStr }: Props) {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button color="inherit" onClick={handleAlertClose}>
+                  <Button
+                    color="inherit"
+                    variant="outlined"
+                    onClick={handleAlertClose}
+                  >
                     {t('detail.deleteConfirmCancelBtn')}
                   </Button>
                   <Button

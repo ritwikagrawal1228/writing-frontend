@@ -9,7 +9,8 @@
     "menu": {
       "problem": "問題",
       "upgrade": "アップグレード",
-      "tip": "ヒント"
+      "tip": "ヒント",
+      "descriptors": "スコアリング基準"
     },
     "profileMenu": {
       "profile": "設定",
@@ -145,6 +146,61 @@
       "answerDiffInfo": "{icon}をクリックして訂正文を入力できます。",
       "answerDiffHelperText": "差分を出すため正しい文を入力してください",
       "answerDiffSubmitButton": "保存"
+    }
+  },
+  "Payment": {
+    "title": "アップグレード",
+    "description": "プランを選択してアップグレードできます | IELTS Writing Helper",
+    "paymentDetail": "支払い詳細",
+    "subtotal":  "小計",
+    "consumptionTax": "消費税",
+    "total": "合計",
+    "cardBrandsSupported": "支払いに対応しているカードブランド",
+    "proceedToPayment": "お支払い",
+    "proPlanTitle": "プロフェッショナルプラン",
+    "proFeature1": "無制限に問題を登録できます",
+    "proFeature2": "広告が表示されません",
+    "proFeature3": "AIのTask2のレビューが可能になります",
+    "paymentSuccess": "お支払いが完了しました",
+    "paymentFailed": "お支払いに失敗しました"
+  },
+  "Setting": {
+    "sidebar": {
+      "labelProfile": "プロフィール設定",
+      "labelNotification": "通知設定",
+      "labelPayment": "支払い設定"
+    },
+    "profile": {
+      "title": "プロフィール設定",
+      "description": "プロフィール設定のページ",
+      "saveButton": "保存"
+    },
+    "payment": {
+      "title": "支払い設定",
+      "description": "支払い設定のページ",
+      "saveButton": "保存",
+      "currentPlan": "現在のプラン",
+      "planExpiresAt": "{data}まで有効",
+      "currentCard": "現在登録中のカード",
+      "noCard": "カードが登録されていません",
+      "cardNumber": "カード番号",
+      "cardExpiry": "有効期限",
+      "cardBrand": "カードブランド",
+      "changeCardInfo": "カード情報の変更",
+      "changeCardSupportedBrand": "対応しているカードブランド",
+      "changeCardButton": "カード情報を変更する",
+      "updateSuccessMessage": "カード情報を更新しました",
+      "updateFailedMessage": "カードの更新に失敗しました",
+      "cancelSubscription": "サブスクリプションのキャンセル",
+      "cancelSubscriptionWarning1": "キャンセルすると、現在登録中の問題のうちの10件目以降の問題が閲覧不可能になります。",
+      "cancelSubscriptionWarning2": "キャンセルすると、次回お支払日にフリープランに変更されます。",
+      "cancelSubscriptionButton": "キャンセルする",
+      "cancelSubscriptionMessage": "サブスクリプションは{date}にキャンセルされます",
+      "cancelSubscriptionDialogTitle": "本当にキャンセルしますか？",
+      "cancelYesButton": "はい",
+      "cancelNoButton": "いいえ",
+      "cancelSuccessMessage": "サブスクリプションをキャンセルしました",
+      "cancelFailedMessage": "サブスクリプションのキャンセルに失敗しました"
     }
   }
 }

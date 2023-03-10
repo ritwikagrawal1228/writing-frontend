@@ -307,7 +307,7 @@ export const MyReview: FC<Props> = memo(
             {isEdit && (
               <Button
                 color="inherit"
-                variant="contained"
+                variant="outlined"
                 onClick={() => setIsEdit(false)}
               >
                 {ta('review.tabContentMyReviewInputCancelEditButton')}

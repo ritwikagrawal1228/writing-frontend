@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import {
   Grid,
   Paper,
-  useTheme,
   Table,
   TableContainer,
   TableRow,
@@ -37,17 +36,17 @@ import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 
 import { useTranslations } from 'next-intl'
 
-import { Path } from '@/constants/Path'
+import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
 
 import { useDispatch } from 'react-redux'
 
-import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 
 import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
 import { commonSlice } from '@/store/common'
+import { userSlice } from '@/store/user'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { SquareCard } from '@/types/model/squareCard'
 
@@ -61,11 +60,10 @@ type Props = {
 
 export default function PaymentSetting({ userStr, squareInfo }: Props) {
   const { user } = useGetAuthUser(userStr)
-  const theme = useTheme()
-  const t = useTranslations('Problem')
+  const t = useTranslations('Setting')
   const router = useRouter()
   const [card, setCard] = useState<SquareCard>()
-  const [isCardLoading, setIsCardLoading] = useState<boolean>(true)
+  const [isCardLoading, setIsCardLoading] = useState<boolean>(false)
   const [isConfirmShow, setIsConfirmShow] = useState<boolean>(false)
   const dispatch = useDispatch()
 
@@ -80,7 +78,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
             dispatch(
               commonSlice.actions.updateSnackBar({
                 isSnackbarShow: true,
-                snackBarMsg: 'Your card is updated successfully',
+                snackBarMsg: t('payment.updateSuccessMessage'),
                 snackBarType: 'success',
               }),
             )
@@ -90,7 +88,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
           dispatch(
             commonSlice.actions.updateSnackBar({
               isSnackbarShow: true,
-              snackBarMsg: 'Failed to update your card',
+              snackBarMsg: t('payment.updateFailedMessage'),
               snackBarType: 'error',
             }),
           )
@@ -98,6 +96,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
       dispatch(commonSlice.actions.updateIsBackdropShow(false))
     }
   }
+
   useEffect(() => {
     if (!user || card) {
       return
@@ -124,42 +123,42 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
 
   const handleConfirm = () => {
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
+    setIsConfirmShow(false)
     squareService
       .cancelSubscription()
       .then(({ data }) => {
         dispatch(
           commonSlice.actions.updateSnackBar({
             isSnackbarShow: true,
-            snackBarMsg: 'Your subscription is canceled successfully',
+            snackBarMsg: t('payment.cancelSuccessMessage'),
             snackBarType: 'success',
           }),
         )
+        if (!user) {
+          return
+        }
+        user.subscriptionExpiresAt = data.cancelCurrentSubscription
+        dispatch(userSlice.actions.updateUser(user))
       })
       .catch(() => {
         dispatch(
           commonSlice.actions.updateSnackBar({
             isSnackbarShow: true,
-            snackBarMsg: 'Failed to cancel your subscription',
+            snackBarMsg: t('payment.cancelFailedMessage'),
             snackBarType: 'error',
           }),
         )
-      })
-      .finally(() => {
-        setIsConfirmShow(false)
       })
     dispatch(commonSlice.actions.updateIsBackdropShow(false))
   }
 
   return (
     <Layout
-      title={t('create.title')}
-      description={t('create.title')}
-      breadcrumbs={[
-        { label: t('list.title'), href: Path.Problem },
-        { label: t('create.title'), href: undefined },
-      ]}
+      title={t('payment.title')}
+      description={t('payment.title')}
+      breadcrumbs={[{ label: t('payment.title'), href: undefined }]}
     >
-      <TitleBox title="Payment Setting">
+      <TitleBox title={t('payment.title')}>
         <></>
       </TitleBox>
       <Grid container columnSpacing={2}>
@@ -175,7 +174,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                   sx={{ pb: 1 }}
                   fontWeight="bold"
                 >
-                  Your Current Plan
+                  {t('payment.currentPlan')}
                 </Typography>
                 <Typography fontSize={fontSizes.m} fontWeight="bold">
                   <Chip
@@ -184,14 +183,15 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                   />
                   {user?.subscriptionExpiresAt && (
                     <>
-                      Valid until{' '}
-                      {format(
-                        new Date(user?.subscriptionExpiresAt),
-                        'yyyy/M/d',
-                        {
-                          locale: router.locale === 'ja' ? ja : enUS,
-                        },
-                      )}
+                      {t('payment.planExpiresAt', {
+                        date: format(
+                          new Date(user?.subscriptionExpiresAt),
+                          'yyyy/M/d',
+                          {
+                            locale: router.locale === 'ja' ? ja : enUS,
+                          },
+                        ),
+                      })}
                     </>
                   )}
                 </Typography>
@@ -201,7 +201,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                   sx={{ pb: 1 }}
                   fontWeight="bold"
                 >
-                  Your Current Card
+                  {t('payment.currentCard')}
                 </Typography>
                 {card ? (
                   <TableContainer component={Paper}>
@@ -209,7 +209,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                       <TableBody>
                         <TableRow>
                           <TableCell sx={{ bgcolor: '#E3183714' }}>
-                            Card number
+                            {t('payment.cardNumber')}
                           </TableCell>
                           <TableCell>
                             {card && `xxxx-xxxx-xxxx-${card.last4}`}
@@ -217,7 +217,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                         </TableRow>
                         <TableRow>
                           <TableCell sx={{ bgcolor: '#E3183714' }}>
-                            Card expires
+                            {t('payment.cardExpiry')}
                           </TableCell>
                           <TableCell>
                             {card && `${card.expYear}/${card.expMonth}`}
@@ -225,7 +225,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                         </TableRow>
                         <TableRow>
                           <TableCell sx={{ bgcolor: '#E3183714' }}>
-                            Card brand
+                            {t('payment.cardBrand')}
                           </TableCell>
                           <TableCell>{card && card.cardBrand}</TableCell>
                         </TableRow>
@@ -235,7 +235,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                 ) : isCardLoading ? (
                   <CircularProgress />
                 ) : (
-                  <>You do not have any card</>
+                  <>{t('payment.noCard')}</>
                 )}
                 {user?.plan === UserPlanPro && (
                   <>
@@ -245,10 +245,10 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                       sx={{ pb: 1 }}
                       fontWeight="bold"
                     >
-                      Change Payment Information
+                      {t('payment.changeCardInfo')}
                     </Typography>
                     <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
-                      Card brand supported
+                      {t('payment.changeCardSupportedBrand')}
                     </Typography>
                     <img
                       src="/img/cardBrands.png"
@@ -264,10 +264,10 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                     >
                       <CreditCard
                         buttonProps={{
-                          css: { backgroundColor: colors.primary.main },
+                          css: { backgroundColor: colors.secondary.main },
                         }}
                       >
-                        Change Card
+                        {t('payment.changeCardButton')}
                       </CreditCard>
                     </PaymentForm>
                   </>
@@ -281,7 +281,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                   sx={{ pb: 1 }}
                   fontWeight="bold"
                 >
-                  Cancel Subscription
+                  {t('payment.cancelSubscription')}
                 </Typography>
                 {!user.subscriptionExpiresAt ? (
                   <>
@@ -290,30 +290,29 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                       sx={{ pb: 1 }}
                       color="primary"
                     >
-                      ※ If you cancel your subscription, you will not be able to
-                      see your all tenth older problems.
-                      <br />※ It will be changed to the free plan on the next
-                      payment date
+                      ※ {t('payment.cancelSubscriptionWarning1')}
+                      <br />※ {t('payment.cancelSubscriptionWarning2')}
                     </Typography>
                     <Button
                       color="primary"
                       variant="contained"
                       onClick={() => setIsConfirmShow(true)}
                     >
-                      Cancel Subscription
+                      {t('payment.cancelSubscriptionButton')}
                     </Button>
                   </>
                 ) : (
                   <>
                     <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
-                      Your subscription will be expired on{' '}
-                      {format(
-                        new Date(user?.subscriptionExpiresAt),
-                        'yyyy/M/d',
-                        {
-                          locale: router.locale === 'ja' ? ja : enUS,
-                        },
-                      )}
+                      {t('payment.cancelSubscriptionMessage', {
+                        date: format(
+                          new Date(user?.subscriptionExpiresAt),
+                          'yyyy/M/d',
+                          {
+                            locale: router.locale === 'ja' ? ja : enUS,
+                          },
+                        ),
+                      })}
                     </Typography>
                   </>
                 )}
@@ -323,32 +322,27 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
         </>
       </Grid>
       <Dialog open={isConfirmShow} onClose={handleCloseConfirm}>
-        <DialogTitle>Are you sure you want to cancel subscription</DialogTitle>
+        <DialogTitle>{t('payment.cancelSubscriptionDialogTitle')}</DialogTitle>
         <DialogContent>
           <DialogContentText
             sx={{ mb: 2, pb: 1 }}
             fontSize={fontSizes.m}
             color="primary"
           >
-            ※ If you cancel your subscription,
-            <br /> you will not be able to see your all tenth older problems.
-            <br />※ It will be changed to the free plan on the next payment date
+            ※ {t('payment.cancelSubscriptionWarning1')}
+            <br />※ {t('payment.cancelSubscriptionWarning2')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            color="primary"
-            variant="outlined"
-            onClick={() => handleConfirm()}
-          >
-            Yes
+          <Button color="primary" onClick={() => handleConfirm()}>
+            {t('payment.cancelYesButton')}
           </Button>
           <Button
             color="inherit"
             variant="outlined"
             onClick={handleCloseConfirm}
           >
-            No
+            {t('payment.cancelNoButton')}
           </Button>
         </DialogActions>
       </Dialog>

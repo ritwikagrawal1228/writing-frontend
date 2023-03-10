@@ -149,10 +149,6 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
                   ○ {ta('review.tabContentWarning1')} <br />○{' '}
                   {ta('review.tabContentWarning2')} <br />○{' '}
                   {ta('review.tabContentWarning3')} <br />
-                  ・May occasionally generate incorrect information <br />
-                  ・May occasionally produce harmful instructions or biased
-                  content <br />
-                  ・Limited knowledge of world and events after 2021
                 </Alert>
                 <Button
                   color="secondary"

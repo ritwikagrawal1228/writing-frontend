@@ -35,7 +35,7 @@ type Props = {
 export default function ProfileSetting({ userStr }: Props) {
   const { user } = useGetAuthUser(userStr)
   const theme = useTheme()
-  const t = useTranslations('Problem')
+  const t = useTranslations('Setting')
   const router = useRouter()
   const [photo, setPhoto] = useState<File | string | undefined>('')
   const { profileSettingForm } = useProfileSettingDefaultFrom(user)
@@ -94,24 +94,13 @@ export default function ProfileSetting({ userStr }: Props) {
     dispatch(userSlice.actions.updateUser(updateUserProfile))
   }
 
-  const handleAlertClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string,
-  ) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setIsAlertShow(false)
-  }
-
   return (
     <Layout
-      title="Profile Setting"
-      description={t('create.title')}
-      breadcrumbs={[{ label: 'Profile Settings', href: undefined }]}
+      title={t('profile.title')}
+      description={t('profile.description')}
+      breadcrumbs={[{ label: t('profile.title'), href: undefined }]}
     >
-      <TitleBox title="Profile Setting">
+      <TitleBox title={t('profile.title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
@@ -119,7 +108,7 @@ export default function ProfileSetting({ userStr }: Props) {
             startIcon={<SaveIcon />}
             onClick={() => methods.handleSubmit(onSubmit)()}
           >
-            <b>{t('create.submitBtn')}</b>
+            <b>{t('profile.saveButton')}</b>
           </Button>
         </Box>
       </TitleBox>
