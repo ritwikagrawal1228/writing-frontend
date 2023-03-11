@@ -29,7 +29,7 @@ export const LpHead: FC = memo(() => {
         sx={{
           width: '100%',
           px: 0,
-          mt: 15,
+          mt: 20,
         }}
       >
         <Grid container sx={{ px: 0 }}>
