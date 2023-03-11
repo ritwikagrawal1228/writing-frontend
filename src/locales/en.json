@@ -20,18 +20,18 @@
       "desc3": "The hottest Open AI will review your answers and give\nadvice to improve your score."
     },
     "pricing": {
-      "title": "Pricing Plan",
-      "desc": "Introducing pricing plans for IELTS Writing Helper.\nYou can learn IELTS writing efficiently at a low cost.",
+      "title": "Pricing",
+      "desc": "Introducing pricing for IELTS Writing Helper.\nYou can learn IELTS writing efficiently at a low cost.",
       "monthUnit": "month",
       "free": {
-        "title": "Free Plan",
+        "title": "Free",
         "desc1": "You can create up to 10 questions",
         "desc2": "Unlimited number of responses",
         "desc3": "Auto-suggest grammar and spelling mistakes",
         "button": "Start for free"
       },
       "pro": {
-        "title": "Pro Plan",
+        "title": "Pro",
         "subheader": "Most popular",
         "desc1": "Unlimited questions can be registered",
         "desc2": "All free plan features",
