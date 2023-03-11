@@ -21,7 +21,7 @@ export default function Page500() {
         container
         alignItems="center"
         justifyContent="center"
-        sx={{ mt: spaces.l }}
+        sx={{ mt: 13 }}
       >
         <Grid
           item

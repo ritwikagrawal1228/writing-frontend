@@ -64,6 +64,14 @@ a {
   --amplify-components-authenticator-state-inactive-background-color: var(--amplify-colors-background-tertiary);
 }
 
+.amplify-checkbox__button::before {
+  background-color: #e31837;
+}
+
+.amplify-checkbox__button--error::before {
+  background-color: #fff;
+}
+
 ::-moz-selection {
   color: #fff;
   background-color: #9768ee;
