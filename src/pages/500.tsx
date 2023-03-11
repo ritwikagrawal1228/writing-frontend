@@ -6,7 +6,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import { Grid, Paper, Typography } from '@mui/material'
 import { useTranslations } from 'next-intl'
 
-import LpNavBar from '@/components/templates/LpNavBar'
+import LpNavBar from '@/components/templates/lp/LpNavBar'
 import { fontSizes, spaces } from '@/themes/globalStyles'
 
 export default function Page500() {

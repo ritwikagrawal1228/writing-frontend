@@ -1,22 +1,25 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
-import { Box, Button, Typography } from '@mui/material'
-import Container from '@mui/material/Container'
+import { Container, useTheme } from '@mui/material'
 import { useTranslations } from 'next-intl'
 
-import LpNavBar from '@/components/templates/LpNavBar'
-import { Path } from '@/constants/Path'
+import { LpFeatures } from '@/components/templates/lp/LpFeatures'
+import { LpFooter } from '@/components/templates/lp/LpFooter'
+import { LpHead } from '@/components/templates/lp/LpHead'
+import LpNavBar from '@/components/templates/lp/LpNavBar'
+import { LpPricing } from '@/components/templates/lp/LpPricing'
+import { LpTrial } from '@/components/templates/lp/LpTrial'
+import { ColorModeContext } from '@/context/ColorMode'
 
 export default function Home() {
   const t = useTranslations('LP')
-  const router = useRouter()
-
-  const toAuthPage = () => {
-    router.push(Path.Auth)
+  const theme = useTheme()
+  if (theme.palette.mode === 'dark') {
+    const colorMode = React.useContext(ColorModeContext)
+    colorMode.toggleColorMode()
+    localStorage.setItem('theme', 'light')
   }
 
   return (
@@ -25,46 +28,12 @@ export default function Home() {
         <title>{t('title')}</title>
       </Head>
       <LpNavBar />
-      <Container
-        maxWidth="xl"
-        sx={{
-          backgroundImage: 'url(/img/lp/bg-darken.jpg)',
-          height: 700,
-          objectFit: 'cover',
-          textAlign: 'center',
-          position: 'relative',
-        }}
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '100%',
-            top: '30%',
-            left: 0,
-          }}
-        >
-          <Container maxWidth="md">
-            <Typography variant="h3" color="initial" fontWeight="bold">
-              {t('catch')}
-            </Typography>
-            <Typography
-              sx={{ mt: 5 }}
-              variant="body1"
-              color="initial"
-              fontWeight="bold"
-            >
-              {t('catchDescription')}
-            </Typography>
-            <Button
-              sx={{ mt: 5 }}
-              variant="contained"
-              endIcon={<DoubleArrowIcon />}
-              onClick={toAuthPage}
-            >
-              <b>Start Now</b>
-            </Button>
-          </Container>
-        </Box>
+      <Container maxWidth="lg">
+        <LpHead />
+        <LpFeatures />
+        <LpPricing />
+        <LpTrial />
+        <LpFooter />
       </Container>
     </>
   )

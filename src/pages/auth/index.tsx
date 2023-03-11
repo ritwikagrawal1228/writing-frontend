@@ -10,7 +10,7 @@ import { Amplify, withSSRContext } from 'aws-amplify'
 import '@aws-amplify/ui-react/styles.css'
 
 import awsExports from '@/aws-exports'
-import LpNavBar from '@/components/templates/LpNavBar'
+import LpNavBar from '@/components/templates/lp/LpNavBar'
 import { Path } from '@/constants/Path'
 
 Amplify.configure({ ...awsExports, ssr: true })

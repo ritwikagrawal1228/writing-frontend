@@ -1,8 +1,10 @@
 {
   "LP": {
     "title": "IELTS Writing Helper | Manage your essays for IELTS writing tasks",
-    "catch": "How do you manage your essays \n for IELTS writing tasks?",
-    "catchDescription": "This app helps you manage your essays for IELTS writing tasks. From writing essays to reviewing essays, it's all taken care of.",
+    "catch": "Make your IELTS writing study easier by\nusing online app",
+    "catchDescription": "This app helps you manage your essays for IELTS writing tasks.\nFrom writing essays to reviewing essays, it's all taken care of.",
+    "catch2": "Study and manage IELTS Writing on your laptop or tablet",
+    "catchDescription2": "You can study IELTS writing on your laptop or tablet.\n No more wasting paper on writing essays.",
     "language": "Language"
   },
   "Nav": {
@@ -81,7 +83,7 @@
   },
   "Answer": {
     "form": {
-      "startButton": "start",
+      "startButton": "Start",
       "startDialogTitle": "Do you want to start answering?",
       "startDialogDescription": "You can pause and resume after starting.\nWould you like to start answering this question?",
       "startMinUnit": "Minutes",
