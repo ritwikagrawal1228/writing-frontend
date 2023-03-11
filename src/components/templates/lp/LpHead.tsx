@@ -35,7 +35,7 @@ export const LpHead: FC = memo(() => {
         <Grid container sx={{ px: 0 }}>
           <Grid item xs={12} sx={{ textAlign: 'center' }}>
             <Typography variant="h4" fontWeight="bold">
-              {t('catch')}
+              {t('head.catch')}
             </Typography>
             <Button
               sx={{ mt: 5, mr: 1 }}
@@ -44,7 +44,7 @@ export const LpHead: FC = memo(() => {
               onClick={toScrollDown}
               color="secondary"
             >
-              <b>機能を見てみる</b>
+              <b>{t('head.seeMoreButton')}</b>
             </Button>
             <Button
               sx={{ mt: 5 }}
@@ -53,7 +53,7 @@ export const LpHead: FC = memo(() => {
               onClick={toAuthPage}
               color="secondary"
             >
-              <b>無料で開始する</b>
+              <b>{t('startFreeButton')}</b>
             </Button>
             <Box sx={{ mt: 5, ml: 20 }}>
               <img src="/img/lp/top.png" alt="top" height={600} />

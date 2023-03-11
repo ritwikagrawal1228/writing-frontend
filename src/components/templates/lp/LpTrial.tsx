@@ -3,10 +3,12 @@ import React, { FC, memo } from 'react'
 
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
 import { Box, Button, Typography } from '@mui/material'
+import { useTranslations } from 'next-intl'
 
 import { Path } from '@/constants/Path'
 
 export const LpTrial: FC = memo(() => {
+  const t = useTranslations('LP')
   const router = useRouter()
 
   const toAuthPage = () => {
@@ -16,7 +18,7 @@ export const LpTrial: FC = memo(() => {
   return (
     <Box sx={{ textAlign: 'center', mt: 15 }}>
       <Typography variant="h5" fontWeight="bold">
-        すぐに無料で体験することができます。
+        {t('trial.title')}
       </Typography>
       <br />
       <Button
@@ -25,7 +27,7 @@ export const LpTrial: FC = memo(() => {
         endIcon={<DoubleArrowIcon />}
         onClick={toAuthPage}
       >
-        <b>無料で始めてみる</b>
+        <b>{t('startFreeButton')}</b>
       </Button>
     </Box>
   )

@@ -9,11 +9,13 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
+import { useTranslations } from 'next-intl'
 
 import { Path } from '@/constants/Path'
 import { colors } from '@/themes/globalStyles'
 
 export const LpPricing: FC = memo(() => {
+  const t = useTranslations('LP')
   const router = useRouter()
 
   const toAuthPage = () => {
@@ -22,27 +24,27 @@ export const LpPricing: FC = memo(() => {
 
   const tiers = [
     {
-      title: 'Free',
+      title: t('pricing.free.title'),
       price: '0',
       description: [
-        '10問まで登録可能',
-        '回答数に上限なし',
-        '文法やスペルミスの自動提案機能',
+        t('pricing.free.desc1'),
+        t('pricing.free.desc2'),
+        t('pricing.free.desc3'),
       ],
-      buttonText: '無料で始める',
+      buttonText: t('pricing.free.button'),
       buttonVariant: 'outlined',
     },
     {
-      title: 'Pro',
-      subheader: '一番人気',
-      price: '891',
+      title: t('pricing.pro.title'),
+      subheader: t('pricing.pro.subheader'),
+      price: '0',
       description: [
-        'すべてのフリープランの機能',
-        '10問以上の問題を登録可能',
-        'AIによる解答提案機能',
-        '広告が非表示',
+        t('pricing.pro.desc1'),
+        t('pricing.pro.desc2'),
+        t('pricing.pro.desc3'),
+        t('pricing.pro.desc4'),
       ],
-      buttonText: '今すぐ始める',
+      buttonText: t('pricing.pro.button'),
       buttonVariant: 'contained',
     },
   ]
@@ -50,10 +52,10 @@ export const LpPricing: FC = memo(() => {
   return (
     <Box sx={{ textAlign: 'center', mt: 15 }}>
       <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }}>
-        料金プラン
+        {t('pricing.title')}
       </Typography>
       <Typography variant="body1" sx={{ mb: 4 }}>
-        IELTSライティングを低価格で効率的に学習
+        {t('pricing.desc')}
         <br />
         <br />
       </Typography>
@@ -93,7 +95,7 @@ export const LpPricing: FC = memo(() => {
                     ¥{tier.price}
                   </Typography>
                   <Typography variant="h6" color="text.secondary">
-                    /月
+                    /{t('pricing.monthUnit')}
                   </Typography>
                 </Box>
                 {tier.description.map((line) => (

@@ -5,10 +5,12 @@ import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
 import { Button } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
+import { useTranslations } from 'next-intl'
 
 import { Path } from '@/constants/Path'
 
 export const LpFeatures: FC = memo(() => {
+  const t = useTranslations('LP')
   const router = useRouter()
 
   const toAuthPage = () => {
@@ -29,14 +31,11 @@ export const LpFeatures: FC = memo(() => {
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h5" fontWeight="bold">
-            PCやタブレットでIELTSライティングを <br />
-            練習して保存、レビューができる。
+            {t('feature.title1')}
           </Typography>
           <br />
           <Typography variant="body1" fontWeight="bold">
-            もうノートにエッセイを書く必要はありません。 <br />
-            PCやタブレットでIELTSライティングを練習して効率的に保存、レビューができます。{' '}
-            <br />
+            {t('feature.desc1')}
           </Typography>
           <Button
             sx={{ mt: 5 }}
@@ -44,20 +43,16 @@ export const LpFeatures: FC = memo(() => {
             endIcon={<DoubleArrowIcon />}
             onClick={toAuthPage}
           >
-            <b>Start Free Trial</b>
+            <b>{t('startFreeButton')}</b>
           </Button>
         </Grid>
         <Grid item xs={5}>
           <Typography variant="h5" fontWeight="bold">
-            本番同様のデザインで <br />
-            問題を解くことができる。
-            <br />
+            {t('feature.title2')}
           </Typography>
           <br />
           <Typography variant="body1" fontWeight="bold">
-            問題を解くページは本番と同様のデザインかつ時間を計測できるためため、{' '}
-            <br />
-            本番同様の緊張感を味わうことができます。 <br />
+            {t('feature.desc2')}
             <br />
           </Typography>
           <Button
@@ -67,7 +62,7 @@ export const LpFeatures: FC = memo(() => {
             onClick={toAuthPage}
             color="secondary"
           >
-            <b>Start Free Trial</b>
+            <b>{t('startFreeButton')}</b>
           </Button>
         </Grid>
         <Grid item xs={6}>
@@ -78,12 +73,11 @@ export const LpFeatures: FC = memo(() => {
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h5" fontWeight="bold">
-            AIが自動で回答をレビューしてくれる。
+            {t('feature.title3')}
           </Typography>
           <br />
           <Typography variant="body1" fontWeight="bold">
-            今話題のOpen AIがあなたの回答をレビューし、 <br />
-            スコアアップのためのアドバイスしてくれます。 <br />
+            {t('feature.desc3')}
           </Typography>
           <Button
             sx={{ mt: 5 }}
@@ -91,7 +85,7 @@ export const LpFeatures: FC = memo(() => {
             onClick={toAuthPage}
             color="secondary"
           >
-            <b>Start Free Trial</b>
+            <b>{t('startFreeButton')}</b>
           </Button>
         </Grid>
       </Grid>

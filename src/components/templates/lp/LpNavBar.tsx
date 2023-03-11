@@ -31,12 +31,12 @@ type Props = {
 
 export default function LpNavBar({ isOnlyLogo = false }: Props) {
   const router = useRouter()
-  const pages = [
-    { label: '特徴', top: 1000 },
-    { label: '料金', top: 2500 },
-  ]
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('LP')
+  const pages = [
+    { label: t('menu.feature'), top: 1000 },
+    { label: t('menu.pricing'), top: 2500 },
+  ]
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -156,7 +156,7 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
                   ))}
                 </Box>
                 <Box sx={{ flexGrow: 0, mr: 5 }}>
-                  <Tooltip title="言語変更">
+                  <Tooltip title={t('menu.langTooltip')}>
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <TranslateIcon />
                       <Typography
