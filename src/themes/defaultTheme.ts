@@ -53,6 +53,13 @@ export const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
         },
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          whiteSpace: 'pre-wrap',
+        },
+      },
+    },
     MuiTextField: {
       defaultProps: {
         color: 'secondary',

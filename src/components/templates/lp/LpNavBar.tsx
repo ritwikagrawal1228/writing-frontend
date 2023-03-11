@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
 import MenuIcon from '@mui/icons-material/Menu'
 import TranslateIcon from '@mui/icons-material/Translate'
 import { Tooltip } from '@mui/material'
@@ -14,17 +13,13 @@ import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-
-import { Path } from '@/constants/Path'
-
 import Toolbar from '@mui/material/Toolbar'
 
-import { colors, fontSizes } from '@/themes/globalStyles'
+import { fontSizes } from '@/themes/globalStyles'
 
 import Typography from '@mui/material/Typography'
 import { useTranslations } from 'next-intl'
 
-const pages = ['Products', 'Pricing', 'Blog']
 const languages = {
   en: 'English',
   ja: '日本語',
@@ -38,10 +33,10 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
   const router = useRouter()
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
   const t = useTranslations('LP')
-
-  const toAuthPage = () => {
-    router.push(Path.Auth)
-  }
+  const pages = [
+    { label: t('menu.feature'), top: 1000 },
+    { label: t('menu.pricing'), top: 2500 },
+  ]
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -59,7 +54,21 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
     setAnchorElNav(null)
   }
 
+  const scroll = (top: number) => {
+    window.scrollTo({
+      top,
+      behavior: 'smooth',
+    })
+    setAnchorElNav(null)
+  }
+
   const handleCloseUserMenu = (lang: string) => {
+    setAnchorElUser(null)
+  }
+  const toggleLang = (lang: string) => {
+    if (lang === router.locale) {
+      return
+    }
     router.push(router.pathname, router.route, {
       locale: router.locales
         ? router.locales.filter((l) => l !== router.locale).join()
@@ -70,7 +79,7 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
 
   return (
     <>
-      <AppBar position="static" color="default" elevation={5}>
+      <AppBar position="fixed" color="default" elevation={0}>
         <Container maxWidth="lg">
           <Toolbar disableGutters>
             <Image src="/logo.png" height={30} width={48.54} alt="logo" />
@@ -124,11 +133,11 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
                   >
                     {pages.map((page) => (
                       <MenuItem
-                        key={page}
+                        key={page.label}
                         color="primary"
-                        onClick={handleCloseNavMenu}
+                        onClick={() => scroll(page.top)}
                       >
-                        <Typography textAlign="center">{page}</Typography>
+                        <Typography textAlign="center">{page.label}</Typography>
                       </MenuItem>
                     ))}
                   </Menu>
@@ -136,16 +145,18 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                   {pages.map((page) => (
                     <Button
-                      key={page}
-                      onClick={handleCloseNavMenu}
-                      sx={{ color: colors.base.black, display: 'block' }}
+                      key={page.label}
+                      onClick={() => scroll(page.top)}
+                      color="inherit"
+                      variant="text"
+                      sx={{ display: 'block' }}
                     >
-                      {page}
+                      {page.label}
                     </Button>
                   ))}
                 </Box>
                 <Box sx={{ flexGrow: 0, mr: 5 }}>
-                  <Tooltip title="Open settings">
+                  <Tooltip title={t('menu.langTooltip')}>
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <TranslateIcon />
                       <Typography
@@ -175,8 +186,9 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
                   >
                     {Object.keys(langs).map((lang) => (
                       <MenuItem
+                        disabled={router.locale === lang}
                         key={lang}
-                        onClick={() => handleCloseUserMenu(lang)}
+                        onClick={() => toggleLang(lang)}
                       >
                         <Typography textAlign="center">
                           {langs[lang]}
@@ -185,13 +197,6 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
                     ))}
                   </Menu>
                 </Box>
-                <Button
-                  variant="contained"
-                  endIcon={<DoubleArrowIcon />}
-                  onClick={toAuthPage}
-                >
-                  <b>Start Now</b>
-                </Button>
               </>
             )}
           </Toolbar>

@@ -1,9 +1,48 @@
 {
   "LP": {
-    "title": "IELTS Writing Helper | Manage your essays for IELTS writing tasks",
-    "catch": "How do you manage your essays \n for IELTS writing tasks?",
-    "catchDescription": "This app helps you manage your essays for IELTS writing tasks. From writing essays to reviewing essays, it's all taken care of.",
-    "language": "Language"
+    "title": "IELTS Writing Helper | IELTS Writing Task Management App",
+    "menu": {
+      "feature": "Feature",
+      "pricing": "Price",
+      "langTooltip": "Change language"
+    },
+    "startFreeButton": "Start for free",
+    "head": {
+      "catch": "Make your IELTS writing practice more efficient\n by using web app",
+      "seeMoreButton": "See more features"
+    },
+    "feature": {
+      "title1": "Practice, save, and review IELTS writing\non your PC or tablet.",
+      "desc1": "No more writing essays in notebooks.\nYou can practice IELTS writing on your PC or tablet and save and review efficiently.",
+      "title2": "You can solve the problem\n with a production-like design.",
+      "desc2": "Since the problem-solving page has the same design as the actual test and you can measure the time, you can enjoy the same tension as the real test situations.",
+      "title3": "AI automatically reviews your answers.",
+      "desc3": "The hottest Open AI will review your answers and give\nadvice to improve your score."
+    },
+    "pricing": {
+      "title": "Pricing Plan",
+      "desc": "Introducing pricing plans for IELTS Writing Helper.\nYou can learn IELTS writing efficiently at a low cost.",
+      "monthUnit": "month",
+      "free": {
+        "title": "Free Plan",
+        "desc1": "You can create up to 10 questions",
+        "desc2": "Unlimited number of responses",
+        "desc3": "Auto-suggest grammar and spelling mistakes",
+        "button": "Start for free"
+      },
+      "pro": {
+        "title": "Pro Plan",
+        "subheader": "Most popular",
+        "desc1": "Unlimited questions can be registered",
+        "desc2": "All free plan features",
+        "desc3": "Answer suggestions by AI",
+        "desc4": "Hide Ads",
+        "button": "Start now"
+      }
+    },
+    "trial": {
+      "title": "You can try it now for free."
+    }
   },
   "Nav": {
     "menu": {
@@ -81,7 +120,7 @@
   },
   "Answer": {
     "form": {
-      "startButton": "start",
+      "startButton": "Start",
       "startDialogTitle": "Do you want to start answering?",
       "startDialogDescription": "You can pause and resume after starting.\nWould you like to start answering this question?",
       "startMinUnit": "Minutes",

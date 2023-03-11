@@ -120,6 +120,7 @@ export const ProfileSettingForm: FC<Props> = memo(
               defaultValue=""
               render={({ field }) => (
                 <BaseInput
+                  disabled
                   labelText="Email"
                   {...field}
                   errMsg={errors.email?.message}
