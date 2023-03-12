@@ -6,19 +6,13 @@ import SaveIcon from '@mui/icons-material/Save'
 import { Box, Button, Paper } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
-
-import Layout from '@/components/templates/Layout'
-
 import { useTranslations } from 'next-intl'
-
-import { TitleBox } from '@/components/templates/common/TitleBox'
-
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-
-import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
-
 import { useDispatch } from 'react-redux'
 
+import Layout from '@/components/templates/Layout'
+import { TitleBox } from '@/components/templates/common/TitleBox'
+import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { problemService } from '@/services/problemService'

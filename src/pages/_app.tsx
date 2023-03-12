@@ -18,17 +18,15 @@ import NProgress from 'nprogress'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Provider } from 'react-redux'
 import { persistStore } from 'redux-persist'
-
-import awsExports from '@/aws-exports'
-
 import { PersistGate } from 'redux-persist/integration/react'
 
+import Page500 from './500'
+
+import awsExports from '@/aws-exports'
 import { ColorModeContext } from '@/context/ColorMode'
 import { useStore } from '@/store'
 import { getDesignTokens } from '@/themes/defaultTheme'
 import { onError } from '@/utils/onError'
-
-import Page500 from './500'
 
 Amplify.configure(awsExports)
 

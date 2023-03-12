@@ -11,4 +11,4 @@ export const answerStr = {
   ANSWER_IN_PROGRESS: 'In Progress',
 }
 
-export type AnswerStatus = typeof answerStatus[keyof typeof answerStatus]
+export type AnswerStatus = (typeof answerStatus)[keyof typeof answerStatus]
