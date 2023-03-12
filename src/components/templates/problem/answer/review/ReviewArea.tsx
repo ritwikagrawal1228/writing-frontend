@@ -13,12 +13,15 @@ import {
   Typography,
   Avatar,
   useTheme,
+  Modal,
 } from '@mui/material'
 import { useTranslations } from 'next-intl'
 
 import { MyReview } from './MyReview'
 
+import { Path } from '@/constants/Path'
 import { ProblemType1 } from '@/constants/ProblemType'
+import { UserPlanFree } from '@/constants/UserPlans'
 import { reviewService } from '@/services/reviewService'
 import { Answer } from '@/types/model/answer'
 import { Review } from '@/types/model/review'
@@ -33,6 +36,18 @@ interface TabPanelProps {
   children?: React.ReactNode
   index: number
   value: number
+}
+
+const style = {
+  position: 'absolute' as const,
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
 }
 
 function a11yProps(index: number) {
@@ -68,12 +83,21 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
   )
   const [isWaitingAiReview, setIsWaitingAiReview] = React.useState(false)
   const [isLoadingOwnReview, setIsLoadingOwnReview] = React.useState(false)
+  const [isModalShow, setIsModalShow] = React.useState(false)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
 
+  const handleModalClose = () => {
+    setIsModalShow(false)
+  }
+
   const sendReviewRequestToAI = () => {
+    if (user?.plan === UserPlanFree) {
+      setIsModalShow(true)
+      return
+    }
     setIsWaitingAiReview(true)
     reviewService
       .getAiReviewByAnswerId(answer.id, router.locale || 'ja')
@@ -103,6 +127,31 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
 
   return (
     <>
+      <Modal open={isModalShow} onClose={handleModalClose}>
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {ta('review.tabContentModalTitle')}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ my: 2 }}>
+            {ta('review.tabContentModalContent')}
+          </Typography>
+          <Button
+            color="inherit"
+            variant="outlined"
+            onClick={handleModalClose}
+            sx={{ mr: 1 }}
+          >
+            {ta('review.tabContentModalCancelBtn')}
+          </Button>
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() => router.push(Path.PaymentSubscription)}
+          >
+            {ta('review.tabContentModalUpgradeBtn')}
+          </Button>
+        </Box>
+      </Modal>
       <Paper sx={{ p: 2 }}>
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
