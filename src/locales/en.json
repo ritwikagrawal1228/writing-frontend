@@ -214,15 +214,15 @@
       "description": "Profile settings page",
       "saveButton": "Save"
     },
-    "payments": {
+    "payment": {
       "title": "Payment Settings",
       "description": "Payment settings page",
       "saveButton": "Save",
-      "currentPlan": "current plan",
+      "currentPlan": "Current plan",
       "planExpiresAt": "Valid until {data}",
       "currentCard": "Currently registered card",
       "noCard": "No card registered",
-      "cardNumber": "card number",
+      "cardNumber": "Card number",
       "cardExpiry": "Expiry date",
       "cardBrand": "CardBrand",
       "changeCardInfo": "Change card info",

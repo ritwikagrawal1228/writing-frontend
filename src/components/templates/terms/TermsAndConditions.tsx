@@ -88,10 +88,10 @@ export const TermsAndConditions: FC = memo(() => {
                 data-id="9d459c4e-c548-e5cb-7729-a118548965d2"
                 data-type="question"
               >
-                Ko Inoue
+                IELTS Writing Helper
               </bdt>
               <bdt className="block-component" />, doing business as{' '}
-              <bdt className="question">Ko Inoue</bdt>
+              <bdt className="question">IELTS Writing Helper</bdt>
               <bdt className="block-component" />
               <bdt className="statement-end-if-in-editor" /> (
               <bdt className="block-component" />"<strong>Company</strong>," "
@@ -334,12 +334,12 @@ export const TermsAndConditions: FC = memo(() => {
               between you, whether personally or on behalf of an entity (
               <bdt className="block-component" />"<strong>you</strong>"
               <bdt className="statement-end-if-in-editor" />
-              ), and <bdt className="question">Ko Inoue</bdt>, concerning your
-              access to and use of the Services. You agree that by accessing the
-              Services, you have read, understood, and agreed to be bound by all
-              of these Legal Terms. IF YOU DO NOT AGREE WITH ALL OF THESE LEGAL
-              TERMS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SERVICES
-              AND YOU MUST DISCONTINUE USE IMMEDIATELY.
+              ), and <bdt className="question">IELTS Writing Helper</bdt>,
+              concerning your access to and use of the Services. You agree that
+              by accessing the Services, you have read, understood, and agreed
+              to be bound by all of these Legal Terms. IF YOU DO NOT AGREE WITH
+              ALL OF THESE LEGAL TERMS, THEN YOU ARE EXPRESSLY PROHIBITED FROM
+              USING THE SERVICES AND YOU MUST DISCONTINUE USE IMMEDIATELY.
               <bdt className="block-component" />
             </span>
           </div>
@@ -5992,8 +5992,8 @@ export const TermsAndConditions: FC = memo(() => {
               >
                 <bdt className="statement-end-if-in-editor" />
               </span>
-              . <bdt className="question">Ko Inoue</bdt> and yourself
-              irrevocably consent that the courts of{' '}
+              . <bdt className="question">IELTS Writing Helper</bdt> and
+              yourself irrevocably consent that the courts of{' '}
               <span
                 style={{
                   fontSize: '11pt',
@@ -7175,7 +7175,7 @@ export const TermsAndConditions: FC = memo(() => {
             <span style={{ fontSize: 15 }}>
               <span style={{ color: 'rgb(89, 89, 89)' }}>
                 <bdt className="question">
-                  <strong>Ko Inoue</strong>
+                  <strong>IELTS Writing Helper</strong>
                 </bdt>
                 <strong>
                   <bdt className="block-component" />
