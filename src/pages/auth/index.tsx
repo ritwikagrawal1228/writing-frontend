@@ -35,21 +35,12 @@ Amplify.configure({ ...awsExports, ssr: true })
 export default function Auth() {
   const { user } = useAuthenticator()
   const route = useRouter()
-  const [open, setOpen] = React.useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-
   // Redirect After Sign In Success
   useEffect(() => {
     if (user) {
       route.push(Path.Problem)
     }
   }, [user])
-
-  const openTermModal = () => {
-    setOpen(true)
-    console.log('openTermModal')
-  }
 
   return (
     <>
@@ -69,7 +60,7 @@ export default function Auth() {
         }}
       >
         <Authenticator
-          initialState="signUp"
+          initialState="signIn"
           components={{
             SignUp: {
               FormFields() {
@@ -92,7 +83,6 @@ export default function Auth() {
                               href="/terms"
                               target="_blank"
                               style={{ textDecoration: 'underline' }}
-                              onClick={openTermModal}
                             >
                               Terms & Conditions
                             </a>
