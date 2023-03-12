@@ -9,7 +9,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm ci --production
+        - npm ci
     build:
       commands:
         - env | grep -e API_URL >> .env.production
