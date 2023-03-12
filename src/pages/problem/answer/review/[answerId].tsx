@@ -16,11 +16,9 @@ import {
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import { Storage, withSSRContext } from 'aws-amplify'
-
-import Layout from '@/components/templates/Layout'
-
 import { useTranslations } from 'next-intl'
 
+import Layout from '@/components/templates/Layout'
 import { ProblemDisplayPaper } from '@/components/templates/common/ProblemDisplayPaper'
 import { AnswerArea } from '@/components/templates/problem/answer/review/AnswerArea'
 import { ReviewArea } from '@/components/templates/problem/answer/review/ReviewArea'

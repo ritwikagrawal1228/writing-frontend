@@ -5,23 +5,15 @@ import React, { useEffect, useState } from 'react'
 import SaveIcon from '@mui/icons-material/Save'
 import { Box, Button, Grid, Paper, useTheme } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
-
-import Layout from '@/components/templates/Layout'
-
 import imageCompression from 'browser-image-compression'
-
-import { TitleBox } from '@/components/templates/common/TitleBox'
-
 import { useTranslations } from 'next-intl'
-
-import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
-
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-
-import { ProfileSettingForm } from '@/components/templates/settings/profile/ProfileSettingForm'
-
 import { useDispatch } from 'react-redux'
 
+import Layout from '@/components/templates/Layout'
+import { TitleBox } from '@/components/templates/common/TitleBox'
+import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
+import { ProfileSettingForm } from '@/components/templates/settings/profile/ProfileSettingForm'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { useProfileSettingDefaultFrom } from '@/hooks/useProfileSettingDefaultFrom'
 import { userService } from '@/services/userService'

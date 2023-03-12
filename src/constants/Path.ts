@@ -14,4 +14,5 @@ export enum Path {
   Tip = '/tip',
   PaymentSubscription = '/payment/subscription',
   Descriptors = '/descriptors/task2',
+  Privacy = '/privacy',
 }

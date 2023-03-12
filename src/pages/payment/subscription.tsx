@@ -13,24 +13,16 @@ import {
   TableBody,
 } from '@mui/material'
 import Table from '@mui/material/Table'
-
-import Layout from '@/components/templates/Layout'
-
 import { TokenResult } from '@square/web-payments-sdk-types'
-
-import { TitleBox } from '@/components/templates/common/TitleBox'
-
 import { withSSRContext } from 'aws-amplify'
-
-import { Path } from '@/constants/Path'
-
 import { useTranslations } from 'next-intl'
 import { useDispatch } from 'react-redux'
-
-import { subtotal, taxRate } from '@/constants/Price'
-
 import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
+import Layout from '@/components/templates/Layout'
+import { TitleBox } from '@/components/templates/common/TitleBox'
+import { Path } from '@/constants/Path'
+import { subtotal, taxRate } from '@/constants/Price'
 import { UserPlanFree } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'

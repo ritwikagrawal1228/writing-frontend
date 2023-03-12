@@ -1,3 +1,5 @@
+/* eslint-disable */
+// @ts-nocheck
 import React, { FC, memo } from 'react'
 
 export const TermsAndConditions: FC = memo(() => {

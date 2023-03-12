@@ -10,17 +10,8 @@ import Brightness4Icon from '@mui/icons-material/Brightness4'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import MenuIcon from '@mui/icons-material/Menu'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
-
-import { Path } from '@/constants/Path'
-
 import SettingsIcon from '@mui/icons-material/Settings'
-
-import { UserPlanFree } from '@/constants/UserPlans'
-
 import TranslateIcon from '@mui/icons-material/Translate'
-
-import { ColorModeContext } from '@/context/ColorMode'
-
 import {
   Alert,
   AppBar,
@@ -45,18 +36,17 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-
-import { RootState } from '@/store'
-
 import { useTranslations } from 'next-intl'
-
-import { commonSlice } from '@/store/common'
-
 import { useSelector, useDispatch } from 'react-redux'
 
-import { colors } from '@/themes/globalStyles'
-
 import { ProfileAvatar } from '../parts/common/ProfileAvatar'
+
+import { Path } from '@/constants/Path'
+import { UserPlanFree } from '@/constants/UserPlans'
+import { ColorModeContext } from '@/context/ColorMode'
+import { RootState } from '@/store'
+import { commonSlice } from '@/store/common'
+import { colors } from '@/themes/globalStyles'
 
 type LayoutProps = {
   title: string

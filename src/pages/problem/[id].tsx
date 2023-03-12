@@ -2,24 +2,10 @@ import { GetServerSidePropsContext } from 'next'
 import { useRouter } from 'next/router'
 import React, { Fragment, useEffect, useState } from 'react'
 
-import Layout from '@/components/templates/Layout'
-
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
-
-import { TitleBox } from '@/components/templates/common/TitleBox'
-
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-
-import { answerStatus, answerStr } from '@/constants/AnswerStatus'
-
 import EditIcon from '@mui/icons-material/Edit'
-
-import { Path } from '@/constants/Path'
-
 import MenuOpenIcon from '@mui/icons-material/MenuOpen'
-
-import { ProblemType, ProblemType1 } from '@/constants/ProblemType'
-
 import {
   Box,
   Button,
@@ -47,19 +33,18 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-
 import { Storage, withSSRContext } from 'aws-amplify'
-
-import { answerService } from '@/services/answerService'
-
 import { useTranslations } from 'next-intl'
-
-import { problemService } from '@/services/problemService'
-
 import { useDispatch } from 'react-redux'
 
+import Layout from '@/components/templates/Layout'
+import { TitleBox } from '@/components/templates/common/TitleBox'
+import { answerStatus, answerStr } from '@/constants/AnswerStatus'
+import { Path } from '@/constants/Path'
+import { ProblemType, ProblemType1 } from '@/constants/ProblemType'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { answerService } from '@/services/answerService'
+import { problemService } from '@/services/problemService'
 import { commonSlice } from '@/store/common'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'

@@ -17,10 +17,9 @@ import { Storage } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 import { useDispatch } from 'react-redux'
 
-import { ProblemDescriptionGrid } from '@/components/templates/common/ProblemDescriptionGrid'
-
 import { ProblemDisplayPaper } from '../../common/ProblemDisplayPaper'
 
+import { ProblemDescriptionGrid } from '@/components/templates/common/ProblemDescriptionGrid'
 import { Stopwatch } from '@/components/templates/common/Stopwatch'
 import { AnswerStatus, answerStatus } from '@/constants/AnswerStatus'
 import { commonSlice } from '@/store/common'

@@ -23,27 +23,17 @@ import {
 } from '@mui/material'
 import { TokenResult } from '@square/web-payments-sdk-types'
 import { withSSRContext } from 'aws-amplify'
-
-import Layout from '@/components/templates/Layout'
-
 import { format } from 'date-fns'
-
-import { TitleBox } from '@/components/templates/common/TitleBox'
-
 import { ja, enUS } from 'date-fns/locale'
-
-import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
-
 import { useTranslations } from 'next-intl'
-
-import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
-
 import { useDispatch } from 'react-redux'
-
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-
 import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
+import Layout from '@/components/templates/Layout'
+import { TitleBox } from '@/components/templates/common/TitleBox'
+import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
+import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
 import { commonSlice } from '@/store/common'
 import { userSlice } from '@/store/user'

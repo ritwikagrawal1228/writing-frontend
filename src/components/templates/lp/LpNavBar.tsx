@@ -14,11 +14,10 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
-
-import { fontSizes } from '@/themes/globalStyles'
-
 import Typography from '@mui/material/Typography'
 import { useTranslations } from 'next-intl'
+
+import { fontSizes } from '@/themes/globalStyles'
 
 const languages = {
   en: 'English',
