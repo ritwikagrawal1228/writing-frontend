@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography'
 import { useTranslations } from 'next-intl'
 
 import { Path } from '@/constants/Path'
+import { subtotal, taxRate } from '@/constants/Price'
 import { colors } from '@/themes/globalStyles'
 
 export const LpPricing: FC = memo(() => {
@@ -37,7 +38,7 @@ export const LpPricing: FC = memo(() => {
     {
       title: t('pricing.pro.title'),
       subheader: t('pricing.pro.subheader'),
-      price: '0',
+      price: subtotal + subtotal / taxRate,
       description: [
         t('pricing.pro.desc1'),
         t('pricing.pro.desc2'),
