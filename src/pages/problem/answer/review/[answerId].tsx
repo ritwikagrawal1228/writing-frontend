@@ -82,7 +82,7 @@ export default function AnswerReview({
 
   return (
     <Layout
-      title={ta('review.title') + answerModel.problem.title}
+      title={`${ta('review.title')} | ${answerModel.problem.title}`}
       description={ta('review.description')}
       breadcrumbs={[
         { label: t('list.title'), href: Path.Problem },

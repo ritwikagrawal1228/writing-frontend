@@ -149,9 +149,9 @@
     "review": {
       "title": "Review",
       "description": "Answer review page | IELTS Writing Helper",
-      "colPart": "part",
+      "colPart": "Part",
       "colWords": "Required number of words",
-      "colWordCount": "word count",
+      "colWordCount": "Word count",
       "colTime": "Set time",
       "colSpentTime": "Elapsed time",
       "wordUnit": "word",

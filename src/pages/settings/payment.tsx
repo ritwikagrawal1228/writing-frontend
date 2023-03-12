@@ -111,10 +111,10 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
     setIsConfirmShow(false)
   }
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
     setIsConfirmShow(false)
-    squareService
+    await squareService
       .cancelSubscription()
       .then(({ data }) => {
         dispatch(
@@ -127,10 +127,14 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
         if (!user) {
           return
         }
-        user.subscriptionExpiresAt = data.cancelCurrentSubscription
-        dispatch(userSlice.actions.updateUser(user))
+        dispatch(
+          userSlice.actions.updateUser({
+            ...user,
+            subscriptionExpiresAt: data.cancelCurrentSubscription,
+          }),
+        )
       })
-      .catch(() => {
+      .catch((err) => {
         dispatch(
           commonSlice.actions.updateSnackBar({
             isSnackbarShow: true,
@@ -171,19 +175,6 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
                     label={user?.plan === userPlans[0] ? 'Free' : '👑 Pro'}
                     sx={{ mr: 2 }}
                   />
-                  {user?.subscriptionExpiresAt && (
-                    <>
-                      {t('payment.planExpiresAt', {
-                        date: format(
-                          new Date(user?.subscriptionExpiresAt),
-                          'yyyy/M/d',
-                          {
-                            locale: router.locale === 'ja' ? ja : enUS,
-                          },
-                        ),
-                      })}
-                    </>
-                  )}
                 </Typography>
                 <Divider sx={{ my: 3 }} />
                 <Typography

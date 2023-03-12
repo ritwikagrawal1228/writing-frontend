@@ -14,7 +14,7 @@ export const ProfileAvatar: FC<Props> = memo(({ user }) => {
   const [avatarImg, setAvatarImg] = useState<string>('')
 
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.profileImageKey) {
       return
     }
     Storage.get(user.profileImageKey)
@@ -30,10 +30,8 @@ export const ProfileAvatar: FC<Props> = memo(({ user }) => {
     <>
       {avatarImg ? (
         <Avatar src={avatarImg}></Avatar>
-      ) : user?.name ? (
-        <Avatar {...stringAvatar(user?.name || 'E I')} />
       ) : (
-        <Avatar />
+        <Avatar {...stringAvatar(user?.name || 'E I')} />
       )}
     </>
   )

@@ -73,7 +73,7 @@
       "editMenu": "編集",
       "deleteMenu": "削除",
       "deleteConfirmTitle": "本当にこの問題を削除しますか？",
-      "deleteConfirmDescription": "この操作は取り消すことができません。 \n 問題とその問題に紐づく全てのエッセイが完全に削除されます。",
+      "deleteConfirmDescription": "この操作は取り消すことができません。 \n 問題とその問題に紐づく全ての回答が完全に削除されます。",
       "deleteConfirmCancelBtn": "キャンセル",
       "deleteConfirmDeleteBtn": "削除",
       "answer": {

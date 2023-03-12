@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
-import { Box, Button, Grid, Paper, useTheme } from '@mui/material'
+import { Box, Button, Grid, Paper } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
 import { useTranslations } from 'next-intl'
@@ -26,12 +26,10 @@ type Props = {
 }
 export default function ProfileSetting({ userStr }: Props) {
   const { user } = useGetAuthUser(userStr)
-  const theme = useTheme()
   const t = useTranslations('Setting')
   const router = useRouter()
   const [photo, setPhoto] = useState<File | string | undefined>('')
   const { profileSettingForm } = useProfileSettingDefaultFrom(user)
-  const [isAlertShow, setIsAlertShow] = useState(false)
   const dispatch = useDispatch()
 
   const methods = useForm<UpdateProfileSettingForm>({
@@ -40,7 +38,7 @@ export default function ProfileSetting({ userStr }: Props) {
   })
 
   useEffect(() => {
-    if (user && typeof photo === 'string') {
+    if (user && user.profileImageKey && typeof photo === 'string') {
       Storage.get(user.profileImageKey)
         .then((res) => {
           setPhoto(res)
@@ -66,6 +64,10 @@ export default function ProfileSetting({ userStr }: Props) {
         compPhoto,
       )
       form.profileImageKey = res.key
+    }
+
+    if (!photo) {
+      form.profileImageKey = ''
     }
 
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
