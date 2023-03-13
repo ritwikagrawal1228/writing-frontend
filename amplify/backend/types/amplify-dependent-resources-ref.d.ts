@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
     "auth": {
-        "iwhd1ae75c2": {
+        "iwh83d9142b": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "HostedUIDomain": "string",
@@ -12,17 +12,8 @@ export type AmplifyDependentResourcesAttributes = {
             "AppClientID": "string"
         }
     },
-    "function": {
-        "iwhd1ae75c2CustomMessage": {
-            "Name": "string",
-            "Arn": "string",
-            "LambdaExecutionRole": "string",
-            "Region": "string",
-            "LambdaExecutionRoleArn": "string"
-        }
-    },
     "storage": {
-        "s330d70d1a": {
+        "iwhSrotage": {
             "BucketName": "string",
             "Region": "string"
         }
