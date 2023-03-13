@@ -111,6 +111,16 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
     setIsConfirmShow(false)
   }
 
+  const report = (eventName: string) => {
+    const TRACKING_ID = process.env.NEXT_PUBLIC_GA4_TRACKING_ID as string
+    if (TRACKING_ID || !router.isPreview) {
+      gtag('event', eventName, {
+        page_path: window.location.pathname,
+        send_to: TRACKING_ID,
+      })
+    }
+  }
+
   const handleConfirm = async () => {
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
     setIsConfirmShow(false)
@@ -133,6 +143,7 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
             subscriptionExpiresAt: data.cancelCurrentSubscription,
           }),
         )
+        report('refund')
       })
       .catch((err) => {
         dispatch(

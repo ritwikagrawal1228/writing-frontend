@@ -1,19 +1,12 @@
-import { useRouter } from 'next/router'
 import React, { FC, memo } from 'react'
 
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useTranslations } from 'next-intl'
 
-import { Path } from '@/constants/Path'
+import { StartButton } from '@/components/parts/lp/StartButton'
 
 export const LpTrial: FC = memo(() => {
   const t = useTranslations('LP')
-  const router = useRouter()
-
-  const toAuthPage = () => {
-    router.push(Path.Auth)
-  }
 
   return (
     <Box sx={{ textAlign: 'center', mt: 15 }}>
@@ -21,14 +14,7 @@ export const LpTrial: FC = memo(() => {
         {t('trial.title')}
       </Typography>
       <br />
-      <Button
-        sx={{ mt: 2 }}
-        variant="outlined"
-        endIcon={<DoubleArrowIcon />}
-        onClick={toAuthPage}
-      >
-        <b>{t('startFreeButton')}</b>
-      </Button>
+      <StartButton sx={{ mt: 2 }} />
     </Box>
   )
 })

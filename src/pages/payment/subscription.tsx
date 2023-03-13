@@ -38,6 +38,8 @@ type Props = {
   }
 }
 
+const TRACKING_ID = process.env.NEXT_PUBLIC_GA4_TRACKING_ID as string
+
 export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
   useGetAuthUser(userStr)
   const t = useTranslations('Payment')
@@ -48,6 +50,12 @@ export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
   const submit = async (token: TokenResult) => {
     if (!token.token) {
       return
+    }
+    if (TRACKING_ID || !router.isPreview) {
+      gtag('event', 'in_app_purchase', {
+        page_path: window.location.pathname,
+        send_to: TRACKING_ID,
+      })
     }
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
     const { data } = await squareService.subscribePaidPlan(token.token)

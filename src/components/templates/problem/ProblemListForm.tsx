@@ -173,7 +173,7 @@ export const ProblemListForm: FC<Props> = memo(
                 </FormLabel>
               </Grid>
               <Button
-                variant="outlined"
+                variant="contained"
                 color="secondary"
                 component="label"
                 startIcon={<AddPhotoAlternateOutlinedIcon />}

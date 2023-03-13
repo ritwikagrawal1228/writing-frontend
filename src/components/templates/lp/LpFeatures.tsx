@@ -1,12 +1,12 @@
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { FC, memo } from 'react'
 
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
-import { Button } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { useTranslations } from 'next-intl'
 
+import { StartButton } from '@/components/parts/lp/StartButton'
 import { Path } from '@/constants/Path'
 
 export const LpFeatures: FC = memo(() => {
@@ -27,7 +27,12 @@ export const LpFeatures: FC = memo(() => {
         rowSpacing={15}
       >
         <Grid item xs={5}>
-          <img src="/img/lp/programming1.png" alt="feature1" height={400} />
+          <Image
+            src="/img/lp/programming1.png"
+            height={400}
+            width={400}
+            alt="pc & tablet"
+          />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h5" fontWeight="bold">
@@ -37,14 +42,7 @@ export const LpFeatures: FC = memo(() => {
           <Typography variant="body1" fontWeight="bold">
             {t('feature.desc1')}
           </Typography>
-          <Button
-            sx={{ mt: 5 }}
-            variant="outlined"
-            endIcon={<DoubleArrowIcon />}
-            onClick={toAuthPage}
-          >
-            <b>{t('startFreeButton')}</b>
-          </Button>
+          <StartButton sx={{ mt: 5 }} variant="outlined" />
         </Grid>
         <Grid item xs={5}>
           <Typography variant="h5" fontWeight="bold">
@@ -55,21 +53,23 @@ export const LpFeatures: FC = memo(() => {
             {t('feature.desc2')}
             <br />
           </Typography>
-          <Button
-            sx={{ mt: 5 }}
-            variant="outlined"
-            endIcon={<DoubleArrowIcon />}
-            onClick={toAuthPage}
-            color="secondary"
-          >
-            <b>{t('startFreeButton')}</b>
-          </Button>
+          <StartButton sx={{ mt: 5 }} variant="outlined" color="secondary" />
         </Grid>
         <Grid item xs={6}>
-          <img src="/img/lp/frontFrameAnswer.png" alt="feature2" height={350} />
+          <Image
+            src="/img/lp/frontFrameAnswer.png"
+            height={350}
+            width={574}
+            alt="pc"
+          />
         </Grid>
         <Grid item xs={6}>
-          <img src="/img/lp/feature3.svg" alt="feature3" height={350} />
+          <Image
+            src="/img/lp/feature3.svg"
+            height={350}
+            width={473}
+            alt="review"
+          />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h5" fontWeight="bold">
@@ -79,14 +79,7 @@ export const LpFeatures: FC = memo(() => {
           <Typography variant="body1" fontWeight="bold">
             {t('feature.desc3')}
           </Typography>
-          <Button
-            sx={{ mt: 5 }}
-            endIcon={<DoubleArrowIcon />}
-            onClick={toAuthPage}
-            color="secondary"
-          >
-            <b>{t('startFreeButton')}</b>
-          </Button>
+          <StartButton sx={{ mt: 5 }} color="secondary" />
         </Grid>
       </Grid>
     </>
