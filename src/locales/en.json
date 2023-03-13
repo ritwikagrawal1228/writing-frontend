@@ -47,6 +47,11 @@
       "title": "You can try it now for free."
     }
   },
+  "Auth": {
+    "termQuestion": "I agree to the ",
+    "termLink": "Terms & Conditions?",
+    "termErrorMsg": "You must agree to the terms and conditions."
+  },
   "Nav": {
     "menu": {
       "problem": "Problem List",

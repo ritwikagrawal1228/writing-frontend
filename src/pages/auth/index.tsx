@@ -8,10 +8,10 @@ import {
   CheckboxField,
   useAuthenticator,
 } from '@aws-amplify/ui-react'
-import Box from '@mui/material/Box'
-import { Amplify, withSSRContext } from 'aws-amplify'
-
+import { Container, Skeleton, Box } from '@mui/material'
 import '@aws-amplify/ui-react/styles.css'
+import { Amplify, withSSRContext, I18n, Auth } from 'aws-amplify'
+import { useTranslations } from 'next-intl'
 
 import awsExports from '@/aws-exports'
 import LpNavBar from '@/components/templates/lp/LpNavBar'
@@ -30,15 +30,48 @@ const style = {
   overflow: 'auto',
 }
 
+const TRACKING_ID = process.env.NEXT_PUBLIC_GA4_TRACKING_ID as string
 Amplify.configure({ ...awsExports, ssr: true })
 
-export default function Auth() {
+export default function AuthPage() {
   const { user } = useAuthenticator()
-  const route = useRouter()
+  const router = useRouter()
+  const t = useTranslations('Auth')
+
+  const report = (eventName: string) => {
+    if (TRACKING_ID || !router.isPreview) {
+      gtag('event', eventName, {
+        page_path: window.location.pathname,
+        send_to: TRACKING_ID,
+      })
+    }
+  }
+
+  I18n.setLanguage(router.locale)
+  const dict = {
+    ja: {
+      'Sign In': 'ログイン',
+      'Sign In with Google': 'Googleでログイン',
+      'Sign in': 'ログイン',
+      'Sign Up with Google': 'Googleでアカウント作成',
+      'Create Account': 'アカウント作成',
+      Email: 'メールアドレス',
+      'Enter your Email': 'メールアドレスを入力してください',
+      Password: 'パスワード',
+      'Enter your Password': 'パスワードを入力してください',
+      'Forgot your password?': 'パスワードを忘れた場合',
+      'Confirm Password': 'パスワード確認',
+      'Please confirm your Password': 'パスワードを再度入力してください',
+      Name: '名前 (ニックネーム)',
+      'Enter your Name': '名前を入力してください',
+    },
+  }
+
+  I18n.putVocabularies(dict)
   // Redirect After Sign In Success
   useEffect(() => {
     if (user) {
-      route.push(Path.Problem)
+      router.push(Path.Problem)
     }
   }, [user])
 
@@ -78,13 +111,13 @@ export default function Auth() {
                       label={
                         <>
                           <p>
-                            I agree with the{' '}
+                            {t('termQuestion')}
                             <a
                               href="/terms"
                               target="_blank"
                               style={{ textDecoration: 'underline' }}
                             >
-                              Terms & Conditions
+                              {t('termLink')}
                             </a>
                           </p>
                         </>
@@ -96,15 +129,38 @@ export default function Auth() {
             },
           }}
           services={{
+            async handleSignUp(formData) {
+              report('sign_up')
+              return Auth.signUp(formData)
+            },
+            async handleSignIn(formData) {
+              report('login')
+              return Auth.signIn(formData)
+            },
             async validateCustomSignUp(formData) {
               if (!formData.acknowledgement) {
                 return {
-                  acknowledgement: 'You must agree to the Terms & Conditions',
+                  acknowledgement: t('termErrorMsg'),
                 }
               }
             },
           }}
-        />
+        >
+          {({ signOut, user }) => (
+            <Box
+              component="main"
+              sx={{
+                minHeight: 'calc(100vh - 64px)',
+                backgroundColor: (theme) => theme.palette.background.default,
+                color: (theme) => theme.palette.text.primary,
+              }}
+            >
+              <Container maxWidth="lg" sx={{ pt: '30px' }}>
+                <Skeleton variant="rounded" width={1152} height={460} />
+              </Container>
+            </Box>
+          )}
+        </Authenticator>
       </Box>
     </>
   )

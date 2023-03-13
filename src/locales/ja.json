@@ -47,6 +47,11 @@
       "title": "すぐに無料で体験することができます。"
     }
   },
+  "Auth": {
+    "termQuestion": "利用規約に同意しますか？",
+    "termLink": "利用規約",
+    "termErrorMsg": "利用規約に同意してください。"
+  },
   "Nav": {
     "menu": {
       "problem": "問題",
