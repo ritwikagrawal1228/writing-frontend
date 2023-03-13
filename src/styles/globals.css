@@ -1,0 +1,83 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-transform: none !important;
+}
+
+body:lang(ja) {
+  font-family: 'Yu Gothic Medium', '游ゴシック Medium', 'YuGothic', '游ゴシック体', 'ヒラギノ角ゴ Pro W3', 'メイリオ', 'sans-serif';
+}
+
+body:lang(en) {
+  font-family: helvetica, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+}
+
+
+.amplify-button[data-variation='primary'] {
+  background: linear-gradient(
+    to right,
+    var(--amplify-colors-red-80),
+    var(--amplify-colors-red-40)
+  );
+}
+
+[data-amplify-authenticator] {
+  --amplify-components-button-primary-background-color: var(--amplify-colors-red-60);
+  --amplify-components-button-primary-active-background-color: var(--amplify-colors-red-60);
+  --amplify-components-button-primary-visited-background-color: var(--amplify-colors-red-60);
+  --amplify-components-button-primary-focus-background-color: var(--amplify-colors-red-60);
+  --amplify-components-button-primary-hover-background-color: var(--amplify-colors-red-40);
+  --amplify-components-button-link-color: var(--amplify-colors-red-60);
+  --amplify-components-button-link-hover-color: var(--amplify-colors-red-60);
+  --amplify-components-button-link-focus-color: var(--amplify-colors-red-60);
+  --amplify-components-button-link-active-color: peachpuff;
+  --amplify-components-button-link-hover-background-color: peachpuff;
+  --amplify-components-button-link-active-background-color: var(--amplify-colors-red-40);
+  --amplify-components-tabs-item-active-color: var(--amplify-colors-red-60);
+  --amplify-components-tabs-item-hover-color: var(--amplify-colors-red-60);
+  --amplify-components-tabs-item-active-border-color: var(--amplify-colors-red-60);
+  --amplify-components-tabs-item-background-color	: var(--amplify-colors-neutral-90);
+  --amplify-components-tabs-item-disabled-background-color: var(--amplify-colors-neutral-90);
+  --amplify-components-authenticator-state-inactive-background-color: var(--amplify-colors-background-tertiary);
+}
+
+.amplify-checkbox__button::before {
+  background-color: #e31837;
+}
+
+.amplify-checkbox__button--error::before {
+  background-color: #fff;
+}
+
+::-moz-selection {
+  color: #fff;
+  background-color: #9768ee;
+}
+
+::selection {
+  color: #fff;
+  background-color: #9768ee;
+}

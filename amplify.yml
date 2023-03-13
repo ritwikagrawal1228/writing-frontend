@@ -1,0 +1,32 @@
+version: 4
+backend:
+  phases:
+    build:
+      commands:
+        - '# Execute Amplify CLI with the helper script'
+        - amplifyPush --simple
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - env | grep -e API_URL >> .env.production
+        - env | grep -e AMPLIFY_GOOGLE_CLIENT_ID >> .env.production
+        - env | grep -e AMPLIFY_GOOGLE_CLIENT_SECRET >> .env.production
+        - env | grep -e AMPLIFY_BACKEND_APP_ID >> .env.production
+        - env | grep -e USER_BRANCH >> .env.production
+        - env | grep -e SQUARE_APPLICATION_ID >> .env.production
+        - env | grep -e SQUARE_ACCESS_TOKEN >> .env.production
+        - env | grep -e SQUARE_LOCATION_ID >> .env.production
+        - env | grep -e GRAMMARLY_CLIENT_ID >> .env.production
+        - env | grep -e NEXT_PUBLIC_GA4_TRACKING_ID >> .env.production
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
