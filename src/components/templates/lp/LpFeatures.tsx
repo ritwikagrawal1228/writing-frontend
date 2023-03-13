@@ -2,12 +2,11 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { FC, memo } from 'react'
 
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
-import { Button } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { useTranslations } from 'next-intl'
 
+import { StartButton } from '@/components/parts/lp/StartButton'
 import { Path } from '@/constants/Path'
 
 export const LpFeatures: FC = memo(() => {
@@ -43,14 +42,7 @@ export const LpFeatures: FC = memo(() => {
           <Typography variant="body1" fontWeight="bold">
             {t('feature.desc1')}
           </Typography>
-          <Button
-            sx={{ mt: 5 }}
-            variant="outlined"
-            endIcon={<DoubleArrowIcon />}
-            onClick={toAuthPage}
-          >
-            <b>{t('startFreeButton')}</b>
-          </Button>
+          <StartButton sx={{ mt: 5 }} variant="outlined" />
         </Grid>
         <Grid item xs={5}>
           <Typography variant="h5" fontWeight="bold">
@@ -61,15 +53,7 @@ export const LpFeatures: FC = memo(() => {
             {t('feature.desc2')}
             <br />
           </Typography>
-          <Button
-            sx={{ mt: 5 }}
-            variant="outlined"
-            endIcon={<DoubleArrowIcon />}
-            onClick={toAuthPage}
-            color="secondary"
-          >
-            <b>{t('startFreeButton')}</b>
-          </Button>
+          <StartButton sx={{ mt: 5 }} variant="outlined" color="secondary" />
         </Grid>
         <Grid item xs={6}>
           <Image
@@ -95,14 +79,7 @@ export const LpFeatures: FC = memo(() => {
           <Typography variant="body1" fontWeight="bold">
             {t('feature.desc3')}
           </Typography>
-          <Button
-            sx={{ mt: 5 }}
-            endIcon={<DoubleArrowIcon />}
-            onClick={toAuthPage}
-            color="secondary"
-          >
-            <b>{t('startFreeButton')}</b>
-          </Button>
+          <StartButton sx={{ mt: 5 }} color="secondary" />
         </Grid>
       </Grid>
     </>

@@ -1,21 +1,14 @@
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import React, { FC, memo } from 'react'
 
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { useTranslations } from 'next-intl'
 
-import { Path } from '@/constants/Path'
+import { StartButton } from '@/components/parts/lp/StartButton'
 
 export const LpHead: FC = memo(() => {
   const t = useTranslations('LP')
-  const router = useRouter()
-
-  const toAuthPage = () => {
-    router.push(Path.Auth)
-  }
 
   const toScrollDown = () => {
     window.scrollTo({
@@ -47,15 +40,7 @@ export const LpHead: FC = memo(() => {
             >
               <b>{t('head.seeMoreButton')}</b>
             </Button>
-            <Button
-              sx={{ mt: 5 }}
-              variant="contained"
-              endIcon={<DoubleArrowIcon />}
-              onClick={toAuthPage}
-              color="secondary"
-            >
-              <b>{t('startFreeButton')}</b>
-            </Button>
+            <StartButton sx={{ mt: 5 }} color="secondary" variant="contained" />
             <Box sx={{ mt: 5, ml: 20 }}>
               <Image
                 src="/img/lp/top.png"

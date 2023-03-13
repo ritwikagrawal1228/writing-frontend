@@ -13,11 +13,7 @@ import { LpPricing } from '@/components/templates/lp/LpPricing'
 import { LpTrial } from '@/components/templates/lp/LpTrial'
 import { ColorModeContext } from '@/context/ColorMode'
 
-type Props = {
-  host: string
-}
-
-export default function Home({ host }: Props = { host: '' }) {
+export default function Home() {
   const t = useTranslations('LP')
   const theme = useTheme()
   if (theme.palette.mode === 'dark') {

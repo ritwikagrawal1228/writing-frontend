@@ -23,6 +23,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import Page500 from './500'
 
 import awsExports from '@/aws-exports'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 import { ColorModeContext } from '@/context/ColorMode'
 import { useStore } from '@/store'
 import { getDesignTokens } from '@/themes/defaultTheme'
@@ -79,6 +80,7 @@ export default function App({ Component, pageProps }: AppProps) {
               <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <ErrorBoundary FallbackComponent={Page500} onError={onError}>
+                  <GoogleAnalytics />
                   <Component {...pageProps} />
                 </ErrorBoundary>
               </ThemeProvider>
