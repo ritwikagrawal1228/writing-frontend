@@ -26,6 +26,12 @@ export default function Home() {
     <>
       <Head>
         <title>{t('title')}</title>
+        <meta property="description" content={t('description')} />
+        <meta property="og:title" content={t('title')} />
+        <meta property="og:description" content={t('description')} />
+        <meta property="og:site_name" content={t('siteName')} />
+        <meta property="og:image" content="/ogp.png" />
+        <meta property="og:url" content={t('url')} />
       </Head>
       <LpNavBar />
       <Container maxWidth="lg">
@@ -42,6 +48,8 @@ export default function Home() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context
   return {
-    props: { messages: require(`@/locales/${locale}.json`) },
+    props: {
+      messages: require(`@/locales/${locale}.json`),
+    },
   }
 }

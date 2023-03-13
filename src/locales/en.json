@@ -1,6 +1,9 @@
 {
   "LP": {
-    "title": "IELTS Writing Helper | IELTS Writing Task Management App",
+    "url": "https://ielts-writing-helper.com",
+    "siteName": "IELTS Writing Helper",
+    "title": "IELTS Writing Helper | IELTS Writing learning efficiency App",
+    "description": "IELTS Writing Helper is a web app for efficient IELTS writing learning. Create IELTS Writing questions, save and review your answers. Also, AI will review your answers and give you advice to improve your score.",
     "menu": {
       "feature": "Feature",
       "pricing": "Price",
@@ -43,6 +46,11 @@
     "trial": {
       "title": "You can try it now for free."
     }
+  },
+  "Auth": {
+    "termQuestion": "I agree to the ",
+    "termLink": "Terms & Conditions?",
+    "termErrorMsg": "You must agree to the terms and conditions."
   },
   "Nav": {
     "menu": {

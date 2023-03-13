@@ -12,7 +12,6 @@ import {
   CircularProgress,
   Paper,
   Snackbar,
-  useTheme,
 } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
@@ -35,7 +34,6 @@ type Props = {
 
 export default function ProblemCreate({ userStr }: Props) {
   const { user } = useGetAuthUser(userStr)
-  const theme = useTheme()
   const t = useTranslations('Problem')
   const [photo, setPhoto] = useState<File | undefined>(undefined)
   const router = useRouter()
