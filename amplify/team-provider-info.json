@@ -1,31 +1,4 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-iwh-dev-162640-authRole",
-      "UnauthRoleArn": "arn:aws:iam::596211650892:role/amplify-iwh-dev-162640-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::596211650892:role/amplify-iwh-dev-162640-authRole",
-      "Region": "ap-northeast-1",
-      "DeploymentBucketName": "amplify-iwh-dev-162640-deployment",
-      "UnauthRoleName": "amplify-iwh-dev-162640-unauthRole",
-      "StackName": "amplify-iwh-dev-162640",
-      "StackId": "arn:aws:cloudformation:ap-northeast-1:596211650892:stack/amplify-iwh-dev-162640/02c78890-6a37-11ed-b91f-0aeb0471bf8d",
-      "AmplifyAppId": "d3uee20obi6sqw"
-    },
-    "categories": {
-      "auth": {
-        "iwh83d9142b": {}
-      },
-      "storage": {
-        "iwhSrotage": {}
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d3uee20obi6sqw",
-          "type": "cicd"
-        }
-      }
-    }
-  },
   "main": {
     "awscloudformation": {
       "AuthRoleName": "amplify-writingfrontend-main-74543-authRole",
@@ -51,6 +24,15 @@
           "deploymentBucketName": "amplify-writingfrontend-main-74543-deployment",
           "s3Key": "amplify-builds/iwhd1ae75c2CustomMessage-3052414e3050486c7938-build.zip"
         }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3uee20obi6sqw",
+          "type": "cicd"
+        }
+      },
+      "storage": {
+        "s330d70d1a": {}
       }
     }
   },
@@ -78,6 +60,33 @@
       },
       "storage": {
         "iwhSrotage": {}
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-iwh-dev-162640-authRole",
+      "UnauthRoleArn": "arn:aws:iam::596211650892:role/amplify-iwh-dev-162640-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::596211650892:role/amplify-iwh-dev-162640-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-iwh-dev-162640-deployment",
+      "UnauthRoleName": "amplify-iwh-dev-162640-unauthRole",
+      "StackName": "amplify-iwh-dev-162640",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:596211650892:stack/amplify-iwh-dev-162640/02c78890-6a37-11ed-b91f-0aeb0471bf8d",
+      "AmplifyAppId": "d3uee20obi6sqw"
+    },
+    "categories": {
+      "auth": {
+        "iwh83d9142b": {}
+      },
+      "storage": {
+        "iwhSrotage": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3uee20obi6sqw",
+          "type": "cicd"
+        }
       }
     }
   }
