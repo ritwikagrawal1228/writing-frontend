@@ -1,8 +1,18 @@
 {
   "auth": {
-    "iwh83d9142b": {
+    "iwhd1ae75c2": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "iwhd1ae75c2CustomMessage",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -30,14 +40,60 @@
       "service": "Cognito"
     }
   },
+  "function": {
+    "iwhd1ae75c2CustomMessage": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "hosting": {
     "amplifyhosting": {
-      "lastPushTimeStamp": "2022-12-10T07:19:28.441Z",
       "service": "amplifyhosting",
       "type": "cicd"
     }
   },
   "parameters": {
+    "AMPLIFY_function_iwhd1ae75c2CustomMessage_EMAILMESSAGE": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iwhd1ae75c2CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_iwhd1ae75c2CustomMessage_EMAILSUBJECT": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iwhd1ae75c2CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_iwhd1ae75c2CustomMessage_REDIRECTURL": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iwhd1ae75c2CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_iwhd1ae75c2CustomMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iwhd1ae75c2CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_iwhd1ae75c2CustomMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iwhd1ae75c2CustomMessage"
+        }
+      ]
+    },
     "AMPLIFY_hosting_amplifyhosting_appId": {
       "usedBy": [
         {
@@ -56,7 +112,7 @@
     }
   },
   "storage": {
-    "iwhSrotage": {
+    "s330d70d1a": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
