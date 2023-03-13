@@ -5,9 +5,9 @@ const nextConfig = {
   i18n: {
     locales: ['en', 'ja'],
     defaultLocale: 'en',
-    localeDetection: false,
+    localeDetection: true,
   },
-  asyncheaders() {
+  async headers() {
     return [
       {
         source: '/(.*)',
@@ -30,4 +30,5 @@ const nextConfig = {
   },
 }
 
+// eslint-disable-next-line no-undef
 module.exports = nextConfig

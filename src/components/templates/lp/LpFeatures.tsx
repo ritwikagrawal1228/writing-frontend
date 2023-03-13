@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { FC, memo } from 'react'
 
@@ -27,7 +28,12 @@ export const LpFeatures: FC = memo(() => {
         rowSpacing={15}
       >
         <Grid item xs={5}>
-          <img src="/img/lp/programming1.png" alt="feature1" height={400} />
+          <Image
+            src="/img/lp/programming1.png"
+            height={400}
+            width={400}
+            alt="pc & tablet"
+          />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h5" fontWeight="bold">
@@ -66,10 +72,20 @@ export const LpFeatures: FC = memo(() => {
           </Button>
         </Grid>
         <Grid item xs={6}>
-          <img src="/img/lp/frontFrameAnswer.png" alt="feature2" height={350} />
+          <Image
+            src="/img/lp/frontFrameAnswer.png"
+            height={350}
+            width={574}
+            alt="pc"
+          />
         </Grid>
         <Grid item xs={6}>
-          <img src="/img/lp/feature3.svg" alt="feature3" height={350} />
+          <Image
+            src="/img/lp/feature3.svg"
+            height={350}
+            width={473}
+            alt="review"
+          />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h5" fontWeight="bold">

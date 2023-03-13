@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { FC, memo } from 'react'
 
@@ -56,7 +57,14 @@ export const LpHead: FC = memo(() => {
               <b>{t('startFreeButton')}</b>
             </Button>
             <Box sx={{ mt: 5, ml: 20 }}>
-              <img src="/img/lp/top.png" alt="top" height={600} />
+              <Image
+                src="/img/lp/top.png"
+                height={600}
+                width={1070}
+                alt="top"
+                priority
+                quality={50}
+              />
             </Box>
           </Grid>
         </Grid>
