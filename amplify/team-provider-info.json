@@ -1,4 +1,31 @@
 {
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-iwh-prod-00859-authRole",
+      "UnauthRoleArn": "arn:aws:iam::596211650892:role/amplify-iwh-prod-00859-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::596211650892:role/amplify-iwh-prod-00859-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-iwh-prod-00859-deployment",
+      "UnauthRoleName": "amplify-iwh-prod-00859-unauthRole",
+      "StackName": "amplify-iwh-prod-00859",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:596211650892:stack/amplify-iwh-prod-00859/6b5a6900-c1fc-11ed-b90c-0ee4efc3dac1",
+      "AmplifyAppId": "d3uee20obi6sqw"
+    },
+    "categories": {
+      "auth": {
+        "iwh83d9142b": {}
+      },
+      "storage": {
+        "iwhSrotage": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3uee20obi6sqw",
+          "type": "cicd"
+        }
+      }
+    }
+  },
   "staging": {
     "awscloudformation": {
       "AuthRoleName": "amplify-iwh-staging-162737-authRole",
@@ -56,7 +83,8 @@
         "iwhd1ae75c2CustomMessage": {}
       },
       "auth": {
-        "iwhd1ae75c2": {}
+        "iwhd1ae75c2": {},
+        "iwh83d9142b": {}
       }
     }
   }
