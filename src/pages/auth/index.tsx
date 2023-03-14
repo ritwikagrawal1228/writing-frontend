@@ -3,15 +3,10 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 
-import {
-  Authenticator,
-  CheckboxField,
-  useAuthenticator,
-} from '@aws-amplify/ui-react'
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react'
 import { Container, Skeleton, Box } from '@mui/material'
 import '@aws-amplify/ui-react/styles.css'
-import { Amplify, withSSRContext, I18n, Auth } from 'aws-amplify'
-import { useTranslations } from 'next-intl'
+import { Amplify, withSSRContext, I18n } from 'aws-amplify'
 
 import awsExports from '@/aws-exports'
 import LpNavBar from '@/components/templates/lp/LpNavBar'
@@ -30,22 +25,11 @@ const style = {
   overflow: 'auto',
 }
 
-const TRACKING_ID = process.env.NEXT_PUBLIC_GA4_TRACKING_ID as string
 Amplify.configure({ ...awsExports, ssr: true })
 
 export default function AuthPage() {
   const { user } = useAuthenticator()
   const router = useRouter()
-  const t = useTranslations('Auth')
-
-  const report = (eventName: string) => {
-    if (TRACKING_ID || !router.isPreview) {
-      gtag('event', eventName, {
-        page_path: window.location.pathname,
-        send_to: TRACKING_ID,
-      })
-    }
-  }
 
   I18n.setLanguage(router.locale)
   const dict = {
@@ -83,69 +67,11 @@ export default function AuthPage() {
       <LpNavBar isOnlyLogo={true} />
       <Box
         sx={{
-          width: '100% !important',
           mt: 8,
-          mx: '0 !important',
           pt: 8,
-          backgroundColor: 'var(--amplify-colors-border-tertiary)',
-          height: '100vh',
-          mb: 8,
         }}
       >
-        <Authenticator
-          initialState="signIn"
-          components={{
-            SignUp: {
-              FormFields() {
-                const { validationErrors } = useAuthenticator()
-
-                return (
-                  <>
-                    <Authenticator.SignUp.FormFields />
-
-                    <CheckboxField
-                      errorMessage={validationErrors.acknowledgement as string}
-                      hasError={!!validationErrors.acknowledgement}
-                      name="acknowledgement"
-                      value="yes"
-                      label={
-                        <>
-                          <p>
-                            {t('termQuestion')}
-                            <a
-                              href="/terms"
-                              target="_blank"
-                              style={{ textDecoration: 'underline' }}
-                            >
-                              {t('termLink')}
-                            </a>
-                          </p>
-                        </>
-                      }
-                    />
-                  </>
-                )
-              },
-            },
-          }}
-          services={{
-            async handleSignUp(formData) {
-              report('sign_up')
-              return Auth.signUp(formData)
-            },
-            async handleSignIn(formData) {
-              report('login')
-              return Auth.signIn(formData)
-            },
-            async validateCustomSignUp(formData) {
-              if (!formData.acknowledgement) {
-                return {
-                  acknowledgement: t('termErrorMsg'),
-                }
-              }
-            },
-          }}
-        >
+        <Authenticator initialState="signIn">
           {({ signOut, user }) => (
             <Box
               component="main"
