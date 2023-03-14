@@ -1,7 +1,7 @@
 {
-  "resourceName": "iwhSrotage",
-  "policyUUID": "64d580a4",
-  "bucketName": "iwhc3b2ffa4426543f9b7bf8b1a368a87a7",
+  "resourceName": "iwh",
+  "policyUUID": "b8532502",
+  "bucketName": "iwh-dev",
   "storageAccess": "auth",
   "guestAccess": [],
   "authAccess": [

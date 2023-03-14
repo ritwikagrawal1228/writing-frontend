@@ -1,6 +1,14 @@
 export type AmplifyDependentResourcesAttributes = {
+    "function": {
+        "ieltswritinghelper755b7ddaCustomMessage": {
+            "Name": "string",
+            "Arn": "string",
+            "LambdaExecutionRole": "string",
+            "Region": "string"
+        }
+    },
     "auth": {
-        "iwh83d9142b": {
+        "ieltswritinghelper755b7dda": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "HostedUIDomain": "string",
@@ -13,7 +21,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "storage": {
-        "iwhSrotage": {
+        "iwh": {
             "BucketName": "string",
             "Region": "string"
         }

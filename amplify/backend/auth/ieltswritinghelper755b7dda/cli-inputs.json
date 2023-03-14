@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "iwh83d9142b_identitypool_83d9142b",
+    "identityPoolName": "ieltswritinghelper755b7dda_identitypool_755b7dda",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "iwh83d9142b",
-    "userPoolName": "iwh83d9142b_userpool_83d9142b",
+    "resourceNameTruncated": "ieltsw755b7dda",
+    "userPoolName": "ieltswritinghelper755b7dda_userpool_755b7dda",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -26,50 +26,37 @@
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [],
-    "userpoolClientReadAttributes": [],
-    "userpoolClientLambdaRole": "iwh83d83d9142b_userpoolclient_lambda_role",
+    "userpoolClientWriteAttributes": [
+      "email"
+    ],
+    "userpoolClientReadAttributes": [
+      "email"
+    ],
+    "userpoolClientLambdaRole": "ieltsw755b7dda_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "83d9142b",
-    "resourceName": "iwh83d9142b",
+    "sharedId": "755b7dda",
+    "resourceName": "ieltswritinghelper755b7dda",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "manual",
+    "useDefault": "defaultSocial",
     "hostedUI": true,
     "usernameAttributes": [
       "email"
     ],
-    "triggers": {},
+    "triggers": {
+      "CustomMessage": [
+        "verification-link"
+      ]
+    },
     "hostedUIDomainName": "ielts-writing-helper",
     "authProvidersUserPool": [
       "Google"
     ],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"sub\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.ielts-writing-helper.com/auth/\"],\"LogoutURLs\":[\"https://dev.ielts-writing-helper.com/\"]}",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
+    "verificationBucketName": "ieltswritinghelper755b7ddaverificationbucket",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true,
-    "authRoleArn": {
-      "Fn::GetAtt": [
-        "AuthRole",
-        "Arn"
-      ]
-    },
-    "unauthRoleArn": {
-      "Fn::GetAtt": [
-        "UnauthRole",
-        "Arn"
-      ]
-    },
-    "breakCircularDependency": true,
-    "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://ielts-writing-helper.com/auth/\"],\"LogoutURLs\":[\"https://ielts-writing-helper.com/\"]}",
-    "parentStack": {
-      "Ref": "AWS::StackId"
-    },
-    "permissions": [],
-    "userPoolGroups": false,
-    "adminQueries": false,
-    "thirdPartyAuth": false,
-    "authProviders": []
+    "useEnabledMfas": true
   }
-}
+} 
