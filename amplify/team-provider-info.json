@@ -39,6 +39,9 @@
       "AmplifyAppId": "d3uee20obi6sqw"
     },
     "categories": {
+      "auth": {
+        "iwh83d9142b": {}
+      },
       "hosting": {
         "amplifyhosting": {
           "appId": "d3uee20obi6sqw",
@@ -47,13 +50,6 @@
       },
       "storage": {
         "iwhSrotage": {}
-      },
-      "function": {
-        "iwhd1ae75c2CustomMessage": {}
-      },
-      "auth": {
-        "iwhd1ae75c2": {},
-        "iwh83d9142b": {}
       }
     }
   },
