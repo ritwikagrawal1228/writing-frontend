@@ -7,15 +7,10 @@ import Typography from '@mui/material/Typography'
 import { useTranslations } from 'next-intl'
 
 import { StartButton } from '@/components/parts/lp/StartButton'
-import { Path } from '@/constants/Path'
 
 export const LpFeatures: FC = memo(() => {
   const t = useTranslations('LP')
   const router = useRouter()
-
-  const toAuthPage = () => {
-    router.push(Path.Auth)
-  }
 
   return (
     <>
@@ -26,7 +21,7 @@ export const LpFeatures: FC = memo(() => {
         justifyContent="center"
         rowSpacing={{ xs: 15, md: 5 }}
       >
-        <Grid item sx={{ display: { xs: 'none' } }} md={5}>
+        <Grid item sx={{ display: { xs: 'none', md: 'block' } }} md={5}>
           <Image
             src="/img/lp/programming1.png"
             height={400}
@@ -55,7 +50,7 @@ export const LpFeatures: FC = memo(() => {
           </Typography>
           <StartButton sx={{ mt: 5 }} variant="outlined" color="secondary" />
         </Grid>
-        <Grid item xs={6} sx={{ display: { xs: 'none' } }}>
+        <Grid item xs={6} sx={{ display: { xs: 'none', md: 'block' } }}>
           <Image
             src="/img/lp/frontFrameAnswer.png"
             height={350}
@@ -63,7 +58,7 @@ export const LpFeatures: FC = memo(() => {
             alt="pc"
           />
         </Grid>
-        <Grid item xs={6} sx={{ display: { xs: 'none' } }}>
+        <Grid item xs={6} sx={{ display: { xs: 'none', md: 'block' } }}>
           <Image
             src="/img/lp/feature3.svg"
             height={350}
