@@ -21,12 +21,12 @@ export const LpFeatures: FC = memo(() => {
     <>
       <Grid
         container
-        sx={{ mt: 15 }}
+        sx={{ mt: { xs: 0, md: 15 } }}
         alignItems="center"
         justifyContent="center"
-        rowSpacing={15}
+        rowSpacing={{ xs: 15, md: 5 }}
       >
-        <Grid item xs={5}>
+        <Grid item sx={{ display: { xs: 'none' } }} md={5}>
           <Image
             src="/img/lp/programming1.png"
             height={400}
@@ -34,7 +34,7 @@ export const LpFeatures: FC = memo(() => {
             alt="pc & tablet"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Typography variant="h5" fontWeight="bold">
             {t('feature.title1')}
           </Typography>
@@ -44,7 +44,7 @@ export const LpFeatures: FC = memo(() => {
           </Typography>
           <StartButton sx={{ mt: 5 }} variant="outlined" />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12} md={5}>
           <Typography variant="h5" fontWeight="bold">
             {t('feature.title2')}
           </Typography>
@@ -55,7 +55,7 @@ export const LpFeatures: FC = memo(() => {
           </Typography>
           <StartButton sx={{ mt: 5 }} variant="outlined" color="secondary" />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} sx={{ display: { xs: 'none' } }}>
           <Image
             src="/img/lp/frontFrameAnswer.png"
             height={350}
@@ -63,7 +63,7 @@ export const LpFeatures: FC = memo(() => {
             alt="pc"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} sx={{ display: { xs: 'none' } }}>
           <Image
             src="/img/lp/feature3.svg"
             height={350}
@@ -71,7 +71,7 @@ export const LpFeatures: FC = memo(() => {
             alt="review"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Typography variant="h5" fontWeight="bold">
             {t('feature.title3')}
           </Typography>
