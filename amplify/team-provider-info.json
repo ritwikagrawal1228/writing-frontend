@@ -22,15 +22,6 @@
       "auth": {
         "ieltswritinghelper755b7dda": {}
       },
-      "function": {
-        "ieltswritinghelper755b7ddaCustomMessage": {
-          "REDIRECTURL": "",
-          "EMAILSUBJECT": "",
-          "EMAILMESSAGE": "",
-          "deploymentBucketName": "amplify-ieltswritinghelper-dev-201428-deployment",
-          "s3Key": "amplify-builds/ieltswritinghelper755b7ddaCustomMessage-457077746f2b7442486a-build.zip"
-        }
-      },
       "storage": {
         "iwh": {}
       }
