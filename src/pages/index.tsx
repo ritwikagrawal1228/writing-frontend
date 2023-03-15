@@ -32,6 +32,11 @@ export default function Home() {
         <meta property="og:site_name" content={t('siteName')} />
         <meta property="og:image" content="/ogp.png" />
         <meta property="og:url" content={t('url')} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@ieltswritingapp" />
+        <meta name="twitter:title" content={t('title')} />
+        <meta name="twitter:description" content={t('description')} />
+        <meta name="twitter:image" content="/ogp.png" />
       </Head>
       <LpNavBar />
       <Container maxWidth="lg">
