@@ -298,7 +298,9 @@ export const TermsAndConditions: FC = memo(() => {
               You can contact us by{' '}
               <bdt className="block-component">
                 email at{' '}
-                <bdt className="question">kjustininoue1996@gmail.com</bdt>
+                <bdt className="question">
+                  ielts.writing.helper.info@gmail.com
+                </bdt>
                 <bdt className="block-component" /> or by mail to{' '}
                 <bdt className="question">Tokyo</bdt>
                 <bdt className="block-component" />,{' '}
@@ -1182,12 +1184,15 @@ export const TermsAndConditions: FC = memo(() => {
               If you wish to make any use of the Services, Content, or Marks
               other than as set out in this section or elsewhere in our Legal
               Terms, please address your request to:{' '}
-              <bdt className="question">kjustininoue1996@gmail.com</bdt>. If we
-              ever grant you the permission to post, reproduce, or publicly
-              display any part of our Services or Content, you must identify us
-              as the owners or licensors of the Services, Content, or Marks and
-              ensure that any copyright or proprietary notice appears or is
-              visible on posting, reproducing, or displaying our Content.
+              <bdt className="question">
+                ielts.writing.helper.info@gmail.com
+              </bdt>
+              . If we ever grant you the permission to post, reproduce, or
+              publicly display any part of our Services or Content, you must
+              identify us as the owners or licensors of the Services, Content,
+              or Marks and ensure that any copyright or proprietary notice
+              appears or is visible on posting, reproducing, or displaying our
+              Content.
             </span>
           </div>
         </div>
@@ -2342,7 +2347,9 @@ export const TermsAndConditions: FC = memo(() => {
           >
             <span style={{ fontSize: 15 }}>
               If you are unsatisfied with our Services, please email us at{' '}
-              <bdt className="question">kjustininoue1996@gmail.com</bdt>
+              <bdt className="question">
+                ielts.writing.helper.info@gmail.com
+              </bdt>
               <bdt className="block-component" />.
               <bdt className="statement-end-if-in-editor" />
             </span>
@@ -7315,7 +7322,9 @@ export const TermsAndConditions: FC = memo(() => {
                 }}
               >
                 <strong>
-                  <bdt className="question">kjustininoue1996@gmail.com</bdt>
+                  <bdt className="question">
+                    ielts.writing.helper.info@gmail.com
+                  </bdt>
                 </strong>
               </span>
             </strong>

@@ -183,7 +183,10 @@ export const PrivacyPolicy: FC = memo(() => {
                   and choices. If you do not agree with our policies and
                   practices, please do not use our Services. If you still have
                   any questions or concerns, please contact us at{' '}
-                  <bdt className="question">kjustininoue1996@gmail.com</bdt>.
+                  <bdt className="question">
+                    ielts.writing.helper.info@gmail.com
+                  </bdt>
+                  .
                 </span>
               </span>
             </span>
@@ -6535,7 +6538,7 @@ export const PrivacyPolicy: FC = memo(() => {
                                                                         email us
                                                                         at{' '}
                                                                         <bdt className="question">
-                                                                          kjustininoue1996@gmail.com
+                                                                          ielts.writing.helper.info@gmail.com
                                                                         </bdt>
                                                                         .
                                                                       </span>
@@ -7503,7 +7506,7 @@ export const PrivacyPolicy: FC = memo(() => {
                                                                               us
                                                                               at{' '}
                                                                               <bdt className="question">
-                                                                                kjustininoue1996@gmail.com
+                                                                                ielts.writing.helper.info@gmail.com
                                                                               </bdt>
                                                                               <bdt className="statement-end-if-in-editor" />
                                                                             </span>
