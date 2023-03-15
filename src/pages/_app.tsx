@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import { Amplify } from 'aws-amplify'
 import { NextIntlProvider } from 'next-intl'
+import { DefaultSeo } from 'next-seo'
 import NProgress from 'nprogress'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Provider } from 'react-redux'
@@ -81,6 +82,33 @@ export default function App({ Component, pageProps }: AppProps) {
                 <CssBaseline />
                 <ErrorBoundary FallbackComponent={Page500} onError={onError}>
                   <GoogleAnalytics />
+                  <DefaultSeo
+                    defaultTitle="IELTS Writing Helper | IELTSライティング学習効率化アプリ"
+                    canonical="https://ielts-writing-helper.com"
+                    description="IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。"
+                    twitter={{
+                      handle: '@ieltswritingapp',
+                      site: '@ieltswritingapp',
+                      cardType: 'summary_large_image',
+                    }}
+                    openGraph={{
+                      type: 'website',
+                      title:
+                        'IELTS Writing Helper | IELTSライティング学習効率化アプリ',
+                      description:
+                        'IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。',
+                      site_name: 'IELTS Writing Helper',
+                      url: 'https://ielts-writing-helper.com',
+                      images: [
+                        {
+                          url: 'https://ielts-writing-helper.com/ogp.png',
+                          width: 800,
+                          height: 600,
+                          alt: 'IELTS Writing Helper | IELTSライティング学習効率化アプリ',
+                        },
+                      ],
+                    }}
+                  />
                   <Component {...pageProps} />
                 </ErrorBoundary>
               </ThemeProvider>
