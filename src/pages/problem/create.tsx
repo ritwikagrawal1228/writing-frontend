@@ -45,6 +45,9 @@ export default function ProblemCreate({ userStr }: Props) {
   const methods = useForm<CreateProblemForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
+    defaultValues: {
+      taskType: 'Type_#Task1',
+    },
   })
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 {
   "auth": {
-    "iwhd1ae75c2": {
+    "ieltswritinghelper755b7dda": {
       "customAuth": false,
       "dependsOn": [
         {
@@ -26,9 +26,7 @@
           "EMAIL",
           "NAME"
         ],
-        "socialProviders": [
-          "GOOGLE"
-        ],
+        "socialProviders": [],
         "usernameAttributes": [
           "EMAIL"
         ],
@@ -40,13 +38,7 @@
       "service": "Cognito"
     }
   },
-  "function": {
-    "iwhd1ae75c2CustomMessage": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
+  "function": {},
   "hosting": {
     "amplifyhosting": {
       "service": "amplifyhosting",
@@ -112,7 +104,7 @@
     }
   },
   "storage": {
-    "s330d70d1a": {
+    "iwh": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
