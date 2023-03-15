@@ -27,34 +27,6 @@ export default function Home() {
       <Head>
         <title>{t('title')}</title>
         <meta property="description" content={t('description')} />
-        <meta
-          property="og:title"
-          content="IELTS Writing Helper | IELTSライティング学習効率化アプリ"
-        />
-        <meta
-          property="og:description"
-          content="IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。"
-        />
-        <meta property="og:site_name" content="IELTS Writing Helper" />
-        <meta
-          property="og:image"
-          content="https://ielts-writing-helper.com/ogp.png"
-        />
-        <meta property="og:url" content="https://ielts-writing-helper.com" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="@ieltswritingapp" />
-        <meta
-          name="twitter:title"
-          content="IELTS Writing Helper | IELTSライティング学習効率化アプリ"
-        />
-        <meta
-          name="twitter:description"
-          content="IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。"
-        />
-        <meta
-          name="twitter:image"
-          content="https://ielts-writing-helper.com/ogp.png"
-        />
       </Head>
       <LpNavBar />
       <Container maxWidth="lg">
