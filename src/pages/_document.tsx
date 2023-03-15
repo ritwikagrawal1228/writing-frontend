@@ -5,6 +5,11 @@ export default function Document() {
     <Html prefix="og: http://ogp.me/ns#">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8180463044271530"
+          crossOrigin="anonymous"
+        ></script>
       </Head>
       <body>
         <Main />
