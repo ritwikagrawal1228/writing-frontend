@@ -1,13 +1,7 @@
 {
-<<<<<<<< HEAD:amplify/backend/storage/iwh/cli-inputs.json
   "resourceName": "iwh",
   "policyUUID": "b8532502",
   "bucketName": "iwh-dev",
-========
-  "resourceName": "s330d70d1a",
-  "policyUUID": "30d70d1a",
-  "bucketName": "iwh759db285a78a47aca6b4df0c90224aee",
->>>>>>>> main:amplify/backend/storage/s330d70d1a/cli-inputs.json
   "storageAccess": "auth",
   "guestAccess": [],
   "authAccess": [

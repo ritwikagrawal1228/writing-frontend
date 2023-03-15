@@ -1,17 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-<<<<<<<< HEAD:amplify/backend/auth/ieltswritinghelper755b7dda/cli-inputs.json
     "identityPoolName": "ieltswritinghelper755b7dda_identitypool_755b7dda",
     "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "ieltsw755b7dda",
     "userPoolName": "ieltswritinghelper755b7dda_userpool_755b7dda",
-========
-    "identityPoolName": "iwhd1ae75c2_identitypool_d1ae75c2",
-    "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "iwhd1ae75c2",
-    "userPoolName": "iwhd1ae75c2_userpool_d1ae75c2",
->>>>>>>> main:amplify/backend/auth/iwhd1ae75c2/cli-inputs.json
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -39,7 +32,6 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-<<<<<<<< HEAD:amplify/backend/auth/ieltswritinghelper755b7dda/cli-inputs.json
     "userpoolClientLambdaRole": "ieltsw755b7dda_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "sharedId": "755b7dda",
@@ -54,31 +46,6 @@
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "verificationBucketName": "ieltswritinghelper755b7ddaverificationbucket",
-========
-    "userpoolClientLambdaRole": "iwhd1ad1ae75c2_userpoolclient_lambda_role",
-    "userpoolClientSetAttributes": false,
-    "sharedId": "d1ae75c2",
-    "resourceName": "iwhd1ae75c2",
-    "authSelections": "identityPoolAndUserPool",
-    "useDefault": "defaultSocial",
-    "hostedUI": true,
-    "usernameAttributes": [
-      "email"
-    ],
-    "triggers": {
-      "CustomMessage": [
-        "verification-link"
-      ]
-    },
-    "hostedUIDomainName": "iwhd1ae75c2-d1ae75c2",
-    "authProvidersUserPool": [
-      "Google"
-    ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"username\":\"sub\"}}]",
-    "userPoolGroupList": [],
-    "serviceName": "Cognito",
-    "verificationBucketName": "iwhd1ae75c2verificationbucket",
->>>>>>>> main:amplify/backend/auth/iwhd1ae75c2/cli-inputs.json
     "usernameCaseSensitive": false,
     "useEnabledMfas": true,
     "authRoleArn": {
