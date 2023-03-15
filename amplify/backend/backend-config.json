@@ -2,17 +2,7 @@
   "auth": {
     "ieltswritinghelper755b7dda": {
       "customAuth": false,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "iwhd1ae75c2CustomMessage",
-          "triggerProvider": "Cognito"
-        }
-      ],
+      "dependsOn": [],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -46,46 +36,6 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_iwhd1ae75c2CustomMessage_EMAILMESSAGE": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "iwhd1ae75c2CustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_iwhd1ae75c2CustomMessage_EMAILSUBJECT": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "iwhd1ae75c2CustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_iwhd1ae75c2CustomMessage_REDIRECTURL": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "iwhd1ae75c2CustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_iwhd1ae75c2CustomMessage_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "iwhd1ae75c2CustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_iwhd1ae75c2CustomMessage_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "iwhd1ae75c2CustomMessage"
-        }
-      ]
-    },
     "AMPLIFY_hosting_amplifyhosting_appId": {
       "usedBy": [
         {
