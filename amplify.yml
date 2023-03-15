@@ -13,8 +13,6 @@ frontend:
     build:
       commands:
         - env | grep -e API_URL >> .env.production
-        - env | grep -e AMPLIFY_GOOGLE_CLIENT_ID >> .env.production
-        - env | grep -e AMPLIFY_GOOGLE_CLIENT_SECRET >> .env.production
         - env | grep -e AMPLIFY_BACKEND_APP_ID >> .env.production
         - env | grep -e USER_BRANCH >> .env.production
         - env | grep -e SQUARE_APPLICATION_ID >> .env.production
