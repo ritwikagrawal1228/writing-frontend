@@ -1,4 +1,31 @@
 {
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ieltswritinghelper-main-21718-authRole",
+      "UnauthRoleArn": "arn:aws:iam::596211650892:role/amplify-ieltswritinghelper-main-21718-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::596211650892:role/amplify-ieltswritinghelper-main-21718-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-ieltswritinghelper-main-21718-deployment",
+      "UnauthRoleName": "amplify-ieltswritinghelper-main-21718-unauthRole",
+      "StackName": "amplify-ieltswritinghelper-main-21718",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:596211650892:stack/amplify-ieltswritinghelper-main-21718/8337c1e0-c2d7-11ed-9ee4-0ed264277887",
+      "AmplifyAppId": "d1q7wtedd3tgaw"
+    },
+    "categories": {
+      "auth": {
+        "ieltswritinghelper755b7dda": {}
+      },
+      "storage": {
+        "iwh": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1q7wtedd3tgaw",
+          "type": "cicd"
+        }
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-ieltswritinghelper-dev-201428-authRole",
