@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl'
 
 import { StartButton } from '@/components/parts/lp/StartButton'
 
+import topImage from '/public/img/lp/top.png'
+
 export const LpHead: FC = memo(() => {
   const t = useTranslations('LP')
 
@@ -26,7 +28,7 @@ export const LpHead: FC = memo(() => {
           mt: 20,
         }}
       >
-        <Grid container sx={{ px: 0 }}>
+        <Grid container sx={{ px: 0, spacing: 0 }}>
           <Grid item xs={12} sx={{ textAlign: 'center' }}>
             <Typography variant="h4" fontWeight="bold">
               {t('head.catch')}
@@ -41,14 +43,20 @@ export const LpHead: FC = memo(() => {
               <b>{t('head.seeMoreButton')}</b>
             </Button>
             <StartButton sx={{ mt: 5 }} color="secondary" variant="contained" />
-            <Box sx={{ mt: 5, ml: 20 }}>
+            <Box
+              sx={{
+                mt: 5,
+                ml: { sx: 0, md: 20 },
+                maxWidth: '100%',
+                position: 'relative',
+              }}
+            >
               <Image
-                src="/img/lp/top.png"
-                height={600}
-                width={1070}
+                src={topImage}
                 alt="top"
                 priority
                 quality={50}
+                layout="responsive"
               />
             </Box>
           </Grid>
@@ -61,7 +69,7 @@ export const LpHead: FC = memo(() => {
         }}
       >
         <Grid container sx={{ px: 0 }} rowSpacing={20}>
-          <Grid item xs={7}></Grid>
+          <Grid item xs={12}></Grid>
         </Grid>
       </Box>
     </>

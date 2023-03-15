@@ -48,9 +48,10 @@
     }
   },
   "Auth": {
-    "termQuestion": "I agree to the ",
-    "termLink": "Terms & Conditions?",
-    "termErrorMsg": "You must agree to the terms and conditions."
+    "termQuestion": "By continuing, you agree to the Terms of Conditions.",
+    "termLink": "Terms & Conditions",
+    "signUpHeader": "Create a new account",
+    "signInHeader": "If you have an account, Sign in."
   },
   "Nav": {
     "menu": {
