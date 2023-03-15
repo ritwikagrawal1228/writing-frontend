@@ -48,9 +48,10 @@
     }
   },
   "Auth": {
-    "termQuestion": "利用規約に同意しますか？",
+    "termQuestion": "続行する場合、利用規約に同意することとします。",
     "termLink": "利用規約",
-    "termErrorMsg": "利用規約に同意してください。"
+    "signUpHeader": "新規にアカウント作成",
+    "signInHeader": "アカウントをお持ちの場合"
   },
   "Nav": {
     "menu": {

@@ -3,10 +3,18 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 
-import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react'
+import {
+  Authenticator,
+  Button,
+  Heading,
+  View,
+  useAuthenticator,
+  useTheme,
+} from '@aws-amplify/ui-react'
 import { Container, Skeleton, Box } from '@mui/material'
 import '@aws-amplify/ui-react/styles.css'
 import { Amplify, withSSRContext, I18n } from 'aws-amplify'
+import { useTranslations } from 'next-intl'
 
 import awsExports from '@/aws-exports'
 import LpNavBar from '@/components/templates/lp/LpNavBar'
@@ -22,10 +30,8 @@ export default function AuthPage() {
   const dict = {
     ja: {
       'Sign In': 'ログイン',
-      'Sign In with Google': 'Googleでログイン',
-      'Sign in': 'ログイン',
-      'Sign Up with Google': 'Googleでアカウント作成',
-      'Create Account': 'アカウント作成',
+      'Sign in': 'ログインする',
+      'Create Account': 'アカウントを作成する',
       Email: 'メールアドレス',
       'Enter your Email': 'メールアドレスを入力してください',
       Password: 'パスワード',
@@ -58,7 +64,60 @@ export default function AuthPage() {
           pt: 8,
         }}
       >
-        <Authenticator initialState="signIn">
+        <Authenticator
+          initialState="signIn"
+          components={{
+            SignIn: {
+              Header() {
+                const { tokens } = useTheme()
+                const t = useTranslations('Auth')
+
+                return (
+                  <Heading
+                    padding={`${tokens.space.xl} 0 0 ${tokens.space.xl}`}
+                    level={4}
+                  >
+                    {t('signInHeader')}
+                  </Heading>
+                )
+              },
+            },
+            SignUp: {
+              Header() {
+                const { tokens } = useTheme()
+                const t = useTranslations('Auth')
+
+                return (
+                  <Heading
+                    padding={`${tokens.space.xl} 0 0 ${tokens.space.xl}`}
+                    level={4}
+                  >
+                    {t('signUpHeader')}
+                  </Heading>
+                )
+              },
+              Footer() {
+                const t = useTranslations('Auth')
+
+                return (
+                  <View textAlign="center">
+                    {t('termQuestion')}
+                    <Button
+                      fontWeight="normal"
+                      onClick={() =>
+                        window?.open(Path.Terms, '_blank')?.focus()
+                      }
+                      size="small"
+                      variation="link"
+                    >
+                      {t('termLink')}
+                    </Button>
+                  </View>
+                )
+              },
+            },
+          }}
+        >
           {({ signOut, user }) => (
             <Box
               component="main"
