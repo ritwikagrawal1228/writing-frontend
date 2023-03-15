@@ -11,7 +11,6 @@ import { LpHead } from '@/components/templates/lp/LpHead'
 import LpNavBar from '@/components/templates/lp/LpNavBar'
 import { LpPricing } from '@/components/templates/lp/LpPricing'
 import { LpTrial } from '@/components/templates/lp/LpTrial'
-import { SiteUrl } from '@/constants/SiteUrl'
 import { ColorModeContext } from '@/context/ColorMode'
 
 export default function Home() {
@@ -37,8 +36,11 @@ export default function Home() {
           content="IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。"
         />
         <meta property="og:site_name" content="IELTS Writing Helper" />
-        <meta property="og:image" content={`${SiteUrl}/ogp.png`} />
-        <meta property="og:url" content={`${SiteUrl}/ogp.png`} />
+        <meta
+          property="og:image"
+          content="https://ielts-writing-helper.com/ogp.png"
+        />
+        <meta property="og:url" content="https://ielts-writing-helper.com" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@ieltswritingapp" />
         <meta
@@ -49,7 +51,10 @@ export default function Home() {
           name="twitter:description"
           content="IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。"
         />
-        <meta name="twitter:image" content={`${SiteUrl}/ogp.png`} />
+        <meta
+          name="twitter:image"
+          content="https://ielts-writing-helper.com/ogp.png"
+        />
       </Head>
       <LpNavBar />
       <Container maxWidth="lg">
@@ -63,11 +68,9 @@ export default function Home() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
   return {
-    props: {
-      messages: require(`@/locales/${locale}.json`),
-    },
+    props: { messages: require(`@/locales/${locale}.json`) },
   }
 }
