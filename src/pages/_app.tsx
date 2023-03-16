@@ -84,8 +84,6 @@ export default function App({ Component, pageProps }: Props) {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        {/* eslint-disable  */}
-        {/* // @ts-nocheck */}
         <NextIntlProvider messages={pageProps.messages}>
           <Authenticator.Provider>
             <ColorModeContext.Provider value={colorMode}>
