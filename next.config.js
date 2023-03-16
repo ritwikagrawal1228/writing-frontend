@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
+// You can choose which headers to add to the list
+// after learning more below.
+const securityHeaders = []
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -10,21 +14,9 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
-        headers: [
-          { key: 'X-DNS-Prefetch-Control', value: 'on' },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          {
-            key: 'ContentSecurityPolicy',
-            // eslint-disable-next-line quotes
-            value: "default-src'self';img-src*;",
-          },
-        ],
+        // Apply these headers to all routes in your application.
+        source: '/:path*',
+        headers: securityHeaders,
       },
     ]
   },
