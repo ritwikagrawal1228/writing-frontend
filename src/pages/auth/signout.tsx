@@ -21,7 +21,7 @@ export default function SignOut() {
       signOut()
     }
 
-    route.push(Path.LP)
+    route.push(Path.Auth)
   }, [user])
 
   return <>Sign Out..</>
