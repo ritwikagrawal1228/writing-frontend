@@ -32,6 +32,7 @@ import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
+import { Path } from '@/constants/Path'
 import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
@@ -366,7 +367,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         permanent: false,
-        destination: '/auth',
+        destination: Path.Auth,
       },
     }
   }

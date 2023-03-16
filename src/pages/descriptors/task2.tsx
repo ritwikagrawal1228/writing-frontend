@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
+import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 
 type Props = {
@@ -67,7 +68,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         permanent: false,
-        destination: '/auth',
+        destination: Path.Auth,
       },
     }
   }

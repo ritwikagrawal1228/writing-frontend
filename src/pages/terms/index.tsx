@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
 import React from 'react'
 
@@ -21,26 +20,4 @@ export default function Terms() {
       </Box>
     </>
   )
-}
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const { locale } = context
-
-  try {
-    return {
-      props: {
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/auth',
-      },
-    }
-  }
 }
