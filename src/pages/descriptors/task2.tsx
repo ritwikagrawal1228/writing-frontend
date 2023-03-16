@@ -3,20 +3,14 @@ import { useRouter } from 'next/router'
 import React from 'react'
 
 import { Grid, Paper, useTheme } from '@mui/material'
-import { withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
-import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 
-type Props = {
-  userStr: string
-}
-
-export default function NotificationSetting({ userStr }: Props) {
-  useGetAuthUser(userStr)
+export default function NotificationSetting() {
+  useGetAuthUser()
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
@@ -49,27 +43,9 @@ export default function NotificationSetting({ userStr }: Props) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-
-    return {
-      props: {
-        authenticated: true,
-        userStr: JSON.stringify(user.attributes),
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Auth,
-      },
-    }
+  return {
+    props: { messages: require(`@/locales/${locale}.json`) },
   }
 }

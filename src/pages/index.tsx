@@ -41,6 +41,15 @@ export default function AuthPage() {
       'Please confirm your Password': 'パスワードを再度入力してください',
       Name: '名前 (ニックネーム)',
       'Enter your Name': '名前を入力してください',
+      'Reset Password': 'パスワードをリセットする',
+      'Enter your email': 'メールアドレスを入力',
+      'Send code': '認証コードを送信',
+      'Back to Sign In': 'ログイン画面に戻る',
+      Code: '認証コード',
+      'Code *': '認証コード *',
+      'New Password': '新しいパスワード',
+      Submit: '送信',
+      'Resend Code': '認証コードを再送',
     },
   }
 

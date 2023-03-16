@@ -22,7 +22,6 @@ import {
   Chip,
 } from '@mui/material'
 import { TokenResult } from '@square/web-payments-sdk-types'
-import { withSSRContext } from 'aws-amplify'
 import { format } from 'date-fns'
 import { ja, enUS } from 'date-fns/locale'
 import { useTranslations } from 'next-intl'
@@ -32,7 +31,6 @@ import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
-import { Path } from '@/constants/Path'
 import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { squareService } from '@/services/squareService'
@@ -42,15 +40,14 @@ import { colors, fontSizes } from '@/themes/globalStyles'
 import { SquareCard } from '@/types/model/squareCard'
 
 type Props = {
-  userStr: string
   squareInfo: {
     appId: string
     locationId: string
   }
 }
 
-export default function PaymentSetting({ userStr, squareInfo }: Props) {
-  const { user } = useGetAuthUser(userStr)
+export default function PaymentSetting({ squareInfo }: Props) {
+  const { user } = useGetAuthUser()
   const t = useTranslations('Setting')
   const router = useRouter()
   const [card, setCard] = useState<SquareCard>()
@@ -343,32 +340,16 @@ export default function PaymentSetting({ userStr, squareInfo }: Props) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-    const squareInfo = {
-      appId: process.env.SQUARE_APPLICATION_ID || '',
-      locationId: process.env.SQUARE_LOCATION_ID || '',
-    }
-
-    return {
-      props: {
-        authenticated: true,
-        userStr: JSON.stringify(user.attributes),
-        messages: require(`@/locales/${locale}.json`),
-        squareInfo,
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Auth,
-      },
-    }
+  const squareInfo = {
+    appId: process.env.SQUARE_APPLICATION_ID || '',
+    locationId: process.env.SQUARE_LOCATION_ID || '',
+  }
+  return {
+    props: {
+      messages: require(`@/locales/${locale}.json`),
+      squareInfo,
+    },
   }
 }

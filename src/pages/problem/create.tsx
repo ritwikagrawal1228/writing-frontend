@@ -28,12 +28,8 @@ import { problemService } from '@/services/problemService'
 import { commonSlice } from '@/store/common'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 
-type Props = {
-  userStr: string
-}
-
-export default function ProblemCreate({ userStr }: Props) {
-  const { user } = useGetAuthUser(userStr)
+export default function ProblemCreate() {
+  const { user } = useGetAuthUser()
   const t = useTranslations('Problem')
   const [photo, setPhoto] = useState<File | undefined>(undefined)
   const router = useRouter()
@@ -224,27 +220,9 @@ export default function ProblemCreate({ userStr }: Props) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-
-    return {
-      props: {
-        authenticated: true,
-        userStr: JSON.stringify(user.attributes),
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Auth,
-      },
-    }
+  return {
+    props: { messages: require(`@/locales/${locale}.json`) },
   }
 }

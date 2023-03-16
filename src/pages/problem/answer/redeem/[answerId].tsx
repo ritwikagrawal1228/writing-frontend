@@ -17,11 +17,10 @@ import { Answer } from '@/types/model/answer'
 
 type Props = {
   answerModel: Answer
-  userStr: string
 }
 
-export default function AnswerRedeem({ answerModel, userStr }: Props) {
-  useGetAuthUser(userStr)
+export default function AnswerRedeem({ answerModel }: Props) {
+  useGetAuthUser()
   const t = useTranslations('Problem')
   const ta = useTranslations('Answer')
   const router = useRouter()
@@ -115,7 +114,6 @@ export const getServerSideProps = async (
     return {
       props: {
         answerModel: result.answer,
-        userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
       },
     }

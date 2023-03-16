@@ -19,7 +19,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { Storage, withSSRContext } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
@@ -31,13 +31,8 @@ import { problemService } from '@/services/problemService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
 
-type Props = {
-  userStr: string
-  authenticated: boolean
-}
-
-export default function ProblemList({ authenticated, userStr }: Props) {
-  const { user } = useGetAuthUser(userStr)
+export default function ProblemList() {
+  const { user } = useGetAuthUser()
   const theme = useTheme()
   const t = useTranslations('Problem')
   const router = useRouter()
@@ -193,27 +188,9 @@ export default function ProblemList({ authenticated, userStr }: Props) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-
-    return {
-      props: {
-        authenticated: true,
-        userStr: JSON.stringify(user.attributes),
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Auth,
-      },
-    }
+  return {
+    props: { messages: require(`@/locales/${locale}.json`) },
   }
 }

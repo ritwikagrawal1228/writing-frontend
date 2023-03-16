@@ -24,13 +24,14 @@ import { PersistGate } from 'redux-persist/integration/react'
 import Page500 from './500'
 
 import awsExports from '@/aws-exports'
+import CSR from '@/components/CSRInner copy'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import { ColorModeContext } from '@/context/ColorMode'
 import { useStore } from '@/store'
 import { getDesignTokens } from '@/themes/defaultTheme'
 import { onError } from '@/utils/onError'
 
-Amplify.configure(awsExports)
+Amplify.configure({ ...awsExports, ssr: true })
 
 Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
@@ -118,7 +119,9 @@ export default function App({ Component, pageProps }: Props) {
                       ],
                     }}
                   />
-                  <Component {...pageProps} />
+                  <CSR>
+                    <Component {...pageProps} />
+                  </CSR>
                 </ErrorBoundary>
               </ThemeProvider>
             </ColorModeContext.Provider>

@@ -31,7 +31,6 @@ import { commonSlice } from '@/store/common'
 import { colors, fontSizes } from '@/themes/globalStyles'
 
 type Props = {
-  userStr: string
   squareInfo: {
     appId: string
     locationId: string
@@ -40,8 +39,8 @@ type Props = {
 
 const TRACKING_ID = process.env.NEXT_PUBLIC_GA4_TRACKING_ID as string
 
-export default function PaymentSubscribe({ userStr, squareInfo }: Props) {
-  useGetAuthUser(userStr)
+export default function PaymentSubscribe({ squareInfo }: Props) {
+  useGetAuthUser()
   const t = useTranslations('Payment')
   const theme = useTheme()
   const router = useRouter()
@@ -217,8 +216,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
-        authenticated: true,
-        userStr: JSON.stringify(userData.attributes),
         messages: require(`@/locales/${locale}.json`),
         squareInfo,
       },

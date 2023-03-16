@@ -22,11 +22,8 @@ import { commonSlice } from '@/store/common'
 import { userSlice } from '@/store/user'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
 
-type Props = {
-  userStr: string
-}
-export default function ProfileSetting({ userStr }: Props) {
-  const { user } = useGetAuthUser(userStr)
+export default function ProfileSetting() {
+  const { user } = useGetAuthUser()
   const t = useTranslations('Setting')
   const router = useRouter()
   const [photo, setPhoto] = useState<File | string | undefined>('')
@@ -132,27 +129,9 @@ export default function ProfileSetting({ userStr }: Props) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-
-    return {
-      props: {
-        authenticated: true,
-        userStr: JSON.stringify(user.attributes),
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Auth,
-      },
-    }
+  return {
+    props: { messages: require(`@/locales/${locale}.json`) },
   }
 }

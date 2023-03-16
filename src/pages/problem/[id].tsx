@@ -53,11 +53,10 @@ import { roundSentence } from '@/utils/roundSentence'
 
 type Props = {
   problem: Problem
-  userStr: string
 }
 
-export default function ProblemDetail({ problem, userStr }: Props) {
-  useGetAuthUser(userStr)
+export default function ProblemDetail({ problem }: Props) {
+  useGetAuthUser()
   const t = useTranslations('Problem')
   const router = useRouter()
   const theme = useTheme()
@@ -471,7 +470,6 @@ export const getServerSideProps = async (
     return {
       props: {
         problem: result.problem,
-        userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
       },
     }

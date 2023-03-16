@@ -30,7 +30,6 @@ import { Answer } from '@/types/model/answer'
 
 type Props = {
   answerModel: Answer
-  userStr: string
   grammarlyClientId: string
 }
 
@@ -44,10 +43,9 @@ interface Column {
 
 export default function AnswerReview({
   answerModel,
-  userStr,
   grammarlyClientId,
 }: Props) {
-  const { user } = useGetAuthUser(userStr)
+  const { user } = useGetAuthUser()
   const t = useTranslations('Problem')
   const ta = useTranslations('Answer')
   const [img, setImg] = React.useState<string | undefined>()
@@ -220,7 +218,6 @@ export const getServerSideProps = async (
     return {
       props: {
         answerModel: result.answer,
-        userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
         grammarlyClientId: process.env.GRAMMARLY_CLIENT_ID,
       },

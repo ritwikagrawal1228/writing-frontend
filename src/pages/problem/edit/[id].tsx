@@ -22,7 +22,6 @@ import { Problem } from '@/types/model/problem'
 
 type Props = {
   problem: Problem
-  userStr: string
 }
 
 export const getServerSideProps = async (
@@ -44,7 +43,6 @@ export const getServerSideProps = async (
     return {
       props: {
         problem: result.problem,
-        userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
       },
     }
@@ -59,8 +57,8 @@ export const getServerSideProps = async (
   }
 }
 
-export default function ProblemEdit({ problem, userStr }: Props) {
-  const { user } = useGetAuthUser(userStr)
+export default function ProblemEdit({ problem }: Props) {
+  const { user } = useGetAuthUser()
   const t = useTranslations('Problem')
   const router = useRouter()
   const [photo, setPhoto] = React.useState<string | File | undefined>()
