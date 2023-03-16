@@ -13,7 +13,7 @@ import {
   Paper,
   Snackbar,
 } from '@mui/material'
-import { Storage, withSSRContext } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
 import { useTranslations } from 'next-intl'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'

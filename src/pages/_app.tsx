@@ -94,7 +94,7 @@ export default function App({ Component, pageProps }: Props) {
                   <GoogleAnalytics />
                   <DefaultSeo
                     defaultTitle="IELTS Writing Helper | IELTSライティング学習効率化アプリ"
-                    canonical="https://ielts-writing-helper.com"
+                    canonical="https://www.ielts-writing-helper.com"
                     description="IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。"
                     twitter={{
                       handle: '@ieltswritingapp',
@@ -108,10 +108,10 @@ export default function App({ Component, pageProps }: Props) {
                       description:
                         'IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。',
                       site_name: 'IELTS Writing Helper',
-                      url: 'https://ielts-writing-helper.com',
+                      url: 'https://www.ielts-writing-helper.com',
                       images: [
                         {
-                          url: 'https://ielts-writing-helper.com/ogp.png',
+                          url: 'https://www.ielts-writing-helper.com/ogp.png',
                           width: 800,
                           height: 600,
                           alt: 'IELTS Writing Helper | IELTSライティング学習効率化アプリ',
