@@ -13,7 +13,7 @@ import {
 } from '@aws-amplify/ui-react'
 import { Container, Skeleton, Box } from '@mui/material'
 import '@aws-amplify/ui-react/styles.css'
-import { Amplify, withSSRContext, I18n } from 'aws-amplify'
+import { Amplify, I18n } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
 import awsExports from '@/aws-exports'
@@ -138,23 +138,9 @@ export default function AuthPage() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
-  const { Auth } = withSSRContext(context)
-
-  try {
-    const u = await Auth.currentAuthenticatedUser()
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Problem,
-      },
-    }
-  } catch (err) {
-    return {
-      props: {
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
+  return {
+    props: { messages: require(`@/locales/${locale}.json`) },
   }
 }
