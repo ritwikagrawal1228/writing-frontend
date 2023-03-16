@@ -14,6 +14,7 @@ import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { ProfileSettingForm } from '@/components/templates/settings/profile/ProfileSettingForm'
+import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { useProfileSettingDefaultFrom } from '@/hooks/useProfileSettingDefaultFrom'
 import { userService } from '@/services/userService'
@@ -150,7 +151,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         permanent: false,
-        destination: '/',
+        destination: Path.Auth,
       },
     }
   }
