@@ -6,4 +6,4 @@ Disallow: /payment/
 Disallow: /settings/
 Disallow: /auth/
 
-Sitemap: https://ielts-writing-helper.com/sitemap.xml
+Sitemap: https://app.ielts-writing-helper.com/sitemap.xml

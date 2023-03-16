@@ -4,7 +4,6 @@ import React from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
 import { Box, Button, Grid, Paper, useTheme } from '@mui/material'
-import { withSSRContext } from 'aws-amplify'
 import { useTranslations } from 'next-intl'
 
 import Layout from '@/components/templates/Layout'
