@@ -13,7 +13,7 @@ import {
   ThemeProvider,
 } from '@mui/material'
 import { Amplify } from 'aws-amplify'
-import { NextIntlProvider } from 'next-intl'
+import { AbstractIntlMessages, NextIntlProvider } from 'next-intl'
 import { DefaultSeo } from 'next-seo'
 import NProgress from 'nprogress'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -36,7 +36,16 @@ Router.events.on('routeChangeStart', () => NProgress.start())
 Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
-export default function App({ Component, pageProps }: AppProps) {
+type PageProps = {
+  messages: AbstractIntlMessages
+  now: number
+}
+
+type Props = Omit<AppProps<PageProps>, 'pageProps'> & {
+  pageProps: PageProps
+}
+
+export default function App({ Component, pageProps }: Props) {
   const store = useStore()
   const persistor = persistStore(store)
   const [mode, setMode] = React.useState<'light' | 'dark'>('light')
@@ -75,6 +84,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
+        {/* eslint-disable  */}
+        {/* // @ts-nocheck */}
         <NextIntlProvider messages={pageProps.messages}>
           <Authenticator.Provider>
             <ColorModeContext.Provider value={colorMode}>
