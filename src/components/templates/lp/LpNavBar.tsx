@@ -16,6 +16,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { useTranslations } from 'next-intl'
 
+import { Path } from '@/constants/Path'
 import { fontSizes } from '@/themes/globalStyles'
 
 const languages = {
@@ -85,7 +86,7 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              href={Path.Auth}
               sx={{
                 mr: 10,
                 ml: 2,

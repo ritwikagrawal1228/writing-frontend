@@ -201,7 +201,7 @@ const Layout: FC<LayoutProps> = ({
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              href={Path.Auth}
               sx={{
                 mr: 5,
                 ml: 2,

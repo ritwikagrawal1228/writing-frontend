@@ -1,7 +1,6 @@
 export enum Path {
   APIGraphql = '/api/graphql',
-  LP = '/',
-  Auth = '/auth',
+  Auth = '/',
   Problem = '/problem',
   ProblemCreate = '/problem/create',
   ProblemEdit = '/problem/edit',
