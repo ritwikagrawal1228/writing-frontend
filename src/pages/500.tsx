@@ -46,8 +46,6 @@ export default function Page500() {
   )
 }
 
-Page500.displayName = 'Page500'
-
 export const getStaticProps: GetServerSideProps = async (context) => {
   const { locale } = context
   return {

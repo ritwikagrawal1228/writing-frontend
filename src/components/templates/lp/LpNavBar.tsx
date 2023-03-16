@@ -1,4 +1,3 @@
-import { GetServerSideProps } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import * as React from 'react'
@@ -7,14 +6,12 @@ import TranslateIcon from '@mui/icons-material/Translate'
 import { Tooltip } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { useTranslations } from 'next-intl'
 
 import { Path } from '@/constants/Path'
 import { fontSizes } from '@/themes/globalStyles'
@@ -31,34 +28,13 @@ type Props = {
 export default function LpNavBar({ isOnlyLogo = false }: Props) {
   const router = useRouter()
   const [langs, setLangs] = React.useState<Record<string, string>>(languages)
-  const t = useTranslations('LP')
-  const pages = [
-    { label: t('menu.feature'), top: 1000 },
-    { label: t('menu.pricing'), top: 2500 },
-  ]
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   )
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget)
-  }
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
-  }
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null)
-  }
-
-  const scroll = (top: number) => {
-    window.scrollTo({
-      top,
-      behavior: 'smooth',
-    })
-    setAnchorElNav(null)
   }
 
   const handleCloseUserMenu = (lang: string) => {
@@ -99,78 +75,51 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
               IELTS Writing Helper
             </Typography>
 
-            {!isOnlyLogo && (
-              <>
-                <Box
-                  sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-                ></Box>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                  {pages.map((page) => (
-                    <Button
-                      key={page.label}
-                      onClick={() => scroll(page.top)}
-                      color="inherit"
-                      variant="text"
-                      sx={{ display: 'block' }}
-                    >
-                      {page.label}
-                    </Button>
-                  ))}
-                </Box>
-                <Box sx={{ flexGrow: 0, mr: 5 }}>
-                  <Tooltip title={t('menu.langTooltip')}>
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <TranslateIcon />
-                      <Typography
-                        variant="caption"
-                        fontSize={fontSizes.m}
-                        sx={{ ml: 1 }}
-                      >
-                        {languages[router.locale as keyof typeof languages]}
-                      </Typography>
-                    </IconButton>
-                  </Tooltip>
-                  <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
+            <Box sx={{ flexGrow: 0, mr: 5 }}>
+              <Tooltip
+                title={router.locale === 'ja' ? '言語変更' : 'Change language'}
+              >
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <TranslateIcon />
+                  <Typography
+                    variant="caption"
+                    fontSize={fontSizes.m}
+                    sx={{ ml: 1 }}
                   >
-                    {Object.keys(langs).map((lang) => (
-                      <MenuItem
-                        disabled={router.locale === lang}
-                        key={lang}
-                        onClick={() => toggleLang(lang)}
-                      >
-                        <Typography textAlign="center">
-                          {langs[lang]}
-                        </Typography>
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </Box>
-              </>
-            )}
+                    {languages[router.locale as keyof typeof languages]}
+                  </Typography>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {Object.keys(langs).map((lang) => (
+                  <MenuItem
+                    disabled={router.locale === lang}
+                    key={lang}
+                    onClick={() => toggleLang(lang)}
+                  >
+                    <Typography textAlign="center">{langs[lang]}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
     </>
   )
-}
-
-export const getStaticProps: GetServerSideProps = async (context) => {
-  const { locale } = context
-  return {
-    props: { messages: require(`@/locales/${locale}.json`) },
-  }
 }
