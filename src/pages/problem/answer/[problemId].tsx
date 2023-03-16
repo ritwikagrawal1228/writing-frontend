@@ -18,11 +18,10 @@ import { Problem } from '@/types/model/problem'
 
 type Props = {
   problem: Problem
-  userStr: string
 }
 
-export default function Answer({ problem, userStr }: Props) {
-  useGetAuthUser(userStr)
+export default function Answer({ problem }: Props) {
+  useGetAuthUser()
   const t = useTranslations('Problem')
   const ta = useTranslations('Answer')
   const router = useRouter()
@@ -105,7 +104,6 @@ export const getServerSideProps = async (
     return {
       props: {
         problem: result.problem,
-        userStr: JSON.stringify(user.attributes),
         messages: require(`@/locales/${locale}.json`),
       },
     }

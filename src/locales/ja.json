@@ -55,7 +55,7 @@
   },
   "Nav": {
     "menu": {
-      "problem": "問題",
+      "problem": "問題一覧",
       "upgrade": "アップグレード",
       "tip": "ヒント",
       "descriptors": "スコアリング基準"
