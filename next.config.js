@@ -1,7 +1,4 @@
 /** @type {import('next').NextConfig} */
-// You can choose which headers to add to the list
-// after learning more below.
-const securityHeaders = []
 
 const nextConfig = {
   reactStrictMode: true,
@@ -10,15 +7,6 @@ const nextConfig = {
     locales: ['en', 'ja'],
     defaultLocale: 'en',
     localeDetection: true,
-  },
-  async headers() {
-    return [
-      {
-        // Apply these headers to all routes in your application.
-        source: '/:path*',
-        headers: securityHeaders,
-      },
-    ]
   },
 }
 
