@@ -9,7 +9,7 @@ import '@aws-amplify/ui-react/styles.css'
 import awsExports from '@/aws-exports'
 import { Path } from '@/constants/Path'
 
-Amplify.configure({ ...awsExports, ssr: true })
+Amplify.configure({ ...awsExports })
 
 export default function SignOut() {
   const { user, signOut } = useAuthenticator()
