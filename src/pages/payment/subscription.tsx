@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 import cardBrandImg from '@/assets/img/cardBrands.png'
+import { SquareCardForm } from '@/components/parts/common/SquareCardForm'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { subtotal, taxRate } from '@/constants/Price'
@@ -118,21 +119,10 @@ export const PaymentSubscribe: FC = () => {
                 alt="VISA/Mastercard/American Express/JCB/Discover"
                 width="400px"
               />
-              {/* <PaymentForm
-                applicationId={import.meta.env.VITE_SQUARE_APPLICATION_ID}
-                cardTokenizeResponseReceived={(token) => {
-                  submit(token)
-                }}
-                locationId={import.meta.env.VITE_SQUARE_LOCATION_ID}
-              >
-                <CreditCard
-                  buttonProps={{
-                    css: { backgroundColor: colors.secondary.main },
-                  }}
-                >
-                  {t('Payment.proceedToPayment')}
-                </CreditCard>
-              </PaymentForm> */}
+              <SquareCardForm
+                buttonText={t('Payment.proceedToPayment')}
+                submit={submit}
+              />
             </Grid>
             <Grid item xs={6}>
               <Paper

@@ -37,11 +37,6 @@ export default defineConfig(({ mode }) => {
     define: {
       global: {},
     },
-    build: {
-      target: 'es2015',
-      minify: 'esbuild',
-      sourcemap: 'inline',
-    },
   }
 })
 

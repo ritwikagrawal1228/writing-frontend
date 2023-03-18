@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 import cardBrandImg from '@/assets/img/cardBrands.png'
+import { SquareCardForm } from '@/components/parts/common/SquareCardForm'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
@@ -223,21 +224,10 @@ export const PaymentSetting: FC = () => {
                       alt="VISA/Mastercard/American Express/JCB/Discover"
                       width="400px"
                     />
-                    {/* <PaymentForm
-                      applicationId={import.meta.env.VITE_SQUARE_APPLICATION_ID}
-                      cardTokenizeResponseReceived={(token) => {
-                        submit(token)
-                      }}
-                      locationId={import.meta.env.VITE_SQUARE_LOCATION_ID}
-                    >
-                      <CreditCard
-                        buttonProps={{
-                          css: { backgroundColor: colors.secondary.main },
-                        }}
-                      >
-                        {t('Setting.payment.changeCardButton')}
-                      </CreditCard>
-                    </PaymentForm> */}
+                    <SquareCardForm
+                      buttonText={t('Setting.payment.changeCardButton')}
+                      submit={submit}
+                    />
                   </>
                 )}
               </>
