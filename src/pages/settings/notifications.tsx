@@ -1,14 +1,12 @@
 import React from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
-import { Box, Button, Grid, Paper, useTheme } from '@mui/material'
+import { Box, Button, Grid, Paper } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { Path } from '@/constants/Path'
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { useTranslation } from 'react-i18next'
 import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 
 export const NotificationSetting = () => {

@@ -19,15 +19,14 @@ import {
   ListItemIcon,
   Box,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import Diff from '@/components/diff'
 import { correctionService } from '@/services/correctionService'
+import { RootState } from '@/store'
 import { colors } from '@/themes/globalStyles'
 import { CompletedAnswerSentence } from '@/types/model/answer'
-import { useTranslation } from 'react-i18next'
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/store'
 
 type Props = {
   answerSentences: CompletedAnswerSentence[]

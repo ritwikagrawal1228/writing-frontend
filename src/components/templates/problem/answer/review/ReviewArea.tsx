@@ -1,4 +1,5 @@
 import React, { FC, Fragment, memo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import SmartToyIcon from '@mui/icons-material/SmartToy'
 import {
@@ -12,8 +13,9 @@ import {
   Typography,
   Avatar,
   useTheme,
-  Modal,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { MyReview } from './MyReview'
 
@@ -21,15 +23,11 @@ import { Path } from '@/constants/Path'
 import { ProblemType1 } from '@/constants/ProblemType'
 import { UserPlanFree } from '@/constants/UserPlans'
 import { reviewService } from '@/services/reviewService'
+import { RootState } from '@/store'
+import { commonSlice } from '@/store/common'
 import { Answer } from '@/types/model/answer'
 import { Review } from '@/types/model/review'
 import { User } from '@/types/model/user'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/store'
-import { useNavigate } from 'react-router-dom'
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { commonSlice } from '@/store/common'
 
 type Props = {
   answer: Answer
@@ -40,18 +38,6 @@ interface TabPanelProps {
   children?: React.ReactNode
   index: number
   value: number
-}
-
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
 }
 
 function a11yProps(index: number) {

@@ -1,11 +1,8 @@
 import React from 'react'
 
-import { Grid, Paper, useTheme } from '@mui/material'
+import { Grid, Paper } from '@mui/material'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { useTranslation } from 'react-i18next'
 import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 
 export const DescriptorTask2 = () => {

@@ -20,7 +20,6 @@ export const BaseRadio: FC<RadioProps> = memo(
     const {
       value,
       radioContents,
-      required = false,
       onChange,
       labelText,
       helperText = '',

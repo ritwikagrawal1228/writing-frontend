@@ -1,4 +1,5 @@
 import React, { Fragment, memo } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 // import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
@@ -10,10 +11,9 @@ import {
   ListItemText,
   Paper,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 import { Path } from '@/constants/Path'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 
 export const SettingSidebar = memo(() => {
   const { t } = useTranslation()

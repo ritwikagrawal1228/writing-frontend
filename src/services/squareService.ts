@@ -1,9 +1,7 @@
-import axios from 'axios'
 import { gql } from 'graphql-request'
 
-import { Path } from '@/constants/Path'
-import { SquareCard } from '@/types/model/squareCard'
 import { AmplifyUser } from '@/types/model/amplifyUser'
+import { SquareCard } from '@/types/model/squareCard'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
 const getSquareCard = async (user?: AmplifyUser) => {

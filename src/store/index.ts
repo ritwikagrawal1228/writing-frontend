@@ -3,33 +3,29 @@ import {
   combineReducers,
   EnhancedStore,
 } from '@reduxjs/toolkit'
-import {
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist'
+import { persistReducer } from 'redux-persist'
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage'
 
-import { commonSlice } from '@/store/common'
-import { userSlice } from '@/store/user'
-import { langSlice } from '@/store/i18n'
 import { breadcrumbsSlice } from './breadcrumbs'
 import { colorModeSlice } from './colorMode'
+
+import { commonSlice } from '@/store/common'
+import { langSlice } from '@/store/i18n'
+import { userSlice } from '@/store/user'
 
 // HACK: `redux-persist failed to create sync storage. falling back to noop storage.`の対応
 // https://github.com/vercel/next.js/discussions/15687#discussioncomment-45319
 const createNoopStorage = () => {
   return {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getItem(_key: string) {
       return Promise.resolve(null)
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setItem(_key: string, value: any) {
       return Promise.resolve(value)
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     removeItem(_key: string) {
       return Promise.resolve()
     },

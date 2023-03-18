@@ -1,4 +1,5 @@
-import React, { FC, memo, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import SaveIcon from '@mui/icons-material/Save'
 import {
@@ -13,19 +14,18 @@ import {
 import { Storage } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { problemService } from '@/services/problemService'
+import { RootState } from '@/store'
 import { commonSlice } from '@/store/common'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
-import { Link, useNavigate } from 'react-router-dom'
-import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
-import { useTranslation } from 'react-i18next'
 
 export const ProblemCreate: FC = () => {
   const { user, amplifyUser } = useGetAuthUser()
@@ -34,7 +34,7 @@ export const ProblemCreate: FC = () => {
     { label: t('Problem.list.title'), href: Path.Problem },
     { label: t('Problem.create.title'), href: undefined },
   ])
-  const lang = useSelector((state: any) => state.lang.lang)
+  const lang = useSelector((state: RootState) => state.lang.lang)
   const navigate = useNavigate()
   const [photo, setPhoto] = useState<File | undefined>(undefined)
   const [problemsNum, setProblemsNum] = useState<number>(0)

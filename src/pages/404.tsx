@@ -9,7 +9,7 @@ import { fontSizes, spaces } from '@/themes/globalStyles'
 export const Page404 = () => {
   return (
     <>
-      <LpNavBar isOnlyLogo={true} />
+      <LpNavBar />
       <Grid
         container
         alignItems="center"

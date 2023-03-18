@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import {
   Divider,
@@ -14,22 +15,20 @@ import {
 } from '@mui/material'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
-import { Storage, withSSRContext } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
-import Layout from '@/components/templates/Layout'
 import { ProblemDisplayPaper } from '@/components/templates/common/ProblemDisplayPaper'
 import { AnswerArea } from '@/components/templates/problem/answer/review/AnswerArea'
 import { ReviewArea } from '@/components/templates/problem/answer/review/ReviewArea'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { answerService } from '@/services/answerService'
+import { commonSlice } from '@/store/common'
 import { fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'
-import { useTranslation } from 'react-i18next'
-import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { commonSlice } from '@/store/common'
 
 interface Column {
   id: 'type' | 'words' | 'time' | 'answerSpentTime' | 'wordCount'

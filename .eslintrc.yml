@@ -89,8 +89,8 @@ rules:
       alphabetize:
         order: asc
       newlines-between: always
-  "@typescript-eslint/no-unused-vars": off
-  unused-imports/no-unused-imports-ts: warn
+  "@typescript-eslint/no-unused-vars": error
+  unused-imports/no-unused-imports-ts: error
   prettier/prettier:
     - error
     -
@@ -101,5 +101,5 @@ rules:
       trailingComma: 'all'
       bracketSpacing: true
       arrowParens: 'always'
-      semi: false 
+      semi: false
       endOfLine: 'auto'

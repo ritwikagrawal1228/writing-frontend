@@ -1,24 +1,23 @@
 import React, { useEffect, useLayoutEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import SaveIcon from '@mui/icons-material/Save'
 import { Box, Button, Paper, Skeleton } from '@mui/material'
-import { Storage, withSSRContext } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { problemService } from '@/services/problemService'
 import { commonSlice } from '@/store/common'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 import { Problem } from '@/types/model/problem'
-import { useTranslation } from 'react-i18next'
-import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
-import { useNavigate, useParams } from 'react-router-dom'
 
 export const ProblemEdit = () => {
   const { user, amplifyUser } = useGetAuthUser()
@@ -32,7 +31,6 @@ export const ProblemEdit = () => {
     },
     { label: t('Problem.edit.title'), href: undefined },
   ])
-  const lang = useSelector((state: any) => state.lang.lang)
   const navigate = useNavigate()
   const params = useParams()
   const [photo, setPhoto] = React.useState<string | File | undefined>()

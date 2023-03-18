@@ -22,24 +22,22 @@ import {
 import { TokenResult } from '@square/web-payments-sdk-types'
 import { format } from 'date-fns'
 import { ja, enUS } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
-import Layout from '@/components/templates/Layout'
+import cardBrandImg from '@/assets/img/cardBrands.png'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { squareService } from '@/services/squareService'
+import { RootState } from '@/store'
 import { commonSlice } from '@/store/common'
 import { userSlice } from '@/store/user'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { SquareCard } from '@/types/model/squareCard'
-import { useTranslation } from 'react-i18next'
-import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
-import { Path } from '@/constants/Path'
-import { RootState } from '@/store'
-import cardBrandImg from '@/assets/img/cardBrands.png'
 
 export const PaymentSetting: FC = () => {
   const lang = useSelector((state: RootState) => state.lang.lang)
@@ -129,7 +127,7 @@ export const PaymentSetting: FC = () => {
           }),
         )
       })
-      .catch((err) => {
+      .catch(() => {
         dispatch(
           commonSlice.actions.updateSnackBar({
             isSnackbarShow: true,

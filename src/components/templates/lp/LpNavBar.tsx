@@ -12,22 +12,17 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import i18next from 'i18next'
 
-import { fontSizes } from '@/themes/globalStyles'
 import { Path } from '@/constants/Path'
+import { fontSizes } from '@/themes/globalStyles'
 
 const languages = {
   en: 'English',
   ja: '日本語',
 }
 
-type Props = {
-  isOnlyLogo?: boolean
-}
+export default function LpNavBar() {
+  const [langs] = React.useState<Record<string, string>>(languages)
 
-export default function LpNavBar({ isOnlyLogo = false }: Props) {
-  const [langs, setLangs] = React.useState<Record<string, string>>(languages)
-
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   )
@@ -35,7 +30,7 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
     setAnchorElUser(event.currentTarget)
   }
 
-  const handleCloseUserMenu = (lang: string) => {
+  const handleCloseUserMenu = () => {
     setAnchorElUser(null)
   }
   const toggleLang = (lang: string) => {

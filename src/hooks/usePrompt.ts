@@ -7,10 +7,10 @@ import { useContext, useEffect, useCallback } from 'react'
 import { UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom'
 
 import { History, Transition } from 'history'
-
-import { useDispatch } from 'react-redux'
-import { commonSlice } from '@/store/common'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
+
+import { commonSlice } from '@/store/common'
 
 type ExtendNavigator = Navigator & Pick<History, 'block'>
 /**

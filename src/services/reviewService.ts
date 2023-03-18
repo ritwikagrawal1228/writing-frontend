@@ -1,9 +1,7 @@
 import { gql } from 'graphql-request'
 
-import { Path } from '@/constants/Path'
-import { Review } from '@/types/model/review'
-import { axios } from '@/utils/axios'
 import { AmplifyUser } from '@/types/model/amplifyUser'
+import { Review } from '@/types/model/review'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
 const createReview = async (

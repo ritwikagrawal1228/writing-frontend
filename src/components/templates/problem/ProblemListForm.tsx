@@ -12,14 +12,13 @@ import {
   IconButton,
 } from '@mui/material'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { BaseInput } from '@/components/parts/common/inputs/BaseInput'
 import { MultiLineInput } from '@/components/parts/common/inputs/MultiLineInput'
 import { BaseRadio } from '@/components/parts/common/radios/BaseRadio'
 import { fontSizes, formControlMinWidth } from '@/themes/globalStyles'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 
 type Props = {
   photo?: File | string

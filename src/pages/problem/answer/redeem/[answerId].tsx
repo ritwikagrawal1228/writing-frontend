@@ -1,28 +1,23 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect } from 'react'
-
-import { withSSRContext } from 'aws-amplify'
-import { useDispatch, useSelector } from 'react-redux'
-
-import Layout from '@/components/templates/Layout'
-import { AnswerForm } from '@/components/templates/problem/answer/AnswerForm'
-import { AnswerStatus, answerStatus } from '@/constants/AnswerStatus'
-import { Path } from '@/constants/Path'
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { answerService } from '@/services/answerService'
-import { problemService } from '@/services/problemService'
-import { commonSlice } from '@/store/common'
-import { Problem } from '@/types/model/problem'
-import { useTranslation } from 'react-i18next'
-import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
+import React, { FC, useLayoutEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { usePrompt } from '@/hooks/usePrompt'
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
+
+import { AnswerForm } from '@/components/templates/problem/answer/AnswerForm'
+import { answerStatus } from '@/constants/AnswerStatus'
+import { Path } from '@/constants/Path'
+import { ProblemType1 } from '@/constants/ProblemType'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
+import { answerService } from '@/services/answerService'
+import { commonSlice } from '@/store/common'
 import { AnsweringForm } from '@/types/form/AnsweringForm'
 import { Answer } from '@/types/model/answer'
-import { ProblemType1 } from '@/constants/ProblemType'
 
 export const AnswerRedeem: FC = () => {
-  const { user, amplifyUser } = useGetAuthUser()
+  const { amplifyUser } = useGetAuthUser()
   const { t } = useTranslation()
   const [answer, setAnswer] = React.useState<Answer>()
   useSetBreadcrumbs([

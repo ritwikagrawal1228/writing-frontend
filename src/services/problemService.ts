@@ -1,12 +1,9 @@
-import { GraphQLClient, gql } from 'graphql-request'
+import { gql } from 'graphql-request'
 
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
-import { Problem } from '@/types/model/problem'
-import { User } from '@/types/model/user'
-import { axios } from '@/utils/axios'
-import { getGraphQLClient } from '@/utils/graphqlClient'
-import { Path } from '@/constants/Path'
 import { AmplifyUser } from '@/types/model/amplifyUser'
+import { Problem } from '@/types/model/problem'
+import { getGraphQLClient } from '@/utils/graphqlClient'
 
 const getProblemsByUserId = async (user?: AmplifyUser) => {
   const query = gql`

@@ -1,6 +1,6 @@
 import React, { FC, Fragment, useEffect, useState } from 'react'
+import { Link, useNavigate, Outlet } from 'react-router-dom'
 
-import i18next from 'i18next'
 import { useAuthenticator } from '@aws-amplify/ui-react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
@@ -19,7 +19,6 @@ import {
   CircularProgress,
   Collapse,
   Container,
-  CssBaseline,
   Dialog,
   DialogActions,
   DialogContent,
@@ -36,24 +35,20 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  useTheme,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { ProfileAvatar } from '../parts/common/ProfileAvatar'
 
-import { ColorModeContext } from '@/context/ColorMode'
-import { RootState } from '@/store'
-import { commonSlice } from '@/store/common'
-import { colors } from '@/themes/globalStyles'
-import { useTranslation } from 'react-i18next'
 import { Path } from '@/constants/Path'
 import { UserPlanFree } from '@/constants/UserPlans'
-import { Outlet } from 'react-router-dom'
-import { Link, useNavigate } from 'react-router-dom'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
-import { Lang, langSlice } from '@/store/i18n'
+import { RootState } from '@/store'
 import { colorModeSlice } from '@/store/colorMode'
+import { commonSlice } from '@/store/common'
+import { Lang, langSlice } from '@/store/i18n'
+import { colors } from '@/themes/globalStyles'
 
 const langMenuItems = [
   { label: 'English', value: 'en' as Lang },

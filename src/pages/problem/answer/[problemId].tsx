@@ -1,23 +1,23 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect } from 'react'
+import React, { FC, useLayoutEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
 import { AnswerForm } from '@/components/templates/problem/answer/AnswerForm'
-import { AnswerStatus, answerStatus } from '@/constants/AnswerStatus'
+import { answerStatus } from '@/constants/AnswerStatus'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { answerService } from '@/services/answerService'
 import { problemService } from '@/services/problemService'
 import { commonSlice } from '@/store/common'
-import { Problem } from '@/types/model/problem'
-import { useTranslation } from 'react-i18next'
-import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
-import { useNavigate, useParams } from 'react-router-dom'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { AnsweringForm } from '@/types/form/AnsweringForm'
+import { Problem } from '@/types/model/problem'
 
 export const Answer: FC = () => {
-  const { user, amplifyUser } = useGetAuthUser()
+  const { amplifyUser } = useGetAuthUser()
   const { t } = useTranslation()
   const [problem, setProblem] = React.useState<Problem>()
   useSetBreadcrumbs([

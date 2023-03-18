@@ -5,6 +5,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -38,7 +39,8 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { Storage, withSSRContext } from 'aws-amplify'
+import { Storage } from 'aws-amplify'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { TitleBox } from '@/components/templates/common/TitleBox'
@@ -46,16 +48,15 @@ import { answerStatus, answerStr } from '@/constants/AnswerStatus'
 import { Path } from '@/constants/Path'
 import { ProblemType, ProblemType1 } from '@/constants/ProblemType'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { answerService } from '@/services/answerService'
 import { problemService } from '@/services/problemService'
+import { RootState } from '@/store'
 import { commonSlice } from '@/store/common'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Answer } from '@/types/model/answer'
 import { Problem } from '@/types/model/problem'
 import { roundSentence } from '@/utils/roundSentence'
-import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 
 export const ProblemDetail: FC = () => {
   const { amplifyUser } = useGetAuthUser()
@@ -64,7 +65,7 @@ export const ProblemDetail: FC = () => {
     { label: t('Problem.list.title'), href: Path.Problem },
     { label: t('Problem.detail.title') },
   ])
-  const lang = useSelector((state: any) => state.lang.lang)
+  const lang = useSelector((state: RootState) => state.lang.lang)
   const navigate = useNavigate()
   const theme = useTheme()
   const params = useParams()
@@ -160,7 +161,7 @@ export const ProblemDetail: FC = () => {
 
     await problemService
       .deleteProblemById(problem.id, amplifyUser)
-      .then((res) => {
+      .then(() => {
         navigate(Path.Problem)
       })
       .catch((err) => {
@@ -271,7 +272,7 @@ export const ProblemDetail: FC = () => {
               </Dialog>
             </Box>
           </TitleBox>
-          {!!problem ? (
+          {problem ? (
             <Paper
               sx={{
                 width: '100%',
@@ -387,7 +388,7 @@ export const ProblemDetail: FC = () => {
               </Button>
             </Box>
           </TitleBox>
-          {!!problem ? (
+          {problem ? (
             <Paper
               sx={{
                 width: '100%',

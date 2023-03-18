@@ -1,10 +1,11 @@
-import { AmplifyUser } from '@/types/model/amplifyUser'
 import { GraphQLClient } from 'graphql-request'
+
+import { AmplifyUser } from '@/types/model/amplifyUser'
 
 export const getGraphQLClient = (user?: AmplifyUser) => {
   const accessToken = user?.signInUserSession.accessToken.jwtToken
   const IdToken = user?.signInUserSession.idToken.jwtToken
-  const uri = import.meta.env.VITE_API_SERVER_URI + '/query'
+  const uri = `${import.meta.env.VITE_API_SERVER_URI}/query`
 
   return new GraphQLClient(uri, {
     headers: {

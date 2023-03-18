@@ -8,7 +8,7 @@ import { PrivacyPolicy } from '@/components/templates/privacy/PrivacyPolicy'
 export const Privacy = () => {
   return (
     <>
-      <LpNavBar isOnlyLogo={true} />
+      <LpNavBar />
       <Box sx={{}}>
         <Container maxWidth="lg" sx={{ mt: 13 }}>
           <PrivacyPolicy />

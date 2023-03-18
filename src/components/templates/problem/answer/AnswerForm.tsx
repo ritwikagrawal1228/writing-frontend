@@ -1,4 +1,5 @@
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { memo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import SendIcon from '@mui/icons-material/Send'
 import {
@@ -14,30 +15,19 @@ import {
   Typography,
 } from '@mui/material'
 import { Storage } from 'aws-amplify'
-import { useDispatch } from 'react-redux'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { ProblemDisplayPaper } from '../../common/ProblemDisplayPaper'
 
 import { ProblemDescriptionGrid } from '@/components/templates/common/ProblemDescriptionGrid'
 import { Stopwatch } from '@/components/templates/common/Stopwatch'
-import { AnswerStatus, answerStatus } from '@/constants/AnswerStatus'
-import { commonSlice } from '@/store/common'
-import { fontSizes } from '@/themes/globalStyles'
-import { Problem } from '@/types/model/problem'
-import { useTranslation } from 'react-i18next'
-import { usePrompt } from '@/hooks/usePrompt'
-import {
-  Controller,
-  SubmitHandler,
-  UseFormHandleSubmit,
-  useFormContext,
-  useWatch,
-} from 'react-hook-form'
-import { CreateProblemForm } from '@/types/form/CreateProblemForm'
-import { AnsweringForm } from '@/types/form/AnsweringForm'
-import { Answer } from '@/types/model/answer'
-import { useNavigate } from 'react-router-dom'
+import { answerStatus } from '@/constants/AnswerStatus'
 import { Path } from '@/constants/Path'
+import { usePrompt } from '@/hooks/usePrompt'
+import { fontSizes } from '@/themes/globalStyles'
+import { AnsweringForm } from '@/types/form/AnsweringForm'
+import { Problem } from '@/types/model/problem'
 
 type Props = {
   problem: Problem
@@ -48,11 +38,7 @@ export const AnswerForm = memo(({ problem, handleSubmit }: Props) => {
   const { t } = useTranslation()
   const [img, setImg] = React.useState<string | undefined>()
   const [isCancelConfirm, setIsCancelConfirm] = React.useState<boolean>(false)
-  const {
-    control,
-    setValue,
-    formState: { errors },
-  } = useFormContext<AnsweringForm>()
+  const { control, setValue } = useFormContext<AnsweringForm>()
   const watchForm = useWatch<AnsweringForm>({
     control,
   })

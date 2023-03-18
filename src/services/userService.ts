@@ -1,11 +1,9 @@
-import { GraphQLClient, gql } from 'graphql-request'
+import { gql } from 'graphql-request'
 
-import { Path } from '@/constants/Path'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
-import { User } from '@/types/model/user'
-import { axios } from '@/utils/axios'
-import { getGraphQLClient } from '@/utils/graphqlClient'
 import { AmplifyUser } from '@/types/model/amplifyUser'
+import { User } from '@/types/model/user'
+import { getGraphQLClient } from '@/utils/graphqlClient'
 
 const updateProfile = async (
   form: UpdateProfileSettingForm,

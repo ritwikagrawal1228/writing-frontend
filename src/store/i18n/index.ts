@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
 import i18next from 'i18next'
 
 export type Lang = 'en' | 'ja'

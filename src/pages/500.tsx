@@ -5,14 +5,13 @@ import { Grid, Paper, Typography } from '@mui/material'
 
 import LpNavBar from '@/components/templates/lp/LpNavBar'
 import { fontSizes, spaces } from '@/themes/globalStyles'
-import { useTranslation } from 'react-i18next'
 
 import '@/index.css'
 
 export const Page500 = () => {
   return (
     <>
-      <LpNavBar isOnlyLogo={true} />
+      <LpNavBar />
       <Grid
         container
         alignItems="center"

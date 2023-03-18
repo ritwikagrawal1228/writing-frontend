@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   Grid,
@@ -12,24 +13,19 @@ import {
 } from '@mui/material'
 import Table from '@mui/material/Table'
 import { TokenResult } from '@square/web-payments-sdk-types'
-import { withSSRContext } from 'aws-amplify'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
-import Layout from '@/components/templates/Layout'
+import cardBrandImg from '@/assets/img/cardBrands.png'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { subtotal, taxRate } from '@/constants/Price'
-import { UserPlanFree } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { squareService } from '@/services/squareService'
-import { userService } from '@/services/userService'
 import { commonSlice } from '@/store/common'
 import { colors, fontSizes } from '@/themes/globalStyles'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
-import cardBrandImg from '@/assets/img/cardBrands.png'
 
 export const PaymentSubscribe: FC = () => {
   const { amplifyUser } = useGetAuthUser()

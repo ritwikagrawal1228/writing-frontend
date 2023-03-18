@@ -1,10 +1,8 @@
 import { gql } from 'graphql-request'
 
-import { Path } from '@/constants/Path'
-import { axios } from '@/utils/axios'
 import { AmplifyUser } from '@/types/model/amplifyUser'
-import { getGraphQLClient } from '@/utils/graphqlClient'
 import { CompletedAnswerSentence } from '@/types/model/answer'
+import { getGraphQLClient } from '@/utils/graphqlClient'
 
 const createCorrection = async (
   answerId: string,

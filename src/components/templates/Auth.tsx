@@ -1,10 +1,5 @@
-import React, { FC, memo, useMemo } from 'react'
+import React, { FC, memo } from 'react'
 
-import { Box, ThemeProvider, createTheme } from '@mui/material'
-
-import i18next from 'i18next'
-import { I18n } from 'aws-amplify'
-import { Router } from '@/routes/router'
 import {
   Authenticator,
   Button,
@@ -13,11 +8,16 @@ import {
   View,
   useTheme,
 } from '@aws-amplify/ui-react'
-import { Path } from '@/constants/Path'
-import '@aws-amplify/ui-react/styles.css'
+import { Box, ThemeProvider, createTheme } from '@mui/material'
+import { I18n } from 'aws-amplify'
+import i18next from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/store'
+
+import { Path } from '@/constants/Path'
 import { dict } from '@/i18n/amplify'
+import '@aws-amplify/ui-react/styles.css'
+import { Router } from '@/routes/router'
+import { RootState } from '@/store'
 import { langSlice } from '@/store/i18n'
 import { getDesignTokens } from '@/themes/defaultTheme'
 
@@ -127,7 +127,7 @@ export const Auth: FC = memo(() => {
             },
           }}
         >
-          {({ signOut, user }) => (
+          {() => (
             <>
               <ThemeProvider theme={theme}>
                 <Router />

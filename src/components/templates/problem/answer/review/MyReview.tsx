@@ -6,7 +6,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import {
   Box,
   Button,
-  CircularProgress,
   TextField,
   Typography,
   useTheme,
@@ -23,6 +22,7 @@ import {
   DialogContentText,
   DialogActions,
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { ProfileAvatar } from '@/components/parts/common/ProfileAvatar'
@@ -31,8 +31,6 @@ import { RootState } from '@/store'
 import { commonSlice } from '@/store/common'
 import { fontSizes } from '@/themes/globalStyles'
 import { Review } from '@/types/model/review'
-import { useTranslation } from 'react-i18next'
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 
 type Props = {
   answerId: string

@@ -13,8 +13,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useTranslation } from 'react-i18next'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+
 import { AnsweringForm } from '@/types/form/AnsweringForm'
 
 export const Stopwatch: FC = () => {

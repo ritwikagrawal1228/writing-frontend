@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { User } from '@/types/model/user'
 import { AmplifyUser } from '@/types/model/amplifyUser'
+import { User } from '@/types/model/user'
 
 export type UserState = {
   user?: User

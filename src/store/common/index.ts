@@ -37,7 +37,9 @@ const initialState: CommonState = {
     contentText: '',
     cancelText: '',
     actionText: '',
-    onAction: () => {},
+    onAction: () => {
+      //
+    },
   },
 }
 
