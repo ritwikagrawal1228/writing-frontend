@@ -1,12 +1,14 @@
 import { gql } from 'graphql-request'
 
-import { Path } from '@/constants/Path'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
+import { AmplifyUser } from '@/types/model/amplifyUser'
 import { User } from '@/types/model/user'
-import { axios } from '@/utils/axios'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
-const updateProfile = async (form: UpdateProfileSettingForm) => {
+const updateProfile = async (
+  form: UpdateProfileSettingForm,
+  user?: AmplifyUser,
+) => {
   const query = gql`
     mutation ($input: UpdateUserProfileInput!) {
       updateUserProfile(input: $input) {
@@ -36,10 +38,10 @@ const updateProfile = async (form: UpdateProfileSettingForm) => {
     },
   }
 
-  return await axios.post<{ updateUserProfile: User }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ updateUserProfile: User }>(
     query,
     variables,
-  })
+  )
 }
 
 const userQuery = gql`
@@ -60,18 +62,8 @@ const userQuery = gql`
     }
   }
 `
-
-const getAuthUser = async () => {
-  return axios.post<{ user: User }>(Path.APIGraphql, {
-    query: userQuery,
-    variables: undefined,
-  })
-}
-
-const getAuthUserFromServer = async (user: any) => {
-  const client = getGraphQLClient(user)
-
-  return await client
+const getAuthUser = async (user: AmplifyUser) => {
+  return await getGraphQLClient(user)
     .request<{ user: User }>(userQuery, { userId: user.attributes.sub })
     .then((res) => res)
 }
@@ -79,5 +71,4 @@ const getAuthUserFromServer = async (user: any) => {
 export const userService = {
   updateProfile,
   getAuthUser,
-  getAuthUserFromServer,
 }

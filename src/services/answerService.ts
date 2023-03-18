@@ -1,12 +1,11 @@
 import { gql } from 'graphql-request'
 
-import { AnswerStatus } from '@/constants/AnswerStatus'
-import { Path } from '@/constants/Path'
+import { AnsweringForm } from '@/types/form/AnsweringForm'
+import { AmplifyUser } from '@/types/model/amplifyUser'
 import { Answer } from '@/types/model/answer'
-import { axios } from '@/utils/axios'
 import { getGraphQLClient } from '@/utils/graphqlClient'
 
-const getAnswersByProblemId = async (problemId: string) => {
+const getAnswersByProblemId = async (problemId: string, user?: AmplifyUser) => {
   const query = gql`
     query ($problemId: String!) {
       answersByProblemId(problemId: $problemId) {
@@ -25,18 +24,16 @@ const getAnswersByProblemId = async (problemId: string) => {
     problemId,
   }
 
-  return await axios.post<{ answersByProblemId: Answer[] }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ answersByProblemId: Answer[] }>(
     query,
     variables,
-  })
+  )
 }
 
 const createAnswer = async (
   problemId: string,
-  answer: string,
-  answerSpentTime: number,
-  time: number,
-  status: AnswerStatus,
+  answerForm: AnsweringForm,
+  user?: AmplifyUser,
 ) => {
   const query = gql`
     mutation ($input: CreateAnswerInput!) {
@@ -48,26 +45,24 @@ const createAnswer = async (
   const variables = {
     input: {
       problemId,
-      answer,
-      answerSpentTime,
-      time,
-      status,
+      answer: answerForm.answer,
+      answerSpentTime: answerForm.countDownSec,
+      time: answerForm.time,
+      status: answerForm.status,
     },
   }
 
-  return await axios.post(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ createAnswer: Answer }>(
     query,
     variables,
-  })
+  )
 }
 
 const updateAnswer = async (
   answerId: string,
   problemId: string,
-  answer: string,
-  answerSpentTime: number,
-  time: number,
-  status: AnswerStatus,
+  answerForm: AnsweringForm,
+  user?: AmplifyUser,
 ) => {
   const query = gql`
     mutation ($input: UpdateAnswerInput!) {
@@ -80,20 +75,20 @@ const updateAnswer = async (
     input: {
       answerId,
       problemId,
-      answer,
-      answerSpentTime,
-      time,
-      status,
+      answer: answerForm.answer,
+      answerSpentTime: answerForm.countDownSec,
+      time: answerForm.time,
+      status: answerForm.status,
     },
   }
 
-  return await axios.post(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ updateAnswer: Answer }>(
     query,
     variables,
-  })
+  )
 }
 
-const getAnswerById = async (id: string, user: any) => {
+const getAnswerById = async (id: string, user: AmplifyUser) => {
   const query = gql`
     query ($id: String!) {
       answer(answerId: $id) {
@@ -123,9 +118,7 @@ const getAnswerById = async (id: string, user: any) => {
     id,
   }
 
-  const client = getGraphQLClient(user)
-
-  return await client
+  return await getGraphQLClient(user)
     .request<{ answer: Answer }>(query, variables)
     .then((res) => res)
 }

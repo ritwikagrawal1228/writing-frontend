@@ -149,7 +149,11 @@
       "quitDialogDescription": "保存すると、回答を再開できます。 \n 保存せずに中止すると、回答は削除されます。",
       "quitDialogWithoutSavingButton": "保存せずに中止",
       "quitDialogSavingButton": "保存して中止",
-      "quitDialogCancelButton": "いいえ"
+      "quitDialogCancelButton": "いいえ",
+      "emptyAnswer": "回答を入力してください",
+      "unsavedDialogTitle": "保存されていない回答があります",
+      "unsavedDialogWithoutSavingButton": "保存せずに中止",
+      "unsavedDialogSavingButton": "保存して中止"
     },
     "create": {
       "title": "回答",
@@ -195,7 +199,7 @@
       "answerTitle": "回答",
       "answerDiffTitle": "回答&訂正の差分",
       "answerDiffToggle": "訂正との差分を表示",
-      "answerDiffInfo": "{icon}をクリックして訂正文を入力できます。",
+      "answerDiffInfo": "💬をクリックして訂正文を入力できます。",
       "answerDiffHelperText": "差分を出すため正しい文を入力してください",
       "answerDiffSubmitButton": "保存"
     }

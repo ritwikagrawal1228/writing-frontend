@@ -30,8 +30,8 @@ a {
     color-scheme: dark;
   }
   body {
-    color: white;
-    background: black;
+    color: white !important;
+    background: black !important;
   }
 }
 

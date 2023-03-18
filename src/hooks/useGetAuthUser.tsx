@@ -1,29 +1,30 @@
-import { useRouter } from 'next/router'
 import { useLayoutEffect } from 'react'
 
 import { Auth } from 'aws-amplify'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Path } from '@/constants/Path'
 import { userService } from '@/services/userService'
 import { RootState } from '@/store'
 import { userSlice } from '@/store/user'
 
 export const useGetAuthUser = () => {
   const user = useSelector((state: RootState) => state.user.user)
+  const amplifyUser = useSelector((state: RootState) => state.user.amplifyUser)
   const dispatch = useDispatch()
-  const router = useRouter()
 
   useLayoutEffect(() => {
-    Auth.currentAuthenticatedUser()
-      .then((user) => {
-        userService.getAuthUser().then(({ data }) => {
-          dispatch(userSlice.actions.updateUser(data.user))
-        })
+    Auth.currentAuthenticatedUser().then((user) => {
+      if (!user) {
+        return
+      }
+
+      dispatch(userSlice.actions.updateAmplifyUser(user))
+
+      userService.getAuthUser(user).then(({ user }) => {
+        dispatch(userSlice.actions.updateUser(user))
       })
-      // if there is no authenticated user, redirect to profile page
-      .catch(() => router.push(Path.Auth))
+    })
   }, [])
 
-  return { user }
+  return { user, amplifyUser }
 }

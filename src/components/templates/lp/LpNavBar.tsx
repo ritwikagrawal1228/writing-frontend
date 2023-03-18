@@ -1,5 +1,3 @@
-import Image from 'next/image'
-import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import TranslateIcon from '@mui/icons-material/Translate'
@@ -12,6 +10,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
+import i18next from 'i18next'
 
 import { Path } from '@/constants/Path'
 import { fontSizes } from '@/themes/globalStyles'
@@ -21,15 +20,9 @@ const languages = {
   ja: '日本語',
 }
 
-type Props = {
-  isOnlyLogo?: boolean
-}
+export default function LpNavBar() {
+  const [langs] = React.useState<Record<string, string>>(languages)
 
-export default function LpNavBar({ isOnlyLogo = false }: Props) {
-  const router = useRouter()
-  const [langs, setLangs] = React.useState<Record<string, string>>(languages)
-
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   )
@@ -37,32 +30,28 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
     setAnchorElUser(event.currentTarget)
   }
 
-  const handleCloseUserMenu = (lang: string) => {
+  const handleCloseUserMenu = () => {
     setAnchorElUser(null)
   }
   const toggleLang = (lang: string) => {
-    if (lang === router.locale) {
+    if (lang === i18next.language) {
       return
     }
-    router.push(router.pathname, router.route, {
-      locale: router.locales
-        ? router.locales.filter((l) => l !== router.locale).join()
-        : 'en',
-    })
+    // TODO: ここで言語を切り替える
     setAnchorElUser(null)
   }
 
   return (
     <>
-      <AppBar position="fixed" color="default" elevation={0}>
+      <AppBar color="default" elevation={0}>
         <Container maxWidth="lg">
           <Toolbar disableGutters>
-            <Image src="/logo.png" height={30} width={48.54} alt="logo" />
+            <img src="/logo.png" height={30} width={48.54} alt="logo" />
             <Typography
               variant="h6"
               noWrap
               component="a"
-              href={Path.Auth}
+              href={Path.Problem}
               sx={{
                 mr: 10,
                 ml: 2,
@@ -77,7 +66,9 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
 
             <Box sx={{ flexGrow: 0, mr: 5 }}>
               <Tooltip
-                title={router.locale === 'ja' ? '言語変更' : 'Change language'}
+                title={
+                  i18next.language === 'ja' ? '言語変更' : 'Change language'
+                }
               >
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <TranslateIcon />
@@ -86,7 +77,7 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
                     fontSize={fontSizes.m}
                     sx={{ ml: 1 }}
                   >
-                    {languages[router.locale as keyof typeof languages]}
+                    {languages[i18next.language as keyof typeof languages]}
                   </Typography>
                 </IconButton>
               </Tooltip>
@@ -108,7 +99,7 @@ export default function LpNavBar({ isOnlyLogo = false }: Props) {
               >
                 {Object.keys(langs).map((lang) => (
                   <MenuItem
-                    disabled={router.locale === lang}
+                    disabled={i18next.language === lang}
                     key={lang}
                     onClick={() => toggleLang(lang)}
                   >

@@ -1,6 +1,5 @@
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import React from 'react'
+import React, { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   Grid,
@@ -13,68 +12,55 @@ import {
   TableBody,
 } from '@mui/material'
 import Table from '@mui/material/Table'
-import { TokenResult } from '@square/web-payments-sdk-types'
-import { withSSRContext } from 'aws-amplify'
-import { useTranslations } from 'next-intl'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
-import Layout from '@/components/templates/Layout'
+import cardBrandImg from '@/assets/img/cardBrands.png'
+import { SquareCardForm } from '@/components/parts/common/SquareCardForm'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { Path } from '@/constants/Path'
 import { subtotal, taxRate } from '@/constants/Price'
-import { UserPlanFree } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { squareService } from '@/services/squareService'
-import { userService } from '@/services/userService'
 import { commonSlice } from '@/store/common'
-import { colors, fontSizes } from '@/themes/globalStyles'
+import { fontSizes } from '@/themes/globalStyles'
 
-type Props = {
-  squareInfo: {
-    appId: string
-    locationId: string
-  }
-}
-
-const TRACKING_ID = process.env.NEXT_PUBLIC_GA4_TRACKING_ID as string
-
-export default function PaymentSubscribe({ squareInfo }: Props) {
-  useGetAuthUser()
-  const t = useTranslations('Payment')
+export const PaymentSubscribe: FC = () => {
+  const { amplifyUser } = useGetAuthUser()
+  const { t } = useTranslation()
   const theme = useTheme()
-  const router = useRouter()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
+  useSetBreadcrumbs([{ label: t('Payment.title'), href: undefined }])
 
-  const submit = async (token: TokenResult) => {
+  const submit = async (token: any) => {
     if (!token.token) {
       return
     }
-    if (TRACKING_ID || !router.isPreview) {
-      gtag('event', 'in_app_purchase', {
-        page_path: window.location.pathname,
-        send_to: TRACKING_ID,
-      })
-    }
+
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
-    const { data } = await squareService.subscribePaidPlan(token.token)
+    const { subscribePaidPlan } = await squareService.subscribePaidPlan(
+      token.token,
+      amplifyUser,
+    )
     dispatch(commonSlice.actions.updateIsBackdropShow(false))
-    if (data.subscribePaidPlan) {
+    if (subscribePaidPlan) {
       dispatch(
         commonSlice.actions.updateSnackBar({
           isSnackbarShow: true,
-          snackBarMsg: t('paymentSuccess'),
+          snackBarMsg: t('Payment.paymentSuccess'),
           snackBarType: 'success',
         }),
       )
       setTimeout(() => {
-        router.push(Path.ProblemCreate)
+        navigate(Path.ProblemCreate)
       }, 3000)
     } else {
       dispatch(
         commonSlice.actions.updateSnackBar({
           isSnackbarShow: true,
-          snackBarMsg: t('paymentFailed'),
+          snackBarMsg: t('Payment.paymentFailed'),
           snackBarType: 'error',
         }),
       )
@@ -83,26 +69,22 @@ export default function PaymentSubscribe({ squareInfo }: Props) {
 
   return (
     <>
-      <Layout
-        title={t('title')}
-        description={t('description')}
-        breadcrumbs={[{ label: t('title'), href: undefined }]}
-      >
-        <TitleBox title={t('title')}>
+      <>
+        <TitleBox title={t('Payment.title')}>
           <></>
         </TitleBox>
         <Paper sx={{ minHeight: '460px', p: 4 }}>
           <Grid container columnSpacing={3}>
             <Grid item xs={6}>
               <Typography variant="h6" sx={{ mb: 3 }}>
-                {t('paymentDetail')}
+                {t('Payment.paymentDetail')}
               </Typography>
               <TableContainer sx={{ mb: 3 }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableBody>
                     <TableRow sx={{ 'td, th': { border: 0 } }}>
                       <TableCell component="th" scope="row">
-                        {t('subtotal')}
+                        {t('Payment.subtotal')}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         ¥{subtotal}
@@ -110,7 +92,7 @@ export default function PaymentSubscribe({ squareInfo }: Props) {
                     </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
-                        {t('consumptionTax')}
+                        {t('Payment.consumptionTax')}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         ¥{(subtotal * taxRate) / 100}
@@ -120,7 +102,7 @@ export default function PaymentSubscribe({ squareInfo }: Props) {
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {t('total')}
+                        {t('Payment.total')}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         ¥{subtotal + (subtotal * taxRate) / 100}
@@ -130,28 +112,17 @@ export default function PaymentSubscribe({ squareInfo }: Props) {
                 </Table>
               </TableContainer>
               <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
-                {t('cardBrandsSupported')}
+                {t('Payment.cardBrandsSupported')}
               </Typography>
               <img
-                src="/img/cardBrands.png"
+                src={cardBrandImg}
                 alt="VISA/Mastercard/American Express/JCB/Discover"
                 width="400px"
               />
-              <PaymentForm
-                applicationId={squareInfo.appId}
-                cardTokenizeResponseReceived={(token, verifiedBuyer) => {
-                  submit(token)
-                }}
-                locationId={squareInfo.locationId}
-              >
-                <CreditCard
-                  buttonProps={{
-                    css: { backgroundColor: colors.secondary.main },
-                  }}
-                >
-                  {t('proceedToPayment')}
-                </CreditCard>
-              </PaymentForm>
+              <SquareCardForm
+                buttonText={t('Payment.proceedToPayment')}
+                submit={submit}
+              />
             </Grid>
             <Grid item xs={6}>
               <Paper
@@ -163,70 +134,23 @@ export default function PaymentSubscribe({ squareInfo }: Props) {
                 }}
               >
                 <Typography variant="h6" sx={{ mb: 3 }}>
-                  👑 {t('proPlanTitle')}
+                  👑 {t('Payment.proPlanTitle')}
                 </Typography>
                 <Typography variant="h4" sx={{ mb: 3 }}>
                   {`¥${subtotal}`}
                 </Typography>
                 <Typography fontSize={fontSizes.l} sx={{ pb: 1 }}>
-                  ✨ {t('proFeature1')}
+                  ✨ {t('Payment.proFeature1')}
                   <br />
-                  <br />✨ {t('proFeature2')}
+                  <br />✨ {t('Payment.proFeature2')}
                   <br />
-                  <br />✨ {t('proFeature3')}
+                  <br />✨ {t('Payment.proFeature3')}
                 </Typography>
               </Paper>
             </Grid>
           </Grid>
         </Paper>
-      </Layout>
+      </>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const userData = await Auth.currentAuthenticatedUser()
-    const squareInfo = {
-      appId: process.env.SQUARE_APPLICATION_ID || '',
-      locationId: process.env.SQUARE_LOCATION_ID || '',
-    }
-    const { user } = await userService.getAuthUserFromServer(userData)
-
-    if (!user) {
-      return {
-        redirect: {
-          permanent: false,
-          destination: context.req.headers.referer || Path.Auth,
-        },
-      }
-    }
-
-    if (user.plan !== UserPlanFree) {
-      return {
-        redirect: {
-          permanent: false,
-          destination: Path.Auth,
-        },
-      }
-    }
-
-    return {
-      props: {
-        messages: require(`@/locales/${locale}.json`),
-        squareInfo,
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Auth,
-      },
-    }
-  }
 }

@@ -13,41 +13,42 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useTranslations } from 'next-intl'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
-type Props = {
-  time: number
-  setTime: React.Dispatch<React.SetStateAction<number>>
-  countDownSec: number
-  setCountDownSec: React.Dispatch<React.SetStateAction<number>>
-}
+import { AnsweringForm } from '@/types/form/AnsweringForm'
 
-export const Stopwatch: FC<Props> = ({
-  time,
-  setTime,
-  countDownSec,
-  setCountDownSec,
-}) => {
-  const ta = useTranslations('Answer')
+export const Stopwatch: FC = () => {
+  const { t } = useTranslation()
   const [isStartConfirm, setIsStartConfirm] = React.useState<boolean>(false)
   const [isPauseConfirm, setIsPauseConfirm] = React.useState<boolean>(false)
   const [isResumeConfirm, setIsResumeConfirm] = React.useState<boolean>(false)
   const [isPaused, setIsPaused] = React.useState<boolean>(false)
   const [isActive, setIsActive] = React.useState(false)
+  const { control, setValue } = useFormContext<AnsweringForm>()
+  const watchForm = useWatch<AnsweringForm>({
+    control,
+  })
+  const [count, setCount] = React.useState<number>(watchForm.countDownSec || 0)
 
   useEffect(() => {
-    if (countDownSec > 0) {
+    setCount(watchForm.countDownSec || 0)
+    if (watchForm.countDownSec || 0 > 0) {
       setIsActive(true)
       setIsPaused(true)
     }
   }, [])
+
+  useEffect(() => {
+    setValue('countDownSec', count)
+  }, [count])
 
   React.useEffect(() => {
     let interval: NodeJS.Timer | undefined = undefined
 
     if (isActive && isPaused === false) {
       interval = setInterval(() => {
-        setCountDownSec((time) => time + 1)
+        setCount((count) => count + 1)
       }, 1000)
     } else {
       clearInterval(interval)
@@ -82,7 +83,7 @@ export const Stopwatch: FC<Props> = ({
 
   return (
     <>
-      {countDownSec > 0 ? (
+      {watchForm.countDownSec || 0 > 0 ? (
         <Button
           startIcon={isPaused ? <PlayArrowIcon /> : <PauseIcon />}
           color="inherit"
@@ -96,7 +97,7 @@ export const Stopwatch: FC<Props> = ({
         >
           <Typography>
             <span style={{ fontWeight: 'bold' }}>
-              {Math.floor(time - countDownSec / 60)}
+              {Math.floor((watchForm.time || 0) - count / 60)}
             </span>{' '}
             minutes left
           </Typography>
@@ -108,32 +109,37 @@ export const Stopwatch: FC<Props> = ({
           variant="contained"
           onClick={() => setIsStartConfirm(true)}
         >
-          <Typography>{ta('form.startButton')}</Typography>
+          <Typography>{t('Answer.form.startButton')}</Typography>
         </Button>
       )}
       <Dialog open={isStartConfirm} onClose={handleCloseStartConfirm}>
-        <DialogTitle>{ta('form.startDialogTitle')}</DialogTitle>
+        <DialogTitle>{t('Answer.form.startDialogTitle')}</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            {ta('form.startDialogDescription')}
+            {t('Answer.form.startDialogDescription')}
           </DialogContentText>
-          <TextField
-            autoFocus
-            color="secondary"
-            margin="dense"
-            id="name"
-            label={ta('form.startDialogInputLabel')}
-            type="number"
-            value={time}
-            onChange={(e) => setTime(Number(e.target.value))}
-            variant="standard"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  {ta('form.startMinUnit')}
-                </InputAdornment>
-              ),
-            }}
+          <Controller
+            name="time"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                autoFocus
+                color="secondary"
+                margin="dense"
+                id="name"
+                label={t('Answer.form.startDialogInputLabel')}
+                type="number"
+                variant="standard"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      {t('Answer.form.startMinUnit')}
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
         </DialogContent>
         <DialogActions>
@@ -142,22 +148,22 @@ export const Stopwatch: FC<Props> = ({
             variant="outlined"
             onClick={handleCloseStartConfirm}
           >
-            {ta('form.startDialogCancelButton')}
+            {t('Answer.form.startDialogCancelButton')}
           </Button>
           <Button
             color="secondary"
             variant="outlined"
             onClick={() => handleStartTimer()}
           >
-            {ta('form.startDialogStartButton')}!
+            {t('Answer.form.startDialogStartButton')}!
           </Button>
         </DialogActions>
       </Dialog>
       <Dialog open={isPauseConfirm} onClose={handleClosePauseConfirm}>
-        <DialogTitle>{ta('form.pauseDialogTitle')}</DialogTitle>
+        <DialogTitle>{t('Answer.form.pauseDialogTitle')}</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            {ta('form.pauseDialogDescription')}
+            {t('Answer.form.pauseDialogDescription')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -166,18 +172,18 @@ export const Stopwatch: FC<Props> = ({
             variant="outlined"
             onClick={handleClosePauseConfirm}
           >
-            {ta('form.pauseDialogCancelButton')}
+            {t('Answer.form.pauseDialogCancelButton')}
           </Button>
           <Button color="secondary" onClick={() => handlePauseTimer()}>
-            {ta('form.pauseDialogPauseButton')}
+            {t('Answer.form.pauseDialogPauseButton')}
           </Button>
         </DialogActions>
       </Dialog>
       <Dialog open={isResumeConfirm} onClose={handleCloseResumeConfirm}>
-        <DialogTitle>{ta('form.resumeDialogTitle')}</DialogTitle>
+        <DialogTitle>{t('Answer.form.resumeDialogTitle')}</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 2 }}>
-            {ta('form.resumeDialogDescription')}
+            {t('Answer.form.resumeDialogDescription')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -186,10 +192,10 @@ export const Stopwatch: FC<Props> = ({
             variant="outlined"
             onClick={handleCloseResumeConfirm}
           >
-            {ta('form.resumeDialogCancelButton')}
+            {t('Answer.form.resumeDialogCancelButton')}
           </Button>
           <Button color="secondary" onClick={() => handlePauseTimer()}>
-            {ta('form.resumeDialogResumeButton')}
+            {t('Answer.form.resumeDialogResumeButton')}
           </Button>
         </DialogActions>
       </Dialog>

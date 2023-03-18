@@ -1,22 +1,17 @@
-import { GetServerSideProps } from 'next'
-import Head from 'next/head'
 import React from 'react'
 
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import { Grid, Paper, Typography } from '@mui/material'
-import { useTranslations } from 'next-intl'
 
 import LpNavBar from '@/components/templates/lp/LpNavBar'
 import { fontSizes, spaces } from '@/themes/globalStyles'
 
-export default function Page500() {
-  const t = useTranslations('Problem')
+import '@/index.css'
+
+export const Page500 = () => {
   return (
     <>
-      <Head>
-        <title>Error</title>
-      </Head>
-      <LpNavBar isOnlyLogo={true} />
+      <LpNavBar />
       <Grid
         container
         alignItems="center"
@@ -44,11 +39,4 @@ export default function Page500() {
       </Grid>
     </>
   )
-}
-
-export const getStaticProps: GetServerSideProps = async (context) => {
-  const { locale } = context
-  return {
-    props: { messages: require(`@/locales/${locale}.json`) },
-  }
 }

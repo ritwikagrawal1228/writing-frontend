@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router'
 import React, { FC, Fragment, memo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import SmartToyIcon from '@mui/icons-material/SmartToy'
 import {
@@ -13,9 +13,9 @@ import {
   Typography,
   Avatar,
   useTheme,
-  Modal,
 } from '@mui/material'
-import { useTranslations } from 'next-intl'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { MyReview } from './MyReview'
 
@@ -23,6 +23,8 @@ import { Path } from '@/constants/Path'
 import { ProblemType1 } from '@/constants/ProblemType'
 import { UserPlanFree } from '@/constants/UserPlans'
 import { reviewService } from '@/services/reviewService'
+import { RootState } from '@/store'
+import { commonSlice } from '@/store/common'
 import { Answer } from '@/types/model/answer'
 import { Review } from '@/types/model/review'
 import { User } from '@/types/model/user'
@@ -36,18 +38,6 @@ interface TabPanelProps {
   children?: React.ReactNode
   index: number
   value: number
-}
-
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
 }
 
 function a11yProps(index: number) {
@@ -74,36 +64,42 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
-  const ta = useTranslations('Answer')
-  const router = useRouter()
+  const { t } = useTranslation()
+  const amplifyUser = useSelector((state: RootState) => state.user.amplifyUser)
   const [reviews, setReviews] = React.useState<Review[]>([])
   const theme = useTheme()
   const [value, setValue] = React.useState(
     answer.problem.taskType === ProblemType1 ? 1 : 0,
   )
   const [isWaitingAiReview, setIsWaitingAiReview] = React.useState(false)
-  const [isLoadingOwnReview, setIsLoadingOwnReview] = React.useState(false)
-  const [isModalShow, setIsModalShow] = React.useState(false)
+  const lang = useSelector((state: RootState) => state.lang.lang)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
 
-  const handleModalClose = () => {
-    setIsModalShow(false)
-  }
-
   const sendReviewRequestToAI = () => {
     if (user?.plan === UserPlanFree) {
-      setIsModalShow(true)
+      dispatch(
+        commonSlice.actions.updateDialog({
+          isDialogShow: true,
+          titleText: t('Answer.review.tabContentModalTitle'),
+          contentText: t('Answer.review.tabContentModalContent'),
+          cancelText: t('Answer.review.tabContentModalCancelBtn'),
+          actionText: t('Answer.review.tabContentModalUpgradeBtn'),
+          onAction: () => navigate(Path.PaymentSubscription),
+        }),
+      )
       return
     }
     setIsWaitingAiReview(true)
     reviewService
-      .getAiReviewByAnswerId(answer.id, router.locale || 'ja')
-      .then(({ data }) => {
+      .getAiReviewByAnswerId(answer.id, lang, amplifyUser)
+      .then(({ createAiReview }) => {
         const rs = [...reviews]
-        rs.push(data.createAiReview)
+        rs.push(createAiReview)
         setReviews(rs)
       })
       .finally(() => {
@@ -114,10 +110,10 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
   useEffect(() => {
     setIsWaitingAiReview(true)
     reviewService
-      .getReviewsByAnswerId(answer.id)
-      .then(({ data }) => {
-        if (data.reviewsByAnswerId) {
-          setReviews(data.reviewsByAnswerId)
+      .getReviewsByAnswerId(answer.id, amplifyUser)
+      .then(({ reviewsByAnswerId }) => {
+        if (reviewsByAnswerId) {
+          setReviews(reviewsByAnswerId)
         }
       })
       .finally(() => {
@@ -127,31 +123,6 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
 
   return (
     <>
-      <Modal open={isModalShow} onClose={handleModalClose}>
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {ta('review.tabContentModalTitle')}
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ my: 2 }}>
-            {ta('review.tabContentModalContent')}
-          </Typography>
-          <Button
-            color="inherit"
-            variant="outlined"
-            onClick={handleModalClose}
-            sx={{ mr: 1 }}
-          >
-            {ta('review.tabContentModalCancelBtn')}
-          </Button>
-          <Button
-            color="secondary"
-            variant="contained"
-            onClick={() => router.push(Path.PaymentSubscription)}
-          >
-            {ta('review.tabContentModalUpgradeBtn')}
-          </Button>
-        </Box>
-      </Modal>
       <Paper sx={{ p: 2 }}>
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -161,11 +132,11 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
               aria-label="basic tabs example"
             >
               <Tab
-                label={ta('review.tabMenuAi')}
+                label={t('Answer.review.tabMenuAi')}
                 disabled={answer.problem.taskType === ProblemType1}
                 {...a11yProps(0)}
               />
-              <Tab label={ta('review.tabMenuMy')} {...a11yProps(1)} />
+              <Tab label={t('Answer.review.tabMenuMy')} {...a11yProps(1)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
@@ -192,19 +163,19 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
             ) : (
               <>
                 <Alert severity="info" sx={{ width: '100%', mb: 1 }}>
-                  {ta('review.tabContentInfo')}
+                  {t('Answer.review.tabContentInfo')}
                 </Alert>
                 <Alert severity="warning" sx={{ width: '100%', mb: 1 }}>
-                  ○ {ta('review.tabContentWarning1')} <br />○{' '}
-                  {ta('review.tabContentWarning2')} <br />○{' '}
-                  {ta('review.tabContentWarning3')} <br />
+                  ○ {t('Answer.review.tabContentWarning1')} <br />○{' '}
+                  {t('Answer.review.tabContentWarning2')} <br />○{' '}
+                  {t('Answer.review.tabContentWarning3')} <br />
                 </Alert>
                 <Button
                   color="secondary"
                   variant="contained"
                   onClick={sendReviewRequestToAI}
                 >
-                  {ta('review.tabContentRequestButton')}
+                  {t('Answer.review.tabContentRequestButton')}
                 </Button>
               </>
             )}
@@ -213,8 +184,6 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
             <MyReview
               reviews={reviews}
               setReviews={setReviews}
-              isLoading={isLoadingOwnReview}
-              setIsLoading={setIsLoadingOwnReview}
               answerId={answer.id}
             />
           </TabPanel>

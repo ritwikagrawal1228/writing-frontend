@@ -1,19 +1,19 @@
 export type AmplifyDependentResourcesAttributes = {
-    "auth": {
-        "ieltswritinghelper755b7dda": {
-            "IdentityPoolId": "string",
-            "IdentityPoolName": "string",
-            "UserPoolId": "string",
-            "UserPoolArn": "string",
-            "UserPoolName": "string",
-            "AppClientIDWeb": "string",
-            "AppClientID": "string"
-        }
-    },
-    "storage": {
-        "iwh": {
-            "BucketName": "string",
-            "Region": "string"
-        }
+  "auth": {
+    "iwh2dcc1fd7": {
+      "AppClientID": "string",
+      "AppClientIDWeb": "string",
+      "IdentityPoolId": "string",
+      "IdentityPoolName": "string",
+      "UserPoolArn": "string",
+      "UserPoolId": "string",
+      "UserPoolName": "string"
     }
+  },
+  "storage": {
+    "iwh": {
+      "BucketName": "string",
+      "Region": "string"
+    }
+  }
 }

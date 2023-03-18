@@ -2,14 +2,14 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "IeltsWritingHelper",
+  "projectName": "iwh",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
     "framework": "react",
     "config": {
       "SourceDir": "src",
-      "DistributionDir": "build",
+      "DistributionDir": "dist",
       "BuildCommand": "npm run build",
       "StartCommand": "npm run dev"
     }

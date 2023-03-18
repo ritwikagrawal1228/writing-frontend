@@ -1,32 +1,23 @@
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
 import React from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
-import { Box, Button, Grid, Paper, useTheme } from '@mui/material'
-import { useTranslations } from 'next-intl'
+import { Box, Button, Grid, Paper } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { Path } from '@/constants/Path'
-import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 
-export default function NotificationSetting() {
-  useGetAuthUser()
-  const theme = useTheme()
-  const t = useTranslations('Problem')
-  const router = useRouter()
+export const NotificationSetting = () => {
+  const { t } = useTranslation()
+  useSetBreadcrumbs([
+    { label: t('list.title'), href: Path.Problem },
+    { label: t('create.title'), href: undefined },
+  ])
 
   return (
-    <Layout
-      title={t('create.title')}
-      description={t('create.title')}
-      breadcrumbs={[
-        { label: t('list.title'), href: Path.Problem },
-        { label: t('create.title'), href: undefined },
-      ]}
-    >
+    <>
       <TitleBox title="Notification Setting">
         <Box sx={{ maxHeight: '36px' }}>
           <Button color="primary" variant="contained" startIcon={<SaveIcon />}>
@@ -42,13 +33,6 @@ export default function NotificationSetting() {
           <Paper sx={{ minHeight: 200 }}></Paper>
         </Grid>
       </Grid>
-    </Layout>
+    </>
   )
-}
-
-export const getStaticProps: GetServerSideProps = async (context) => {
-  const { locale } = context
-  return {
-    props: { messages: require(`@/locales/${locale}.json`) },
-  }
 }

@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import React from 'react'
 
 import { Box, Container } from '@mui/material'
@@ -6,13 +5,10 @@ import { Box, Container } from '@mui/material'
 import LpNavBar from '@/components/templates/lp/LpNavBar'
 import { PrivacyPolicy } from '@/components/templates/privacy/PrivacyPolicy'
 
-export default function Terms() {
+export const Privacy = () => {
   return (
     <>
-      <Head>
-        <title>Privacy Policy</title>
-      </Head>
-      <LpNavBar isOnlyLogo={true} />
+      <LpNavBar />
       <Box sx={{}}>
         <Container maxWidth="lg" sx={{ mt: 13 }}>
           <PrivacyPolicy />

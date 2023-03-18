@@ -1,10 +1,14 @@
 import { gql } from 'graphql-request'
 
-import { Path } from '@/constants/Path'
+import { AmplifyUser } from '@/types/model/amplifyUser'
 import { Review } from '@/types/model/review'
-import { axios } from '@/utils/axios'
+import { getGraphQLClient } from '@/utils/graphqlClient'
 
-const createReview = async (answerId: string, content: string) => {
+const createReview = async (
+  answerId: string,
+  content: string,
+  user?: AmplifyUser,
+) => {
   const query = gql`
     mutation ($input: CreateReviewInput!) {
       createReview(input: $input) {
@@ -21,13 +25,13 @@ const createReview = async (answerId: string, content: string) => {
     },
   }
 
-  return await axios.post<{ createReview: Review }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ createReview: Review }>(
     query,
     variables,
-  })
+  )
 }
 
-const getReviewsByAnswerId = async (answerId: string) => {
+const getReviewsByAnswerId = async (answerId: string, user?: AmplifyUser) => {
   const query = gql`
     query ($answerId: String!) {
       reviewsByAnswerId(answerId: $answerId) {
@@ -42,13 +46,17 @@ const getReviewsByAnswerId = async (answerId: string) => {
     answerId,
   }
 
-  return await axios.post<{ reviewsByAnswerId: Review[] }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ reviewsByAnswerId: Review[] }>(
     query,
     variables,
-  })
+  )
 }
 
-const getAiReviewByAnswerId = async (answerId: string, locale: string) => {
+const getAiReviewByAnswerId = async (
+  answerId: string,
+  locale: string,
+  user?: AmplifyUser,
+) => {
   const query = gql`
     mutation ($input: CreateAiReviewInput!) {
       createAiReview(input: $input) {
@@ -65,13 +73,17 @@ const getAiReviewByAnswerId = async (answerId: string, locale: string) => {
     },
   }
 
-  return await axios.post<{ createAiReview: Review }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ createAiReview: Review }>(
     query,
     variables,
-  })
+  )
 }
 
-const updateReview = async (reviewId: string, content: string) => {
+const updateReview = async (
+  reviewId: string,
+  content: string,
+  user?: AmplifyUser,
+) => {
   const query = gql`
     mutation ($input: UpdateReviewInput!) {
       updateReview(input: $input) {
@@ -88,13 +100,13 @@ const updateReview = async (reviewId: string, content: string) => {
     },
   }
 
-  return await axios.post<{ updateReview: Review }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ updateReview: Review }>(
     query,
     variables,
-  })
+  )
 }
 
-const deleteReview = async (reviewId: string) => {
+const deleteReview = async (reviewId: string, user?: AmplifyUser) => {
   const query = gql`
     mutation ($id: ID!) {
       deleteReview(id: $id)
@@ -105,10 +117,10 @@ const deleteReview = async (reviewId: string) => {
     id: reviewId,
   }
 
-  return await axios.post<{ deleteReview: Review }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ deleteReview: Review }>(
     query,
     variables,
-  })
+  )
 }
 
 export const reviewService = {

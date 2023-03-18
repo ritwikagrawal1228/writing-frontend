@@ -21,7 +21,6 @@ export const BaseInput = React.memo(
       value,
       disabled = false,
       error = false,
-      required = false,
       errMsg = '',
       onChange,
       labelText,

@@ -1,5 +1,3 @@
-import { axios } from '@/utils/axios'
-
 type ErrorInfo = {
   message?: string | undefined
   name?: string | undefined
@@ -11,11 +9,9 @@ export const onError = async (
   err: Error | undefined,
   info: { componentStack: string } | undefined,
 ) => {
-  const env = process.env.NODE_ENV
-  if (env == 'development') {
+  if (import.meta.env.MODE === 'development') {
     return
   }
-
   if (err === undefined) {
     return
   }
@@ -38,8 +34,5 @@ export const onError = async (
     errDetail.componentStack = info?.componentStack || ''
   }
 
-  axios.post('/api/error', {
-    err: errDetail,
-    userInfo,
-  })
+  console.log(err)
 }

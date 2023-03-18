@@ -1,9 +1,3 @@
 # Block all crawlers for /accounts
 User-agent: *
-Disallow: /problem/
-Disallow: /descriptors/
-Disallow: /payment/
-Disallow: /settings/
-Disallow: /auth/
-
-Sitemap: https://app.ielts-writing-helper.com/sitemap.xml
+Sitemap: https://www.ielts-writing-helper.com/sitemap.xml

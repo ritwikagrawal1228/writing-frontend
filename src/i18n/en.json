@@ -149,7 +149,11 @@
       "quitDialogDescription": "Save allows you to resume your answer.\nAborting without saving will delete your answer.",
       "quitDialogWithoutSavingButton": "quit without saving",
       "quitDialogSavingButton": "Save and Quit",
-      "quitDialogCancelButton": "No"
+      "quitDialogCancelButton": "No",
+      "emptyAnswer": "Answer is required",
+      "unsavedDialogTitle": "保存されていない回答があります",
+      "unsavedDialogWithoutSavingButton": "保存せずに中止",
+      "unsavedDialogSavingButton": "保存して中止"
     },
     "create": {
       "title": "Answer",
@@ -195,7 +199,7 @@
       "answerTitle": "Answer",
       "answerDiffTitle": "Answer & Correction Diff",
       "answerDiffToggle": "Show diff with correction",
-      "answerDiffInfo": "Click the {icon} to enter corrections.",
+      "answerDiffInfo": "Click the 💬 to enter corrections.",
       "answerDiffHelperText": "Enter the correct sentence to diff",
       "answerDiffSubmitButton": "Save"
     }

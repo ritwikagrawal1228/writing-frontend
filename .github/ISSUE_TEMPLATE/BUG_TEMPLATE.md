@@ -2,7 +2,7 @@
 name: BugTemplate
 about: issues template
 title: ''
-labels: ["bug", "frontend"]
+labels: ["bug", "lp"]
 assignees: ''
 ---
 

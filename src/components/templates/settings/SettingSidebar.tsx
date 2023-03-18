@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router'
 import React, { Fragment, memo } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 // import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
@@ -11,16 +11,17 @@ import {
   ListItemText,
   Paper,
 } from '@mui/material'
-import { useTranslations } from 'next-intl'
+import { useTranslation } from 'react-i18next'
 
 import { Path } from '@/constants/Path'
 
 export const SettingSidebar = memo(() => {
-  const router = useRouter()
-  const t = useTranslations('Setting')
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const location = useLocation()
   const settingList = [
     {
-      label: t('sidebar.labelProfile'),
+      label: t('Setting.sidebar.labelProfile'),
       icon: <ManageAccountsIcon />,
       path: Path.ProfileSettings,
     },
@@ -30,14 +31,14 @@ export const SettingSidebar = memo(() => {
     //   path: Path.NotificationSettings,
     // },
     {
-      label: t('sidebar.labelPayment'),
+      label: t('Setting.sidebar.labelPayment'),
       icon: <PaymentIcon />,
       path: Path.PaymentSettings,
     },
   ]
 
   const movePage = (path: string) => {
-    router.push(path)
+    navigate(path)
   }
 
   return (
@@ -47,7 +48,7 @@ export const SettingSidebar = memo(() => {
           {settingList.map((item, index) => (
             <Fragment key={index}>
               <ListItemButton
-                selected={router.pathname === item.path}
+                selected={location.pathname === item.path}
                 onClick={() => movePage(item.path)}
                 disabled={Path.NotificationSettings === item.path}
               >

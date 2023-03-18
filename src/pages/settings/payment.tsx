@@ -1,6 +1,4 @@
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import {
   Grid,
@@ -21,52 +19,48 @@ import {
   Divider,
   Chip,
 } from '@mui/material'
-import { TokenResult } from '@square/web-payments-sdk-types'
 import { format } from 'date-fns'
 import { ja, enUS } from 'date-fns/locale'
-import { useTranslations } from 'next-intl'
-import { useDispatch } from 'react-redux'
-import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
-import Layout from '@/components/templates/Layout'
+import cardBrandImg from '@/assets/img/cardBrands.png'
+import { SquareCardForm } from '@/components/parts/common/SquareCardForm'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { SettingSidebar } from '@/components/templates/settings/SettingSidebar'
 import { UserPlanFree, UserPlanPro, userPlans } from '@/constants/UserPlans'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { squareService } from '@/services/squareService'
+import { RootState } from '@/store'
 import { commonSlice } from '@/store/common'
 import { userSlice } from '@/store/user'
-import { colors, fontSizes } from '@/themes/globalStyles'
+import { fontSizes } from '@/themes/globalStyles'
 import { SquareCard } from '@/types/model/squareCard'
 
-type Props = {
-  squareInfo: {
-    appId: string
-    locationId: string
-  }
-}
-
-export default function PaymentSetting({ squareInfo }: Props) {
+export const PaymentSetting: FC = () => {
+  const lang = useSelector((state: RootState) => state.lang.lang)
   const { user } = useGetAuthUser()
-  const t = useTranslations('Setting')
-  const router = useRouter()
+  const { t } = useTranslation()
+  useSetBreadcrumbs([{ label: t('Setting.payment.title'), href: undefined }])
+
   const [card, setCard] = useState<SquareCard>()
   const [isCardLoading, setIsCardLoading] = useState<boolean>(false)
   const [isConfirmShow, setIsConfirmShow] = useState<boolean>(false)
   const dispatch = useDispatch()
 
-  const submit = async (token: TokenResult) => {
+  const submit = async (token: any) => {
     if (token.token) {
       dispatch(commonSlice.actions.updateIsBackdropShow(true))
       await squareService
         .updateSquareCard(token.token)
-        .then(({ data }) => {
-          if (data.updateSquareCard) {
-            setCard(data.updateSquareCard)
+        .then(({ updateSquareCard }) => {
+          if (updateSquareCard) {
+            setCard(updateSquareCard)
             dispatch(
               commonSlice.actions.updateSnackBar({
                 isSnackbarShow: true,
-                snackBarMsg: t('payment.updateSuccessMessage'),
+                snackBarMsg: t('Setting.payment.updateSuccessMessage'),
                 snackBarType: 'success',
               }),
             )
@@ -76,7 +70,7 @@ export default function PaymentSetting({ squareInfo }: Props) {
           dispatch(
             commonSlice.actions.updateSnackBar({
               isSnackbarShow: true,
-              snackBarMsg: t('payment.updateFailedMessage'),
+              snackBarMsg: t('Setting.payment.updateFailedMessage'),
               snackBarType: 'error',
             }),
           )
@@ -95,9 +89,9 @@ export default function PaymentSetting({ squareInfo }: Props) {
     setIsCardLoading(true)
     squareService
       .getSquareCard()
-      .then(({ data }) => {
-        if (data.getSquareCard) {
-          setCard(data.getSquareCard)
+      .then(({ getSquareCard }) => {
+        if (getSquareCard) {
+          setCard(getSquareCard)
         }
       })
       .finally(() => {
@@ -109,26 +103,16 @@ export default function PaymentSetting({ squareInfo }: Props) {
     setIsConfirmShow(false)
   }
 
-  const report = (eventName: string) => {
-    const TRACKING_ID = process.env.NEXT_PUBLIC_GA4_TRACKING_ID as string
-    if (TRACKING_ID || !router.isPreview) {
-      gtag('event', eventName, {
-        page_path: window.location.pathname,
-        send_to: TRACKING_ID,
-      })
-    }
-  }
-
   const handleConfirm = async () => {
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
     setIsConfirmShow(false)
     await squareService
       .cancelSubscription()
-      .then(({ data }) => {
+      .then(({ cancelCurrentSubscription }) => {
         dispatch(
           commonSlice.actions.updateSnackBar({
             isSnackbarShow: true,
-            snackBarMsg: t('payment.cancelSuccessMessage'),
+            snackBarMsg: t('Setting.payment.cancelSuccessMessage'),
             snackBarType: 'success',
           }),
         )
@@ -138,16 +122,15 @@ export default function PaymentSetting({ squareInfo }: Props) {
         dispatch(
           userSlice.actions.updateUser({
             ...user,
-            subscriptionExpiresAt: data.cancelCurrentSubscription,
+            subscriptionExpiresAt: cancelCurrentSubscription,
           }),
         )
-        report('refund')
       })
-      .catch((err) => {
+      .catch(() => {
         dispatch(
           commonSlice.actions.updateSnackBar({
             isSnackbarShow: true,
-            snackBarMsg: t('payment.cancelFailedMessage'),
+            snackBarMsg: t('Setting.payment.cancelFailedMessage'),
             snackBarType: 'error',
           }),
         )
@@ -156,12 +139,8 @@ export default function PaymentSetting({ squareInfo }: Props) {
   }
 
   return (
-    <Layout
-      title={t('payment.title')}
-      description={t('payment.title')}
-      breadcrumbs={[{ label: t('payment.title'), href: undefined }]}
-    >
-      <TitleBox title={t('payment.title')}>
+    <>
+      <TitleBox title={t('Setting.payment.title')}>
         <></>
       </TitleBox>
       <Grid container columnSpacing={2}>
@@ -177,7 +156,7 @@ export default function PaymentSetting({ squareInfo }: Props) {
                   sx={{ pb: 1 }}
                   fontWeight="bold"
                 >
-                  {t('payment.currentPlan')}
+                  {t('Setting.payment.currentPlan')}
                 </Typography>
                 <Typography fontSize={fontSizes.m} fontWeight="bold">
                   <Chip
@@ -191,7 +170,7 @@ export default function PaymentSetting({ squareInfo }: Props) {
                   sx={{ pb: 1 }}
                   fontWeight="bold"
                 >
-                  {t('payment.currentCard')}
+                  {t('Setting.payment.currentCard')}
                 </Typography>
                 {card ? (
                   <TableContainer component={Paper}>
@@ -199,7 +178,7 @@ export default function PaymentSetting({ squareInfo }: Props) {
                       <TableBody>
                         <TableRow>
                           <TableCell sx={{ bgcolor: '#E3183714' }}>
-                            {t('payment.cardNumber')}
+                            {t('Setting.payment.cardNumber')}
                           </TableCell>
                           <TableCell>
                             {card && `xxxx-xxxx-xxxx-${card.last4}`}
@@ -207,7 +186,7 @@ export default function PaymentSetting({ squareInfo }: Props) {
                         </TableRow>
                         <TableRow>
                           <TableCell sx={{ bgcolor: '#E3183714' }}>
-                            {t('payment.cardExpiry')}
+                            {t('Setting.payment.cardExpiry')}
                           </TableCell>
                           <TableCell>
                             {card && `${card.expYear}/${card.expMonth}`}
@@ -215,7 +194,7 @@ export default function PaymentSetting({ squareInfo }: Props) {
                         </TableRow>
                         <TableRow>
                           <TableCell sx={{ bgcolor: '#E3183714' }}>
-                            {t('payment.cardBrand')}
+                            {t('Setting.payment.cardBrand')}
                           </TableCell>
                           <TableCell>{card && card.cardBrand}</TableCell>
                         </TableRow>
@@ -225,7 +204,7 @@ export default function PaymentSetting({ squareInfo }: Props) {
                 ) : isCardLoading ? (
                   <CircularProgress />
                 ) : (
-                  <>{t('payment.noCard')}</>
+                  <>{t('Setting.payment.noCard')}</>
                 )}
                 {user?.plan === UserPlanPro && (
                   <>
@@ -235,31 +214,20 @@ export default function PaymentSetting({ squareInfo }: Props) {
                       sx={{ pb: 1 }}
                       fontWeight="bold"
                     >
-                      {t('payment.changeCardInfo')}
+                      {t('Setting.payment.changeCardInfo')}
                     </Typography>
                     <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
-                      {t('payment.changeCardSupportedBrand')}
+                      {t('Setting.payment.changeCardSupportedBrand')}
                     </Typography>
                     <img
-                      src="/img/cardBrands.png"
+                      src={cardBrandImg}
                       alt="VISA/Mastercard/American Express/JCB/Discover"
                       width="400px"
                     />
-                    <PaymentForm
-                      applicationId={squareInfo.appId}
-                      cardTokenizeResponseReceived={(token) => {
-                        submit(token)
-                      }}
-                      locationId={squareInfo.locationId}
-                    >
-                      <CreditCard
-                        buttonProps={{
-                          css: { backgroundColor: colors.secondary.main },
-                        }}
-                      >
-                        {t('payment.changeCardButton')}
-                      </CreditCard>
-                    </PaymentForm>
+                    <SquareCardForm
+                      buttonText={t('Setting.payment.changeCardButton')}
+                      submit={submit}
+                    />
                   </>
                 )}
               </>
@@ -271,7 +239,7 @@ export default function PaymentSetting({ squareInfo }: Props) {
                   sx={{ pb: 1 }}
                   fontWeight="bold"
                 >
-                  {t('payment.cancelSubscription')}
+                  {t('Setting.payment.cancelSubscription')}
                 </Typography>
                 {!user.subscriptionExpiresAt ? (
                   <>
@@ -280,26 +248,26 @@ export default function PaymentSetting({ squareInfo }: Props) {
                       sx={{ pb: 1 }}
                       color="primary"
                     >
-                      ※ {t('payment.cancelSubscriptionWarning1')}
-                      <br />※ {t('payment.cancelSubscriptionWarning2')}
+                      ※ {t('Setting.payment.cancelSubscriptionWarning1')}
+                      <br />※ {t('Setting.payment.cancelSubscriptionWarning2')}
                     </Typography>
                     <Button
                       color="primary"
                       variant="contained"
                       onClick={() => setIsConfirmShow(true)}
                     >
-                      {t('payment.cancelSubscriptionButton')}
+                      {t('Setting.payment.cancelSubscriptionButton')}
                     </Button>
                   </>
                 ) : (
                   <>
                     <Typography fontSize={fontSizes.m} sx={{ pb: 1 }}>
-                      {t('payment.cancelSubscriptionMessage', {
+                      {t('Setting.payment.cancelSubscriptionMessage', {
                         date: format(
                           new Date(user?.subscriptionExpiresAt),
                           'yyyy/M/d',
                           {
-                            locale: router.locale === 'ja' ? ja : enUS,
+                            locale: lang === 'ja' ? ja : enUS,
                           },
                         ),
                       })}
@@ -312,44 +280,32 @@ export default function PaymentSetting({ squareInfo }: Props) {
         </>
       </Grid>
       <Dialog open={isConfirmShow} onClose={handleCloseConfirm}>
-        <DialogTitle>{t('payment.cancelSubscriptionDialogTitle')}</DialogTitle>
+        <DialogTitle>
+          {t('Setting.payment.cancelSubscriptionDialogTitle')}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText
             sx={{ mb: 2, pb: 1 }}
             fontSize={fontSizes.m}
             color="primary"
           >
-            ※ {t('payment.cancelSubscriptionWarning1')}
-            <br />※ {t('payment.cancelSubscriptionWarning2')}
+            ※ {t('Setting.payment.cancelSubscriptionWarning1')}
+            <br />※ {t('Setting.payment.cancelSubscriptionWarning2')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button color="primary" onClick={() => handleConfirm()}>
-            {t('payment.cancelYesButton')}
+            {t('Setting.payment.cancelYesButton')}
           </Button>
           <Button
             color="inherit"
             variant="outlined"
             onClick={handleCloseConfirm}
           >
-            {t('payment.cancelNoButton')}
+            {t('Setting.payment.cancelNoButton')}
           </Button>
         </DialogActions>
       </Dialog>
-    </Layout>
+    </>
   )
-}
-
-export const getStaticProps: GetServerSideProps = async (context) => {
-  const { locale } = context
-  const squareInfo = {
-    appId: process.env.SQUARE_APPLICATION_ID || '',
-    locationId: process.env.SQUARE_LOCATION_ID || '',
-  }
-  return {
-    props: {
-      messages: require(`@/locales/${locale}.json`),
-      squareInfo,
-    },
-  }
 }

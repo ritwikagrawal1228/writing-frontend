@@ -1,7 +1,5 @@
-import { GetServerSideProps } from 'next'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import SaveIcon from '@mui/icons-material/Save'
 import {
@@ -15,24 +13,30 @@ import {
 } from '@mui/material'
 import { Storage } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
-import { useTranslations } from 'next-intl'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
 import { ProblemListForm } from '@/components/templates/problem/ProblemListForm'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { problemService } from '@/services/problemService'
+import { RootState } from '@/store'
 import { commonSlice } from '@/store/common'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 
-export default function ProblemCreate() {
-  const { user } = useGetAuthUser()
-  const t = useTranslations('Problem')
+export const ProblemCreate: FC = () => {
+  const { user, amplifyUser } = useGetAuthUser()
+  const { t } = useTranslation()
+  useSetBreadcrumbs([
+    { label: t('Problem.list.title'), href: Path.Problem },
+    { label: t('Problem.create.title'), href: undefined },
+  ])
+  const lang = useSelector((state: RootState) => state.lang.lang)
+  const navigate = useNavigate()
   const [photo, setPhoto] = useState<File | undefined>(undefined)
-  const router = useRouter()
   const [problemsNum, setProblemsNum] = useState<number>(0)
   const [isProblemsLoading, setIsProblemsLoading] =
     React.useState<boolean>(true)
@@ -51,9 +55,9 @@ export default function ProblemCreate() {
       return
     }
     problemService
-      .getProblemsByUserId(user)
-      .then(({ data }) => {
-        setProblemsNum(data.problemsByUserId.length)
+      .getProblemsByUserId(amplifyUser)
+      .then(({ problemsByUserId }) => {
+        setProblemsNum(problemsByUserId.length)
       })
       .finally(() => {
         setIsProblemsLoading(false)
@@ -68,7 +72,7 @@ export default function ProblemCreate() {
       const compPhoto = await imageCompression(photo, {
         maxSizeMB: 1,
       })
-      const fileExt = compPhoto.name.split('.').pop()
+      const fileExt = compPhoto.name.split('Problem..').pop()
       const res = await Storage.put(
         `${user?.id}-${Date.now()}.${fileExt}`,
         compPhoto,
@@ -77,9 +81,9 @@ export default function ProblemCreate() {
     }
 
     problemService
-      .createProblem(data, key)
-      .then(({ data }) => {
-        router.push(`${Path.Problem}/${data.createProblem.id}`)
+      .createProblem(data, key, amplifyUser)
+      .then(({ createProblem }) => {
+        navigate(Path.ProblemDetail.replace(':problemId', createProblem.id))
       })
       .catch((err) => {
         if (err.response?.data === 'PROBLEM_COUNT_LIMIT') {
@@ -104,7 +108,7 @@ export default function ProblemCreate() {
     const limit = problemsNum || 0
 
     let text: React.ReactNode
-    switch (router.locale) {
+    switch (lang) {
       case 'en':
         text = (
           <>
@@ -127,14 +131,7 @@ export default function ProblemCreate() {
   }
 
   return (
-    <Layout
-      title={t('create.title')}
-      description={t('create.title')}
-      breadcrumbs={[
-        { label: t('list.title'), href: Path.Problem },
-        { label: t('create.title'), href: undefined },
-      ]}
-    >
+    <>
       <Snackbar
         open={limitAlert}
         autoHideDuration={6000}
@@ -145,10 +142,10 @@ export default function ProblemCreate() {
           severity="error"
           sx={{ width: '100%' }}
         >
-          {t('create.limitAlertSnackbarTitle')}
+          {t('Problem.create.limitAlertSnackbarTitle')}
         </Alert>
       </Snackbar>
-      <TitleBox title={t('create.title')}>
+      <TitleBox title={t('Problem.create.title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
@@ -157,7 +154,7 @@ export default function ProblemCreate() {
             onClick={() => methods.handleSubmit(onSubmit)()}
             disabled={user?.plan === 'FREE' && problemsNum >= 10}
           >
-            <b>{t('create.submitBtn')}</b>
+            <b>{t('Problem.create.submitBtn')}</b>
           </Button>
         </Box>
       </TitleBox>
@@ -167,12 +164,12 @@ export default function ProblemCreate() {
             <>
               <Alert severity="error">
                 <AlertTitle>
-                  <strong>{t('create.limitAlertTitle')}</strong>
+                  <strong>{t('Problem.create.limitAlertTitle')}</strong>
                 </AlertTitle>
-                {t('create.limitAlertContent1')}
+                {t('Problem.create.limitAlertContent1')}
                 <br />
-                {t('create.limitAlertContent2')}{' '}
-                <Link href={Path.PaymentSubscription}>
+                {t('Problem.create.limitAlertContent2')}{' '}
+                <Link to={Path.PaymentSubscription}>
                   <u style={{ color: 'link' }}>here</u>
                 </Link>
                 .
@@ -183,11 +180,13 @@ export default function ProblemCreate() {
             <>
               <Alert severity={10 - problemsNum > 3 ? 'info' : 'warning'}>
                 <AlertTitle>{getAlertWarningTitle()}</AlertTitle>
-                {t('create.limitAlertContent1')}
+                {t('Problem.create.limitAlertContent1')}
                 <br />
-                {t('create.limitAlertContent2')}{' '}
-                <Link href={Path.PaymentSubscription}>
-                  <u style={{ color: 'link' }}>{t('create.upgradeLink')}</u>
+                {t('Problem.create.limitAlertContent2')}{' '}
+                <Link to={Path.PaymentSubscription}>
+                  <u style={{ color: 'link' }}>
+                    {t('Problem.create.upgradeLink')}
+                  </u>
                 </Link>
                 .
               </Alert>
@@ -207,22 +206,11 @@ export default function ProblemCreate() {
               onSubmit={methods.handleSubmit(onSubmit)}
               style={{ width: '100%' }}
             >
-              <ProblemListForm
-                photo={photo}
-                setPhoto={setPhoto}
-                locale={router.locale}
-              />
+              <ProblemListForm photo={photo} setPhoto={setPhoto} />
             </form>
           </FormProvider>
         )}
       </Paper>
-    </Layout>
+    </>
   )
-}
-
-export const getStaticProps: GetServerSideProps = async (context) => {
-  const { locale } = context
-  return {
-    props: { messages: require(`@/locales/${locale}.json`) },
-  }
 }
