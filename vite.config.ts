@@ -26,9 +26,10 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react(), htmlPlugin(loadEnv(mode, '.'))],
     resolve: {
-      alias: {
-        '@/': path.join(__dirname, 'src/'),
-      },
+      alias: [
+        { find: '@/', replacement: path.join(__dirname, 'src/') },
+        { find: './runtimeConfig', replacement: './runtimeConfig.browser' },
+      ],
     },
     esbuild: {
       logOverride: { 'this-is-undefined-in-esm': 'silent' },

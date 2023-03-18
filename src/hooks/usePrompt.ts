@@ -75,6 +75,7 @@ export function usePrompt(onSave: () => void, when = true) {
       commonSlice.actions.updateDialog({
         isDialogShow: true,
         titleText: t('Answer.form.unsavedDialogTitle'),
+        contentText: '',
         cancelText: t('Answer.form.unsavedDialogWithoutSavingButton'),
         actionText: t('Answer.form.unsavedDialogSavingButton'),
         onAction,
