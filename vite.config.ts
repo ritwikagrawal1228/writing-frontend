@@ -35,7 +35,12 @@ export default defineConfig(({ mode }) => {
       logOverride: { 'this-is-undefined-in-esm': 'silent' },
     },
     define: {
-      global: 'window',
+      global: {},
+    },
+    build: {
+      target: 'es2015',
+      minify: 'esbuild',
+      sourcemap: 'inline',
     },
   }
 })

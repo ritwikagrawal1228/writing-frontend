@@ -8,7 +8,7 @@ import {
   View,
   useTheme,
 } from '@aws-amplify/ui-react'
-import { Box, ThemeProvider, createTheme } from '@mui/material'
+import { Box, ThemeProvider, createTheme, Typography } from '@mui/material'
 import { I18n } from 'aws-amplify'
 import i18next from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -47,9 +47,9 @@ export const Auth: FC = memo(() => {
                   <img src="/logo.png" height={40} width={64.72} alt="logo" />
                   <br />
                   <br />
-                  <Heading level={3} fontWeight="bold">
+                  <Typography variant="h4" fontWeight="bold" color="initial">
                     IELTS Writing Helper
-                  </Heading>
+                  </Typography>
                 </View>
               )
             },

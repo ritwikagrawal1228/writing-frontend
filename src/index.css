@@ -30,7 +30,7 @@ a {
     color-scheme: dark;
   }
   body {
-    color: white;
+    color: white !important;
     background: black !important;
   }
 }

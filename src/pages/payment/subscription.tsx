@@ -12,10 +12,8 @@ import {
   TableBody,
 } from '@mui/material'
 import Table from '@mui/material/Table'
-import { TokenResult } from '@square/web-payments-sdk-types'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
 import cardBrandImg from '@/assets/img/cardBrands.png'
 import { TitleBox } from '@/components/templates/common/TitleBox'
@@ -25,7 +23,7 @@ import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 import { squareService } from '@/services/squareService'
 import { commonSlice } from '@/store/common'
-import { colors, fontSizes } from '@/themes/globalStyles'
+import { fontSizes } from '@/themes/globalStyles'
 
 export const PaymentSubscribe: FC = () => {
   const { amplifyUser } = useGetAuthUser()
@@ -35,7 +33,7 @@ export const PaymentSubscribe: FC = () => {
   const dispatch = useDispatch()
   useSetBreadcrumbs([{ label: t('Payment.title'), href: undefined }])
 
-  const submit = async (token: TokenResult) => {
+  const submit = async (token: any) => {
     if (!token.token) {
       return
     }
@@ -120,7 +118,7 @@ export const PaymentSubscribe: FC = () => {
                 alt="VISA/Mastercard/American Express/JCB/Discover"
                 width="400px"
               />
-              <PaymentForm
+              {/* <PaymentForm
                 applicationId={import.meta.env.VITE_SQUARE_APPLICATION_ID}
                 cardTokenizeResponseReceived={(token) => {
                   submit(token)
@@ -134,7 +132,7 @@ export const PaymentSubscribe: FC = () => {
                 >
                   {t('Payment.proceedToPayment')}
                 </CreditCard>
-              </PaymentForm>
+              </PaymentForm> */}
             </Grid>
             <Grid item xs={6}>
               <Paper

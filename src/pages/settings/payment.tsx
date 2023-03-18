@@ -19,12 +19,10 @@ import {
   Divider,
   Chip,
 } from '@mui/material'
-import { TokenResult } from '@square/web-payments-sdk-types'
 import { format } from 'date-fns'
 import { ja, enUS } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { CreditCard, PaymentForm } from 'react-square-web-payments-sdk'
 
 import cardBrandImg from '@/assets/img/cardBrands.png'
 import { TitleBox } from '@/components/templates/common/TitleBox'
@@ -36,7 +34,7 @@ import { squareService } from '@/services/squareService'
 import { RootState } from '@/store'
 import { commonSlice } from '@/store/common'
 import { userSlice } from '@/store/user'
-import { colors, fontSizes } from '@/themes/globalStyles'
+import { fontSizes } from '@/themes/globalStyles'
 import { SquareCard } from '@/types/model/squareCard'
 
 export const PaymentSetting: FC = () => {
@@ -50,7 +48,7 @@ export const PaymentSetting: FC = () => {
   const [isConfirmShow, setIsConfirmShow] = useState<boolean>(false)
   const dispatch = useDispatch()
 
-  const submit = async (token: TokenResult) => {
+  const submit = async (token: any) => {
     if (token.token) {
       dispatch(commonSlice.actions.updateIsBackdropShow(true))
       await squareService
@@ -225,7 +223,7 @@ export const PaymentSetting: FC = () => {
                       alt="VISA/Mastercard/American Express/JCB/Discover"
                       width="400px"
                     />
-                    <PaymentForm
+                    {/* <PaymentForm
                       applicationId={import.meta.env.VITE_SQUARE_APPLICATION_ID}
                       cardTokenizeResponseReceived={(token) => {
                         submit(token)
@@ -239,7 +237,7 @@ export const PaymentSetting: FC = () => {
                       >
                         {t('Setting.payment.changeCardButton')}
                       </CreditCard>
-                    </PaymentForm>
+                    </PaymentForm> */}
                   </>
                 )}
               </>
