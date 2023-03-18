@@ -1,13 +1,14 @@
-import { gql } from 'graphql-request'
+import { GraphQLClient, gql } from 'graphql-request'
 
-import { Path } from '@/constants/Path'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 import { Problem } from '@/types/model/problem'
 import { User } from '@/types/model/user'
 import { axios } from '@/utils/axios'
 import { getGraphQLClient } from '@/utils/graphqlClient'
+import { Path } from '@/constants/Path'
+import { AmplifyUser } from '@/types/model/amplifyUser'
 
-const getProblemsByUserId = async (user: User) => {
+const getProblemsByUserId = async (user?: AmplifyUser) => {
   const query = gql`
     query ($userId: String!) {
       problemsByUserId(userId: $userId) {
@@ -22,16 +23,16 @@ const getProblemsByUserId = async (user: User) => {
   `
 
   const variables = {
-    userId: user.id,
+    userId: user?.attributes.sub,
   }
 
-  return await axios.post<{ problemsByUserId: Problem[] }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ problemsByUserId: Problem[] }>(
     query,
     variables,
-  })
+  )
 }
 
-const getProblemById = async (id: string, user: any) => {
+const getProblemById = async (id: string, user?: AmplifyUser) => {
   const query = gql`
     query ($id: String!) {
       problem(problemId: $id) {
@@ -48,14 +49,12 @@ const getProblemById = async (id: string, user: any) => {
     id,
   }
 
-  const client = getGraphQLClient(user)
-
-  return await client
+  return await getGraphQLClient(user)
     .request<{ problem: Problem }>(query, variables)
     .then((res) => res)
 }
 
-const deleteProblemById = async (id: string): Promise<boolean> => {
+const deleteProblemById = async (id: string, user?: AmplifyUser) => {
   const query = gql`
     mutation ($id: ID!) {
       deleteProblem(id: $id)
@@ -65,10 +64,16 @@ const deleteProblemById = async (id: string): Promise<boolean> => {
     id,
   }
 
-  return axios.post(Path.APIGraphql, { query, variables })
+  return await getGraphQLClient(user)
+    .request<{ deleteProblem: boolean }>(query, variables)
+    .then((res) => res)
 }
 
-const createProblem = async (data: CreateProblemForm, key: string) => {
+const createProblem = async (
+  data: CreateProblemForm,
+  key: string,
+  user?: AmplifyUser,
+) => {
   const uploadQuery = gql`
     mutation ($input: CreateProblemInput!) {
       createProblem(input: $input) {
@@ -85,16 +90,17 @@ const createProblem = async (data: CreateProblemForm, key: string) => {
     },
   }
 
-  return await axios.post<{ createProblem: Problem }>(Path.APIGraphql, {
-    query: uploadQuery,
+  return await getGraphQLClient(user).request<{ createProblem: Problem }>(
+    uploadQuery,
     variables,
-  })
+  )
 }
 
 const updateProblem = async (
   problemId: string,
   data: CreateProblemForm,
   key: string,
+  user?: AmplifyUser,
 ) => {
   const uploadQuery = gql`
     mutation ($input: UpdateProblemInput!) {
@@ -113,10 +119,10 @@ const updateProblem = async (
     },
   }
 
-  return await axios.post<{ updateProblem: Problem }>(Path.APIGraphql, {
-    query: uploadQuery,
+  return await getGraphQLClient(user).request<{ updateProblem: Problem }>(
+    uploadQuery,
     variables,
-  })
+  )
 }
 
 export const problemService = {

@@ -1,5 +1,3 @@
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
 import React, { Fragment, useEffect } from 'react'
 
 import AddIcon from '@mui/icons-material/Add'
@@ -20,33 +18,35 @@ import {
   useTheme,
 } from '@mui/material'
 import { Storage } from 'aws-amplify'
-import { useTranslations } from 'next-intl'
 
-import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
-import { Path } from '@/constants/Path'
-import { ProblemType } from '@/constants/ProblemType'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { problemService } from '@/services/problemService'
 import { colors, fontSizes } from '@/themes/globalStyles'
 import { Problem } from '@/types/model/problem'
+import { useTranslation } from 'react-i18next'
+import { Path } from '@/constants/Path'
+import { ProblemType } from '@/constants/ProblemType'
+import { useNavigate } from 'react-router-dom'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
 
-export default function ProblemList() {
-  const { user } = useGetAuthUser()
+export const ProblemList = () => {
+  const { user, amplifyUser } = useGetAuthUser()
   const theme = useTheme()
-  const t = useTranslations('Problem')
-  const router = useRouter()
+  const { t } = useTranslation()
+  useSetBreadcrumbs([{ label: t('Problem.list.title') }])
   const [isProblemsLoading, setIsProblemsLoading] =
     React.useState<boolean>(true)
   const [problems, setProblems] = React.useState<Problem[]>([])
   const [images, setImages] = React.useState<{ id: string; src: string }[]>([])
+  const navigate = useNavigate()
 
   const moveCreatePage = () => {
-    router.push(Path.ProblemCreate)
+    navigate(Path.ProblemCreate)
   }
 
   const moveDetail = (problemId: string) => {
-    router.push(`${Path.Problem}/${problemId}`)
+    navigate(Path.ProblemDetail.replace(':problemId', problemId))
   }
 
   useEffect(() => {
@@ -54,9 +54,9 @@ export default function ProblemList() {
       return
     }
     problemService
-      .getProblemsByUserId(user)
-      .then(({ data }) => {
-        setProblems(data.problemsByUserId)
+      .getProblemsByUserId(amplifyUser)
+      .then(({ problemsByUserId }) => {
+        setProblems(problemsByUserId)
       })
       .finally(() => {
         setIsProblemsLoading(false)
@@ -79,12 +79,8 @@ export default function ProblemList() {
   }, [problems])
 
   return (
-    <Layout
-      title={t('list.title')}
-      description={t('list.description')}
-      breadcrumbs={[{ label: t('list.title'), href: undefined }]}
-    >
-      <TitleBox title={t('list.title')}>
+    <>
+      <TitleBox title={t('Problem.list.title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
@@ -92,7 +88,7 @@ export default function ProblemList() {
             variant="contained"
             startIcon={<AddIcon />}
           >
-            <b>{t('list.addBtn')}</b>
+            <b>{t('Problem.list.addBtn')}</b>
           </Button>
         </Box>
       </TitleBox>
@@ -170,7 +166,7 @@ export default function ProblemList() {
         ) : (
           <Box sx={{ p: 10 }}>
             <Typography variant="h6" fontWeight="bold">
-              {t('list.empty')}
+              {t('Problem.list.empty')}
             </Typography>
             <br />
             <Button
@@ -179,18 +175,11 @@ export default function ProblemList() {
               variant="contained"
               startIcon={<AddIcon />}
             >
-              <b>{t('list.addBtn')}</b>
+              <b>{t('Problem.list.addBtn')}</b>
             </Button>
           </Box>
         )}
       </Paper>
-    </Layout>
+    </>
   )
-}
-
-export const getStaticProps: GetServerSideProps = async (context) => {
-  const { locale } = context
-  return {
-    props: { messages: require(`@/locales/${locale}.json`) },
-  }
 }

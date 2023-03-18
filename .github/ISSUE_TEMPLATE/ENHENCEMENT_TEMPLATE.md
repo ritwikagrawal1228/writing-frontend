@@ -2,7 +2,7 @@
 name: EnhancementTemplate
 about: issues template
 title: ''
-labels: ['enhancement', 'frontend']
+labels: ['enhancement', 'lp']
 assignees: ''
 ---
 

@@ -3,8 +3,10 @@ import { gql } from 'graphql-request'
 
 import { Path } from '@/constants/Path'
 import { SquareCard } from '@/types/model/squareCard'
+import { AmplifyUser } from '@/types/model/amplifyUser'
+import { getGraphQLClient } from '@/utils/graphqlClient'
 
-const getSquareCard = async () => {
+const getSquareCard = async (user?: AmplifyUser) => {
   const query = gql`
     query () {
       getSquareCard {
@@ -16,13 +18,13 @@ const getSquareCard = async () => {
     }
   `
 
-  return await axios.post<{ getSquareCard: SquareCard }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ getSquareCard: SquareCard }>(
     query,
-    variables: {},
-  })
+    {},
+  )
 }
 
-const subscribePaidPlan = async (token: string) => {
+const subscribePaidPlan = async (token: string, user?: AmplifyUser) => {
   const query = gql`
     mutation ($input: SubscribePaidPlanInput!) {
       subscribePaidPlan(input: $input)
@@ -35,13 +37,13 @@ const subscribePaidPlan = async (token: string) => {
     },
   }
 
-  return await axios.post<{ subscribePaidPlan: boolean }>(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ subscribePaidPlan: boolean }>(
     query,
     variables,
-  })
+  )
 }
 
-const updateSquareCard = async (token: string) => {
+const updateSquareCard = async (token: string, user?: AmplifyUser) => {
   const query = gql`
     mutation ($input: UpdateSquareCardInput!) {
       updateSquareCard(input: $input) {
@@ -58,26 +60,22 @@ const updateSquareCard = async (token: string) => {
     },
   }
 
-  return await axios.post(Path.APIGraphql, {
+  return await getGraphQLClient(user).request<{ updateSquareCard: SquareCard }>(
     query,
     variables,
-  })
+  )
 }
 
-const cancelSubscription = async () => {
+const cancelSubscription = async (user?: AmplifyUser) => {
   const query = gql`
     mutation {
       cancelCurrentSubscription
     }
   `
 
-  return await axios.post<{ cancelCurrentSubscription: string }>(
-    Path.APIGraphql,
-    {
-      query,
-      variables: {},
-    },
-  )
+  return await getGraphQLClient(user).request<{
+    cancelCurrentSubscription: string
+  }>(query, {})
 }
 
 export const squareService = {

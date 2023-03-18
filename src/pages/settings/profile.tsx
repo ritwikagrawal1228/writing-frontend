@@ -1,14 +1,11 @@
-import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
 import { Box, Button, Grid, Paper } from '@mui/material'
 import { Storage } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
-import { useTranslations } from 'next-intl'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
@@ -20,14 +17,18 @@ import { userService } from '@/services/userService'
 import { commonSlice } from '@/store/common'
 import { userSlice } from '@/store/user'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
+import { useTranslation } from 'react-i18next'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
+import { RootState } from '@/store'
 
-export default function ProfileSetting() {
-  const { user } = useGetAuthUser()
-  const t = useTranslations('Setting')
-  const router = useRouter()
+export const ProfileSetting = () => {
+  const { user, amplifyUser } = useGetAuthUser()
+  const { t } = useTranslation()
   const [photo, setPhoto] = useState<File | string | undefined>('')
   const { profileSettingForm } = useProfileSettingDefaultFrom(user)
   const dispatch = useDispatch()
+  useSetBreadcrumbs([{ label: t('Setting.profile.title'), href: undefined }])
+  const lang = useSelector((state: RootState) => state.lang.lang)
 
   const methods = useForm<UpdateProfileSettingForm>({
     mode: 'onChange',
@@ -68,9 +69,9 @@ export default function ProfileSetting() {
     }
 
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
-    const { updateUserProfile } = await userService
-      .updateProfile(form)
-      .then(({ data }) => {
+    const updateUserProfile = await userService
+      .updateProfile(form, amplifyUser)
+      .then(({ updateUserProfile }) => {
         dispatch(
           commonSlice.actions.updateSnackBar({
             isSnackbarShow: true,
@@ -78,7 +79,7 @@ export default function ProfileSetting() {
             snackBarType: 'success',
           }),
         )
-        return data
+        return updateUserProfile
       })
     dispatch(commonSlice.actions.updateIsBackdropShow(false))
 
@@ -86,12 +87,8 @@ export default function ProfileSetting() {
   }
 
   return (
-    <Layout
-      title={t('profile.title')}
-      description={t('profile.description')}
-      breadcrumbs={[{ label: t('profile.title'), href: undefined }]}
-    >
-      <TitleBox title={t('profile.title')}>
+    <>
+      <TitleBox title={t('Setting.profile.title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
@@ -99,7 +96,7 @@ export default function ProfileSetting() {
             startIcon={<SaveIcon />}
             onClick={() => methods.handleSubmit(onSubmit)()}
           >
-            <b>{t('profile.saveButton')}</b>
+            <b>{t('Setting.profile.saveButton')}</b>
           </Button>
         </Box>
       </TitleBox>
@@ -117,20 +114,13 @@ export default function ProfileSetting() {
                 <ProfileSettingForm
                   photo={photo}
                   setPhoto={setPhoto}
-                  locale={router.locale}
+                  locale={lang}
                 />
               </form>
             </FormProvider>
           </Paper>
         </Grid>
       </Grid>
-    </Layout>
+    </>
   )
-}
-
-export const getStaticProps: GetServerSideProps = async (context) => {
-  const { locale } = context
-  return {
-    props: { messages: require(`@/locales/${locale}.json`) },
-  }
 }

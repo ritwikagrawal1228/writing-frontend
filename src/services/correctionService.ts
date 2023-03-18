@@ -2,11 +2,15 @@ import { gql } from 'graphql-request'
 
 import { Path } from '@/constants/Path'
 import { axios } from '@/utils/axios'
+import { AmplifyUser } from '@/types/model/amplifyUser'
+import { getGraphQLClient } from '@/utils/graphqlClient'
+import { CompletedAnswerSentence } from '@/types/model/answer'
 
 const createCorrection = async (
   answerId: string,
   num: number,
   sentence: string,
+  user?: AmplifyUser,
 ) => {
   const query = gql`
     mutation ($input: CreateCorrectionInput!) {
@@ -25,13 +29,15 @@ const createCorrection = async (
     },
   }
 
-  return await axios.post(Path.APIGraphql, {
-    query,
-    variables,
-  })
+  return await getGraphQLClient(user).request<{
+    createCorrection: CompletedAnswerSentence
+  }>(query, variables)
 }
 
-const getCorrectionByAnswerId = async (answerId: string) => {
+const getCorrectionByAnswerId = async (
+  answerId: string,
+  user?: AmplifyUser,
+) => {
   const query = gql`
     query ($answerId: ID!) {
       correctionByAnswerId(answerId: $answerId) {
@@ -48,10 +54,11 @@ const getCorrectionByAnswerId = async (answerId: string) => {
     answerId,
   }
 
-  return await axios.post(Path.APIGraphql, {
-    query,
-    variables,
-  })
+  return await getGraphQLClient(user).request<{
+    correctionByAnswerId: {
+      correctedAnswerSentences: CompletedAnswerSentence[]
+    }
+  }>(query, variables)
 }
 
 export const correctionService = {

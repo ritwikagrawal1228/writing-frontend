@@ -10,13 +10,13 @@ import {
   Grid,
   IconButton,
 } from '@mui/material'
-import { useTranslations } from 'next-intl'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { BaseInput } from '@/components/parts/common/inputs/BaseInput'
 import { MultiLineInput } from '@/components/parts/common/inputs/MultiLineInput'
 import { fontSizes, formControlMinWidth } from '@/themes/globalStyles'
 import { UpdateProfileSettingForm } from '@/types/form/ProfileSettingForm'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   photo?: File | string
@@ -31,7 +31,7 @@ export const ProfileSettingForm: FC<Props> = memo(
       formState: { errors },
     } = useFormContext<UpdateProfileSettingForm>()
 
-    const t = useTranslations('Problem')
+    const { t } = useTranslation()
     const [isFileTypeError, setIsFileTypeError] = useState<string>('')
     const [isFileSizeError, setIsFileSizeError] = useState<string>('')
 
@@ -70,7 +70,7 @@ export const ProfileSettingForm: FC<Props> = memo(
             'image/svg+xml',
           ].includes(file.type)
         ) {
-          setIsFileTypeError(t('form.fileTypeError'))
+          setIsFileTypeError(t('Setting.form.fileTypeError') || '')
           return false
         }
 
@@ -83,7 +83,7 @@ export const ProfileSettingForm: FC<Props> = memo(
 
       // Up to 10MB
       if (pickedPhotos[0].size > 10485760) {
-        setIsFileSizeError(t('form.fileSizeError'))
+        setIsFileSizeError(t('Setting.form.fileSizeError') || '')
         return
       }
 
@@ -97,7 +97,7 @@ export const ProfileSettingForm: FC<Props> = memo(
             <Controller
               name="name"
               control={control}
-              rules={{ required: t('form.required') }}
+              rules={{ required: t('Setting.form.required') || '' }}
               defaultValue=""
               render={({ field }) => (
                 <BaseInput
@@ -116,7 +116,7 @@ export const ProfileSettingForm: FC<Props> = memo(
             <Controller
               name="email"
               control={control}
-              rules={{ required: t('form.required') }}
+              rules={{ required: t('Setting.form.required') || '' }}
               defaultValue=""
               render={({ field }) => (
                 <BaseInput
@@ -195,7 +195,7 @@ export const ProfileSettingForm: FC<Props> = memo(
               sx={{ width: '70%' }}
               disabled={!!photo}
             >
-              {t('form.imageUploadButton')}
+              {t('Problem.form.imageUploadButton')}
               <input
                 type="file"
                 name="questionImage"

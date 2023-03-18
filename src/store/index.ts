@@ -16,6 +16,9 @@ import createWebStorage from 'redux-persist/lib/storage/createWebStorage'
 
 import { commonSlice } from '@/store/common'
 import { userSlice } from '@/store/user'
+import { langSlice } from '@/store/i18n'
+import { breadcrumbsSlice } from './breadcrumbs'
+import { colorModeSlice } from './colorMode'
 
 // HACK: `redux-persist failed to create sync storage. falling back to noop storage.`の対応
 // https://github.com/vercel/next.js/discussions/15687#discussioncomment-45319
@@ -41,6 +44,9 @@ const storage =
 const rootReducer = combineReducers({
   user: userSlice.reducer,
   common: commonSlice.reducer,
+  lang: langSlice.reducer,
+  breadcrumbs: breadcrumbsSlice.reducer,
+  colorMode: colorModeSlice.reducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>
@@ -57,9 +63,7 @@ export const useStore = (): EnhancedStore => {
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
+        serializableCheck: false,
       }),
   })
 }

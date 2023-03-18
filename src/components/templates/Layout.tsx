@@ -1,9 +1,6 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React, { FC, Fragment, useEffect, useState } from 'react'
 
+import i18next from 'i18next'
 import { useAuthenticator } from '@aws-amplify/ui-react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
@@ -23,6 +20,11 @@ import {
   Collapse,
   Container,
   CssBaseline,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   List,
   ListItemButton,
@@ -36,68 +38,68 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { useTranslations } from 'next-intl'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { ProfileAvatar } from '../parts/common/ProfileAvatar'
 
-import { Path } from '@/constants/Path'
-import { UserPlanFree } from '@/constants/UserPlans'
 import { ColorModeContext } from '@/context/ColorMode'
 import { RootState } from '@/store'
 import { commonSlice } from '@/store/common'
 import { colors } from '@/themes/globalStyles'
-
-type LayoutProps = {
-  title: string
-  description?: string
-  children: React.ReactNode
-  breadcrumbs?: { label: string; href?: string }[]
-}
-
-const languages = {
-  en: 'English',
-  ja: '日本語',
-}
+import { useTranslation } from 'react-i18next'
+import { Path } from '@/constants/Path'
+import { UserPlanFree } from '@/constants/UserPlans'
+import { Outlet } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useGetAuthUser } from '@/hooks/useGetAuthUser'
+import { Lang, langSlice } from '@/store/i18n'
+import { colorModeSlice } from '@/store/colorMode'
 
 const langMenuItems = [
-  { label: 'English', value: 'en' },
-  { label: '日本語', value: 'ja' },
+  { label: 'English', value: 'en' as Lang },
+  { label: '日本語', value: 'ja' as Lang },
 ]
 
-const Layout: FC<LayoutProps> = ({
-  children,
-  title,
-  description,
-  breadcrumbs,
-}) => {
-  const t = useTranslations('Nav')
-  const problemMenuItems = { label: t('menu.problem'), href: Path.Problem }
+const Layout: FC = () => {
+  const { t } = useTranslation()
+  const { user } = useGetAuthUser()
+  const lang = useSelector((state: RootState) => state.lang.lang)
+  const problemMenuItems = { label: t('Nav.menu.problem'), href: Path.Problem }
   const upgradeMenuItems = {
-    label: t('menu.upgrade'),
+    label: t('Nav.menu.upgrade'),
     href: Path.PaymentSubscription,
   }
   const descriptorItems = {
-    label: t('menu.descriptors'),
+    label: t('Nav.menu.descriptors'),
     href: Path.Descriptors,
   }
-  const router = useRouter()
+  const navigate = useNavigate()
   const { signOut } = useAuthenticator()
-  const theme = useTheme()
   const dispatch = useDispatch()
-  const user = useSelector((state: RootState) => state.user.user)
 
-  const colorMode = React.useContext(ColorModeContext)
   const snackBarState = useSelector(
     (state: RootState) => state.common.snackBarState,
   )
   const isBackdropShow = useSelector(
     (state: RootState) => state.common.isBackdropShow,
   )
+  const dialogState = useSelector(
+    (state: RootState) => state.common.dialogState,
+  )
+  const handleClose = (result?: boolean) => {
+    if (result !== undefined) {
+      dialogState.onAction(result)
+    }
+    dispatch(commonSlice.actions.closeDialog())
+  }
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const [open, setOpen] = React.useState(false)
   const [menus, setMenus] = React.useState([problemMenuItems, descriptorItems])
+  const colorMode = useSelector((state: RootState) => state.colorMode.colorMode)
+  const breadcrumbs = useSelector(
+    (state: RootState) => state.breadcrumbs.breadcrumbs,
+  )
 
   useEffect(() => {
     if (!user) {
@@ -107,31 +109,31 @@ const Layout: FC<LayoutProps> = ({
     if (user.plan === UserPlanFree) {
       setMenus([problemMenuItems, descriptorItems, upgradeMenuItems])
     }
-  }, [user])
+  }, [user, lang])
 
   const settings = [
     {
       key: 'profileSetting',
-      text: t('profileMenu.profile'),
+      text: t('Nav.profileMenu.profile'),
       type: 'text',
       icon: <SettingsIcon />,
     },
     {
       key: 'language',
-      text: t('profileMenu.language'),
+      text: t('Nav.profileMenu.language'),
       type: 'collapse',
       icon: <TranslateIcon />,
       children: langMenuItems,
     },
     {
       key: 'colorMode',
-      text: t('profileMenu.colorMode'),
+      text: t('Nav.profileMenu.colorMode'),
       type: 'text',
       icon: <Brightness4Icon />,
     },
     {
       key: 'signOut',
-      text: t('profileMenu.signOut'),
+      text: t('Nav.profileMenu.signOut'),
       type: 'text',
       icon: <ExitToAppIcon />,
     },
@@ -149,20 +151,23 @@ const Layout: FC<LayoutProps> = ({
   }
 
   const handleCloseNavMenu = (href: string) => {
-    router.push(href)
+    navigate(href)
     setAnchorElNav(null)
   }
   const handleCloseUserMenu = (menu: string) => {
     switch (menu) {
       case 'profileSetting':
-        router.push(Path.ProfileSettings)
+        navigate(Path.ProfileSettings)
         break
       case 'signOut':
         signOut()
-        router.push(Path.Auth)
         break
       case 'colorMode':
-        colorMode.toggleColorMode()
+        dispatch(
+          colorModeSlice.actions.updateColorMode(
+            colorMode === 'light' ? 'dark' : 'light',
+          ),
+        )
         break
 
       default:
@@ -172,23 +177,13 @@ const Layout: FC<LayoutProps> = ({
     setAnchorElUser(null)
   }
 
-  const handleCloseLangMenu = (lang: string) => {
-    router.push(
-      { pathname: router.pathname, query: router.query },
-      router.asPath,
-      { locale: lang },
-    )
+  const handleCloseLangMenu = (lang: Lang) => {
+    dispatch(langSlice.actions.updateLang(lang))
     setOpen(false)
   }
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
-      <CssBaseline />
       <AppBar position="static" color="default">
         <Container maxWidth="lg">
           <Toolbar
@@ -197,12 +192,12 @@ const Layout: FC<LayoutProps> = ({
               paddingRight: '0 !important',
             }}
           >
-            <Image src="/logo.png" height={20} width={32.36} alt="logo" />
+            <img src="/logo.png" height={20} width={32.36} alt="logo" />
             <Typography
               variant="h6"
               noWrap
               component="a"
-              href={Path.Auth}
+              href={Path.Problem}
               sx={{
                 mr: 5,
                 ml: 2,
@@ -347,11 +342,11 @@ const Layout: FC<LayoutProps> = ({
       <Box
         sx={{
           height: 35,
-          backgroundColor:
+          backgroundColor: (theme) =>
             theme.palette.mode === 'dark'
               ? colors.base.gray
               : colors.disabled.light,
-          color: theme.palette.text.primary,
+          color: (theme) => theme.palette.text.primary,
         }}
       >
         <Container maxWidth="lg">
@@ -361,7 +356,7 @@ const Layout: FC<LayoutProps> = ({
           >
             {breadcrumbs?.map((b, i) =>
               b.href ? (
-                <Link href={b.href} key={i}>
+                <Link to={b.href} key={i}>
                   <Typography
                     sx={{ lineHeight: '35px', textDecoration: 'underline' }}
                     color="link"
@@ -383,12 +378,15 @@ const Layout: FC<LayoutProps> = ({
         component="main"
         sx={{
           minHeight: 'calc(100vh - 64px)',
-          backgroundColor: theme.palette.background.default,
-          color: theme.palette.text.primary,
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark'
+              ? theme.palette.background.paper
+              : theme.palette.background.default,
+          color: (theme) => theme.palette.text.primary,
         }}
       >
         <Container maxWidth="lg" sx={{ pt: '30px' }}>
-          {children}
+          <Outlet />
         </Container>
       </Box>
       <Backdrop
@@ -420,6 +418,29 @@ const Layout: FC<LayoutProps> = ({
           </Alert>
         </Snackbar>
       )}
+      <Dialog
+        open={dialogState.isDialogShow}
+        onClose={() => handleClose(undefined)}
+      >
+        <DialogTitle>{dialogState.titleText}</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 2 }}>
+            {dialogState.contentText}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={() => handleClose(true)}>
+            {dialogState.actionText}
+          </Button>
+          <Button
+            color="inherit"
+            variant="outlined"
+            onClick={() => handleClose(false)}
+          >
+            {dialogState.cancelText}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

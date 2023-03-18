@@ -1,129 +1,124 @@
-import { GetServerSidePropsContext } from 'next'
-import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { FC, useCallback, useEffect, useLayoutEffect } from 'react'
 
 import { withSSRContext } from 'aws-amplify'
-import { useTranslations } from 'next-intl'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Layout from '@/components/templates/Layout'
 import { AnswerForm } from '@/components/templates/problem/answer/AnswerForm'
-import { AnswerStatus } from '@/constants/AnswerStatus'
+import { AnswerStatus, answerStatus } from '@/constants/AnswerStatus'
 import { Path } from '@/constants/Path'
 import { useGetAuthUser } from '@/hooks/useGetAuthUser'
 import { answerService } from '@/services/answerService'
+import { problemService } from '@/services/problemService'
 import { commonSlice } from '@/store/common'
+import { Problem } from '@/types/model/problem'
+import { useTranslation } from 'react-i18next'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
+import { useNavigate, useParams } from 'react-router-dom'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { usePrompt } from '@/hooks/usePrompt'
+import { AnsweringForm } from '@/types/form/AnsweringForm'
 import { Answer } from '@/types/model/answer'
+import { ProblemType1 } from '@/constants/ProblemType'
 
-type Props = {
-  answerModel: Answer
-}
-
-export default function AnswerRedeem({ answerModel }: Props) {
-  useGetAuthUser()
-  const t = useTranslations('Problem')
-  const ta = useTranslations('Answer')
-  const router = useRouter()
-  const [answer, setAnswer] = React.useState<string>(answerModel.answer || '')
-  const [time, setTime] = React.useState<number>(answerModel.time)
-  const [countDownSec, setCountDownSec] = React.useState<number>(
-    answerModel.answerSpentTime,
-  )
+export const AnswerRedeem: FC = () => {
+  const { user, amplifyUser } = useGetAuthUser()
+  const { t } = useTranslation()
+  const [answer, setAnswer] = React.useState<Answer>()
+  useSetBreadcrumbs([
+    { label: t('Problem.list.title'), href: Path.Problem },
+    {
+      label: t('Problem.detail.title'),
+      href: Path.ProblemDetail.replace(':problemId', answer?.problem.id || ''),
+    },
+    { label: t('Answer.create.title'), href: undefined },
+  ])
+  const navigate = useNavigate()
+  const params = useParams()
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (!answerModel) {
+  const methods = useForm<AnsweringForm>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    shouldUnregister: false,
+  })
+
+  useLayoutEffect(() => {
+    if (!amplifyUser) {
       return
     }
-    if (answerModel.time > 0) {
+    if (!params.answerId) {
+      return navigate(Path.Problem)
+    }
+    dispatch(commonSlice.actions.updateIsBackdropShow(true))
+    answerService
+      .getAnswerById(params.answerId as string, amplifyUser)
+      .then(({ answer }) => {
+        setAnswer(answer)
+        methods.reset({
+          answer: answer.answer,
+          countDownSec: answer.answerSpentTime,
+          status: answerStatus.inProgress,
+          time: answer.time
+            ? answer.time
+            : answer.problem.taskType === ProblemType1
+            ? 20
+            : 40,
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+        return navigate(Path.Problem)
+      })
+      .finally(() => dispatch(commonSlice.actions.updateIsBackdropShow(false)))
+  }, [amplifyUser])
+
+  const save = () => {
+    methods.handleSubmit(onSubmit)()
+  }
+
+  const onSubmit: SubmitHandler<AnsweringForm> = async (data) => {
+    if (!data.answer) {
+      dispatch(
+        commonSlice.actions.updateSnackBar({
+          isSnackbarShow: true,
+          snackBarMsg: t('Answer.form.emptyAnswer'),
+          snackBarType: 'error',
+        }),
+      )
       return
     }
 
-    // Set default time if answer doesn't have time
-    const type = answerModel.problem.taskType === 'Type_#Task1' ? 20 : 40
-    console.log(type)
-
-    setTime(type)
-  }, [answerModel])
-
-  const handleSubmit = async (isSave: boolean, status: AnswerStatus) => {
-    if (!isSave) {
-      router.push(`${Path.Problem}/${answerModel.problem.id}`)
+    if (!answer) {
       return
     }
 
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
     const res = await answerService.updateAnswer(
-      answerModel.id,
-      answerModel.problem.id,
-      answer,
-      countDownSec,
-      time,
-      status,
+      answer.id,
+      answer.problem.id,
+      data,
+      amplifyUser,
     )
     dispatch(commonSlice.actions.updateIsBackdropShow(false))
 
     if (res) {
-      router.push(`${Path.Problem}/${answerModel.problem.id}`)
+      navigate(Path.ProblemDetail.replace(':problemId', answer.problem.id))
     }
   }
 
   return (
-    <Layout
-      title={answerModel.problem.title}
-      description={answerModel.problem.question}
-      breadcrumbs={[
-        { label: t('list.title'), href: Path.Problem },
-        {
-          label: t('detail.title'),
-          href: `${Path.Problem}/${answerModel.problem.id}`,
-        },
-        { label: ta('create.title'), href: undefined },
-      ]}
-    >
-      <AnswerForm
-        problem={answerModel.problem}
-        answer={answer}
-        setAnswer={setAnswer}
-        countDownSec={countDownSec}
-        setCountDownSec={setCountDownSec}
-        handleSubmit={handleSubmit}
-        time={time}
-        setTime={setTime}
-      />
-    </Layout>
+    <>
+      {answer?.problem && (
+        <FormProvider {...methods}>
+          <form
+            onSubmit={methods.handleSubmit(onSubmit)}
+            style={{ width: '100%' }}
+          >
+            <AnswerForm problem={answer.problem} handleSubmit={save} />
+          </form>
+        </FormProvider>
+      )}
+    </>
   )
-}
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-
-    const { answerId: id } = context.query
-    if (typeof id !== 'string') {
-      return { notFound: true }
-    }
-
-    const result = await answerService.getAnswerById(id, user)
-
-    return {
-      props: {
-        answerModel: result.answer,
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Auth,
-      },
-    }
-  }
 }

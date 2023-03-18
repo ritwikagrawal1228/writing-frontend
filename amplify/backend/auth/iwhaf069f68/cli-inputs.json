@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "ieltswritinghelper755b7dda_identitypool_755b7dda",
+    "identityPoolName": "iwhaf069f68_identitypool_af069f68",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "ieltsw755b7dda",
-    "userPoolName": "ieltswritinghelper755b7dda_userpool_755b7dda",
+    "resourceNameTruncated": "iwhaf069f68",
+    "userPoolName": "iwhaf069f68_userpool_af069f68",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -32,43 +32,19 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "ieltsw755b7dda_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "iwhaf0af069f68_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "755b7dda",
-    "resourceName": "ieltswritinghelper755b7dda",
+    "sharedId": "af069f68",
+    "resourceName": "iwhaf069f68",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "manual",
-    "hostedUI": false,
+    "useDefault": "default",
     "usernameAttributes": [
       "email"
     ],
     "triggers": {},
     "userPoolGroupList": [],
     "serviceName": "Cognito",
-    "verificationBucketName": "ieltswritinghelper755b7ddaverificationbucket",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true,
-    "authRoleArn": {
-      "Fn::GetAtt": [
-        "AuthRole",
-        "Arn"
-      ]
-    },
-    "unauthRoleArn": {
-      "Fn::GetAtt": [
-        "UnauthRole",
-        "Arn"
-      ]
-    },
-    "breakCircularDependency": true,
-    "dependsOn": [],
-    "permissions": [],
-    "authProviders": [],
-    "parentStack": {
-      "Ref": "AWS::StackId"
-    },
-    "thirdPartyAuth": false,
-    "userPoolGroups": false,
-    "adminQueries": false
+    "useEnabledMfas": true
   }
 }

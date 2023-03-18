@@ -12,14 +12,6 @@ frontend:
         - npm ci
     build:
       commands:
-        - env | grep -e API_URL >> .env.production
-        - env | grep -e AMPLIFY_BACKEND_APP_ID >> .env.production
-        - env | grep -e USER_BRANCH >> .env.production
-        - env | grep -e SQUARE_APPLICATION_ID >> .env.production
-        - env | grep -e SQUARE_ACCESS_TOKEN >> .env.production
-        - env | grep -e SQUARE_LOCATION_ID >> .env.production
-        - env | grep -e GRAMMARLY_CLIENT_ID >> .env.production
-        - env | grep -e NEXT_PUBLIC_GA4_TRACKING_ID >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next

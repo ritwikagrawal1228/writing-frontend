@@ -1,14 +1,11 @@
-import { GetServerSidePropsContext } from 'next'
-import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 
 import SaveIcon from '@mui/icons-material/Save'
-import { Box, Button, Paper } from '@mui/material'
+import { Box, Button, Paper, Skeleton } from '@mui/material'
 import { Storage, withSSRContext } from 'aws-amplify'
 import imageCompression from 'browser-image-compression'
-import { useTranslations } from 'next-intl'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Layout from '@/components/templates/Layout'
 import { TitleBox } from '@/components/templates/common/TitleBox'
@@ -19,54 +16,48 @@ import { problemService } from '@/services/problemService'
 import { commonSlice } from '@/store/common'
 import { CreateProblemForm } from '@/types/form/CreateProblemForm'
 import { Problem } from '@/types/model/problem'
+import { useTranslation } from 'react-i18next'
+import { useSetBreadcrumbs } from '@/hooks/useSetBreadcrumbs'
+import { useNavigate, useParams } from 'react-router-dom'
 
-type Props = {
-  problem: Problem
-}
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const { locale } = context
-  const { Auth } = withSSRContext({ req: context.req })
-
-  try {
-    const user = await Auth.currentAuthenticatedUser()
-
-    const { id } = context.query
-    if (typeof id !== 'string') {
-      return { notFound: true }
-    }
-
-    const result = await problemService.getProblemById(id, user)
-
-    return {
-      props: {
-        problem: result.problem,
-        messages: require(`@/locales/${locale}.json`),
-      },
-    }
-  } catch (err) {
-    console.error(err)
-    return {
-      redirect: {
-        permanent: false,
-        destination: Path.Auth,
-      },
-    }
-  }
-}
-
-export default function ProblemEdit({ problem }: Props) {
-  const { user } = useGetAuthUser()
-  const t = useTranslations('Problem')
-  const router = useRouter()
+export const ProblemEdit = () => {
+  const { user, amplifyUser } = useGetAuthUser()
+  const { t } = useTranslation()
+  const [problem, setProblem] = React.useState<Problem>()
+  useSetBreadcrumbs([
+    { label: t('Problem.list.title'), href: Path.Problem },
+    {
+      label: t('Problem.detail.title'),
+      href: Path.ProblemDetail.replace(':problemId', problem?.id || ''),
+    },
+    { label: t('Problem.edit.title'), href: undefined },
+  ])
+  const lang = useSelector((state: any) => state.lang.lang)
+  const navigate = useNavigate()
+  const params = useParams()
   const [photo, setPhoto] = React.useState<string | File | undefined>()
   const methods = useForm<CreateProblemForm>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   })
   const dispatch = useDispatch()
+
+  useLayoutEffect(() => {
+    if (!amplifyUser) {
+      return
+    }
+    if (!params.problemId) {
+      return navigate(Path.Problem)
+    }
+    problemService
+      .getProblemById(params.problemId as string, amplifyUser)
+      .then(({ problem }) => {
+        setProblem(problem)
+      })
+      .catch(() => {
+        return navigate(Path.Problem)
+      })
+  }, [amplifyUser])
 
   useEffect(() => {
     if (!problem) {
@@ -89,6 +80,9 @@ export default function ProblemEdit({ problem }: Props) {
   }, [problem])
 
   const onSubmit: SubmitHandler<CreateProblemForm> = async (form) => {
+    if (!problem || !user) {
+      return
+    }
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
     let key = ''
     if (photo && typeof photo !== 'string') {
@@ -99,7 +93,7 @@ export default function ProblemEdit({ problem }: Props) {
       const compPhoto = await imageCompression(photo, {
         maxSizeMB: 1,
       })
-      const fileExt = compPhoto.name.split('.').pop()
+      const fileExt = compPhoto.name.split('Problem..').pop()
 
       const res = await Storage.put(
         `${user?.id}-${Date.now()}.${fileExt}`,
@@ -110,23 +104,20 @@ export default function ProblemEdit({ problem }: Props) {
       key = problem.questionImageKey || ''
     }
 
-    const { data } = await problemService.updateProblem(problem.id, form, key)
+    const { updateProblem } = await problemService.updateProblem(
+      problem.id,
+      form,
+      key,
+      amplifyUser,
+    )
     dispatch(commonSlice.actions.updateIsBackdropShow(false))
 
-    router.push(`${Path.Problem}/${data.updateProblem.id}`)
+    navigate(Path.ProblemDetail.replace(':problemId', updateProblem.id))
   }
 
   return (
-    <Layout
-      title={t('edit.title')}
-      description={t('edit.description')}
-      breadcrumbs={[
-        { label: t('list.title'), href: Path.Problem },
-        { label: t('detail.title'), href: `${Path.Problem}/${problem.id}` },
-        { label: t('edit.title'), href: undefined },
-      ]}
-    >
-      <TitleBox title="Problem Edit">
+    <>
+      <TitleBox title={t('Problem.edit.title')}>
         <Box sx={{ maxHeight: '36px' }}>
           <Button
             color="primary"
@@ -134,20 +125,24 @@ export default function ProblemEdit({ problem }: Props) {
             startIcon={<SaveIcon />}
             onClick={() => methods.handleSubmit(onSubmit)()}
           >
-            <b>{t('edit.submitBtn')}</b>
+            <b>{t('Problem.edit.submitBtn')}</b>
           </Button>
         </Box>
       </TitleBox>
-      <Paper sx={{ px: 5, py: 3, pb: 5 }}>
-        <FormProvider {...methods}>
-          <form
-            onSubmit={methods.handleSubmit(onSubmit)}
-            style={{ width: '100%' }}
-          >
-            <ProblemListForm photo={photo} setPhoto={setPhoto} />
-          </form>
-        </FormProvider>
-      </Paper>
-    </Layout>
+      {problem ? (
+        <Paper sx={{ px: 5, py: 3, pb: 5 }}>
+          <FormProvider {...methods}>
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              style={{ width: '100%' }}
+            >
+              <ProblemListForm photo={photo} setPhoto={setPhoto} />
+            </form>
+          </FormProvider>
+        </Paper>
+      ) : (
+        <Skeleton sx={{ px: 0 }} height={400} width="100%" />
+      )}
+    </>
   )
 }

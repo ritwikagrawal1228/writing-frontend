@@ -1,6 +1,6 @@
 import { outlinedInputClasses, PaletteMode, ThemeOptions } from '@mui/material'
 
-import { colors, fontSizes } from '@/themes/globalStyles'
+import { colors, fontSizes } from './globalStyles'
 
 export const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
   palette: {
