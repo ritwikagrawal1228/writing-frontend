@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Authenticator } from '@aws-amplify/ui-react'
 import { CssBaseline } from '@mui/material'
 import { Amplify } from 'aws-amplify'
+import i18next from 'i18next'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Provider } from 'react-redux'
 
@@ -19,6 +20,7 @@ Amplify.configure({ ...awsExports })
 
 function App() {
   const store = useStore()
+  i18next.changeLanguage(store.getState().lang.lang)
 
   return (
     <Provider store={store}>

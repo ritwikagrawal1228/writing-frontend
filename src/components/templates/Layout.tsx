@@ -106,34 +106,6 @@ const Layout: FC = () => {
     }
   }, [user, lang])
 
-  const settings = [
-    {
-      key: 'profileSetting',
-      text: t('Nav.profileMenu.profile'),
-      type: 'text',
-      icon: <SettingsIcon />,
-    },
-    {
-      key: 'language',
-      text: t('Nav.profileMenu.language'),
-      type: 'collapse',
-      icon: <TranslateIcon />,
-      children: langMenuItems,
-    },
-    {
-      key: 'colorMode',
-      text: t('Nav.profileMenu.colorMode'),
-      type: 'text',
-      icon: <Brightness4Icon />,
-    },
-    {
-      key: 'signOut',
-      text: t('Nav.profileMenu.signOut'),
-      type: 'text',
-      icon: <ExitToAppIcon />,
-    },
-  ]
-
   const handleClick = () => {
     setOpen(!open)
   }
@@ -289,7 +261,33 @@ const Layout: FC = () => {
                   component="nav"
                   aria-labelledby="nested-list-subheader"
                 >
-                  {settings.map((setting) => {
+                  {[
+                    {
+                      key: 'profileSetting',
+                      text: t('Nav.profileMenu.profile'),
+                      type: 'text',
+                      icon: <SettingsIcon />,
+                    },
+                    {
+                      key: 'language',
+                      text: t('Nav.profileMenu.language'),
+                      type: 'collapse',
+                      icon: <TranslateIcon />,
+                      children: langMenuItems,
+                    },
+                    {
+                      key: 'colorMode',
+                      text: t('Nav.profileMenu.colorMode'),
+                      type: 'text',
+                      icon: <Brightness4Icon />,
+                    },
+                    {
+                      key: 'signOut',
+                      text: t('Nav.profileMenu.signOut'),
+                      type: 'text',
+                      icon: <ExitToAppIcon />,
+                    },
+                  ].map((setting) => {
                     return (
                       <Fragment key={setting.key}>
                         {setting.type === 'text' ? (

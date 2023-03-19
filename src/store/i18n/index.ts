@@ -10,7 +10,7 @@ export type LangState = {
 export type UpdateLangPayload = Lang
 
 const initialState: LangState = {
-  lang: i18next.language as Lang,
+  lang: (localStorage.getItem('lang') as Lang) || ('ja' as Lang),
 }
 
 export const langSlice = createSlice({
@@ -19,6 +19,7 @@ export const langSlice = createSlice({
   reducers: {
     updateLang(state, action: PayloadAction<UpdateLangPayload>) {
       state.lang = action.payload
+      localStorage.setItem('lang', action.payload)
       i18next.changeLanguage(state.lang)
     },
     reset(): LangState {

@@ -196,7 +196,7 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
               >
                 <FormControl variant="standard" fullWidth sx={{ mb: 2 }}>
                   <GrammarlyEditorPlugin
-                    clientId={import.meta.env.GRAMMARLLY_CLIENT_ID}
+                    clientId={import.meta.env.VITE_GRAMMARLY_CLIENT_ID}
                   >
                     <OutlinedInput
                       id={sentence.num.toString()}
