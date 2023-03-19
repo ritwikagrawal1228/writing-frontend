@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, useEffect } from 'react'
 
 import {
   Authenticator,
@@ -31,8 +31,13 @@ export const Auth: FC = memo(() => {
     const l = lang === 'ja' ? 'en' : 'ja'
     dispatch(langSlice.actions.updateLang(l))
   }
+  const [theme, setTheme] = React.useState(
+    createTheme(getDesignTokens(colorMode)),
+  )
 
-  const theme = createTheme(getDesignTokens(colorMode))
+  useEffect(() => {
+    setTheme(createTheme(getDesignTokens(colorMode)))
+  }, [colorMode])
 
   return (
     <>

@@ -8,12 +8,13 @@ export type colorModeState = {
 export type UpdateLangPayload = PaletteMode
 
 const initialState: colorModeState = {
-  colorMode:
-    (localStorage.getItem('theme') as PaletteMode) || window.matchMedia
-      ? window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : ('light' as PaletteMode),
+  colorMode: (localStorage.getItem('theme') as PaletteMode)
+    ? (localStorage.getItem('theme') as PaletteMode)
+    : window.matchMedia
+    ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'
+    : 'light',
 }
 
 export const colorModeSlice = createSlice({

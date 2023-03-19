@@ -2,6 +2,9 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+
+import { RootState } from '@/store'
 
 const darkModeCardStyle = {
   '.input-container': {
@@ -49,6 +52,7 @@ export const SquareCardForm: FC<Props> = ({ buttonText, submit }) => {
   const renderedRef = useRef(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
   const [card, setCard] = useState()
+  const colorMode = useSelector((state: RootState) => state.colorMode.colorMode)
 
   useEffect(() => {
     if (renderedRef.current) {
@@ -72,8 +76,10 @@ export const SquareCardForm: FC<Props> = ({ buttonText, submit }) => {
   }, [])
 
   const initializeCard = async (payments: any) => {
+    console.log(colorMode)
+
     const card = await payments.card({
-      style: darkModeCardStyle,
+      style: colorMode === 'dark' ? darkModeCardStyle : {},
     })
     await card.attach('#card-container')
     return card
