@@ -151,9 +151,9 @@
       "quitDialogSavingButton": "Save and Quit",
       "quitDialogCancelButton": "No",
       "emptyAnswer": "Answer is required",
-      "unsavedDialogTitle": "保存されていない回答があります",
-      "unsavedDialogWithoutSavingButton": "保存せずに中止",
-      "unsavedDialogSavingButton": "保存して中止"
+      "unsavedDialogTitle": "You have unsaved answers.",
+      "unsavedDialogWithoutSavingButton": "Quit without saving",
+      "unsavedDialogSavingButton": "Save and Quit"
     },
     "create": {
       "title": "Answer",
