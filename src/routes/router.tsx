@@ -6,6 +6,7 @@ import { Path } from '@/constants/Path'
 import { Page404 } from '@/pages/404'
 import { Page500 } from '@/pages/500'
 import { DescriptorTask2 } from '@/pages/descriptors/task2'
+import { HowToUse } from '@/pages/howToUse'
 import { PaymentSubscribe } from '@/pages/payment/subscription'
 import { ProblemList } from '@/pages/problem'
 import { ProblemDetail } from '@/pages/problem/[id]'
@@ -71,6 +72,10 @@ export const Router: FC = memo(() => {
         {
           path: Path.ProfileSettings,
           element: <ProfileSetting />,
+        },
+        {
+          path: Path.HowToUse,
+          element: <HowToUse />,
         },
         {
           path: 'error',

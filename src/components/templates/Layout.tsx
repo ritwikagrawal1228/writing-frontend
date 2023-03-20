@@ -68,6 +68,10 @@ const Layout: FC = () => {
     label: t('Nav.menu.descriptors'),
     href: Path.Descriptors,
   }
+  const howToUseItems = {
+    label: t('Nav.menu.howToUse'),
+    href: Path.HowToUse,
+  }
   const navigate = useNavigate()
   const { signOut } = useAuthenticator()
   const dispatch = useDispatch()
@@ -90,7 +94,11 @@ const Layout: FC = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
   const [open, setOpen] = React.useState(false)
-  const [menus, setMenus] = React.useState([problemMenuItems, descriptorItems])
+  const [menus, setMenus] = React.useState([
+    problemMenuItems,
+    descriptorItems,
+    howToUseItems,
+  ])
   const colorMode = useSelector((state: RootState) => state.colorMode.colorMode)
   const breadcrumbs = useSelector(
     (state: RootState) => state.breadcrumbs.breadcrumbs,
@@ -102,7 +110,12 @@ const Layout: FC = () => {
     }
 
     if (user.plan === UserPlanFree) {
-      setMenus([problemMenuItems, descriptorItems, upgradeMenuItems])
+      setMenus([
+        problemMenuItems,
+        descriptorItems,
+        howToUseItems,
+        upgradeMenuItems,
+      ])
     }
   }, [user, lang])
 

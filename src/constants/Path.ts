@@ -13,5 +13,6 @@ export enum Path {
   Tip = '/tip',
   PaymentSubscription = '/payment/subscription',
   Descriptors = '/descriptors/task2',
+  HowToUse = '/how-to-use',
   Terms = 'https://www.ielts-writing-helper.com/terms',
 }
