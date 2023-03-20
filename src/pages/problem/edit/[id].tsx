@@ -45,6 +45,13 @@ export const ProblemEdit = () => {
       return
     }
     if (!params.problemId) {
+      dispatch(
+        commonSlice.actions.updateSnackBar({
+          isSnackbarShow: true,
+          snackBarMsg: t('Common.errorOccurred'),
+          snackBarType: 'error',
+        }),
+      )
       return navigate(Path.Problem)
     }
     problemService
@@ -53,6 +60,13 @@ export const ProblemEdit = () => {
         setProblem(problem)
       })
       .catch(() => {
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: t('Common.errorOccurred'),
+            snackBarType: 'error',
+          }),
+        )
         return navigate(Path.Problem)
       })
   }, [amplifyUser])

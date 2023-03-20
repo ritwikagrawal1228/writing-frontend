@@ -42,6 +42,13 @@ export const Answer: FC = () => {
       return
     }
     if (!params.problemId) {
+      dispatch(
+        commonSlice.actions.updateSnackBar({
+          isSnackbarShow: true,
+          snackBarMsg: t('Common.errorOccurred'),
+          snackBarType: 'error',
+        }),
+      )
       return navigate(Path.Problem)
     }
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
@@ -57,6 +64,13 @@ export const Answer: FC = () => {
         })
       })
       .catch(() => {
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: t('Common.errorOccurred'),
+            snackBarType: 'error',
+          }),
+        )
         return navigate(Path.Problem)
       })
       .finally(() => dispatch(commonSlice.actions.updateIsBackdropShow(false)))

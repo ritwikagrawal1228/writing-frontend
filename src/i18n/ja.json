@@ -1,51 +1,6 @@
 {
-  "LP": {
-    "url": "https://www.ielts-writing-helper.com/ja",
-    "siteName": "IELTS Writing Helper",
-    "title": "IELTS Writing Helper | IELTSライティング学習効率化アプリ",
-    "description": "IELTS Writing HelperはIELTSライティングの学習を効率的にするためのWebアプリです。IELTSライティングの問題を作成し、回答を保存、レビューができます。また、AIがあなたの回答をレビューし、スコアアップのためのアドバイスしてくれます。",
-    "menu": {
-      "feature": "特徴",
-      "pricing": "料金",
-      "langTooltip": "言語を変更する"
-    },
-    "startFreeButton": "無料で始める",
-    "head": {
-      "catch": "WebアプリでIELTSライティングの学習を効率的に。",
-      "seeMoreButton": "機能を見てみる"
-    },
-    "feature": {
-      "title1": "PCやタブレットでIELTSライティングを\n練習して保存、レビューができる。",
-      "desc1": "もうノートにエッセイを書く必要はありません。\nPCやタブレットでIELTSライティングを練習して効率的に保存、レビューができます。",
-      "title2": "本番同様のデザインで\n問題を解くことができる。",
-      "desc2": "問題を解くページは本番と同様のデザインかつ時間を計測できるためため、本番同様の緊張感を味わうことができます。",
-      "title3": "AIが自動で回答をレビューしてくれる。",
-      "desc3": "今話題のOpen AIがあなたの回答をレビューし、\nスコアアップのためのアドバイスしてくれます。"
-    },
-    "pricing": {
-      "title": "料金プラン",
-      "desc": "IELTS Writing Helperの料金プランをご紹介します。\nIELTSライティングを低価格で効率的に学習できます。",
-      "monthUnit": "月",
-      "free": {
-        "title": "フリープラン",
-        "desc1": "10問まで問題を作成可能",
-        "desc2": "回答数に上限なし",
-        "desc3": "文法やスペルミスの自動提案機能",
-        "button": "無料で始める"
-      },
-      "pro": {
-        "title": "プロプラン",
-        "subheader": "おすすめ",
-        "desc1": "無制限に問題を登録可能",
-        "desc2": "すべてのフリープランの機能",
-        "desc3": "AIによる解答提案機能",
-        "desc4": "広告が非表示",
-        "button": "今すぐ始める"
-      }
-    },
-    "trial": {
-      "title": "すぐに無料で体験することができます。"
-    }
+  "Common": {
+    "errorOccurred": "エラーが発生しました。しばらくしてから再度お試しください。"
   },
   "Auth": {
     "termQuestion": "続行する場合、利用規約に同意することとします。",

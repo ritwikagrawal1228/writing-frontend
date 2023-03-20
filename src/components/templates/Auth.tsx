@@ -111,9 +111,11 @@ export const Auth: FC = memo(() => {
               Footer() {
                 return (
                   <View textAlign="center">
-                    {i18next.language === 'ja'
-                      ? '続行する場合、利用規約に同意することとします。'
-                      : 'By continuing, you agree to the Terms of Conditions.'}
+                    <Heading>
+                      {i18next.language === 'ja'
+                        ? '続行する場合、利用規約に同意することとします。'
+                        : 'By continuing, you agree to the Terms of Conditions.'}
+                    </Heading>
                     <Button
                       fontWeight="normal"
                       onClick={() =>

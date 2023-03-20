@@ -100,6 +100,13 @@ export const ProblemDetail: FC = () => {
       return
     }
     if (!params.problemId) {
+      dispatch(
+        commonSlice.actions.updateSnackBar({
+          isSnackbarShow: true,
+          snackBarMsg: t('Common.errorOccurred'),
+          snackBarType: 'error',
+        }),
+      )
       return navigate(Path.Problem)
     }
     problemService
@@ -108,6 +115,13 @@ export const ProblemDetail: FC = () => {
         setProblem(problem)
       })
       .catch(() => {
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: t('Common.errorOccurred'),
+            snackBarType: 'error',
+          }),
+        )
         return navigate(Path.Problem)
       })
   }, [amplifyUser])

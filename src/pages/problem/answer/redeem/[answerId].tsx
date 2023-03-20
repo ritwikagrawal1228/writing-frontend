@@ -43,6 +43,13 @@ export const AnswerRedeem: FC = () => {
       return
     }
     if (!params.answerId) {
+      dispatch(
+        commonSlice.actions.updateSnackBar({
+          isSnackbarShow: true,
+          snackBarMsg: t('Common.errorOccurred'),
+          snackBarType: 'error',
+        }),
+      )
       return navigate(Path.Problem)
     }
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
@@ -62,6 +69,13 @@ export const AnswerRedeem: FC = () => {
         })
       })
       .catch((err) => {
+        dispatch(
+          commonSlice.actions.updateSnackBar({
+            isSnackbarShow: true,
+            snackBarMsg: t('Common.errorOccurred'),
+            snackBarType: 'error',
+          }),
+        )
         console.error(err)
         return navigate(Path.Problem)
       })
