@@ -10,7 +10,9 @@ export type LangState = {
 export type UpdateLangPayload = Lang
 
 const initialState: LangState = {
-  lang: (localStorage.getItem('lang') as Lang) || ('ja' as Lang),
+  lang: (localStorage.getItem('lang') as Lang)
+    ? (localStorage.getItem('lang') as Lang)
+    : (window.navigator.language as Lang),
 }
 
 export const langSlice = createSlice({
