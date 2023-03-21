@@ -61,8 +61,6 @@ export const AnswerArea: FC<Props> = memo(({ answerSentences, answerId }) => {
     correctionService
       .getCorrectionByAnswerId(answerId, amplifyUser)
       .then(({ correctionByAnswerId }) => {
-        console.log('correctionByAnswerId', correctionByAnswerId)
-
         const correctedSentences: CompletedAnswerSentence[] =
           correctionByAnswerId.correctedAnswerSentences
 

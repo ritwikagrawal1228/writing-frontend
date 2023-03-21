@@ -34,14 +34,14 @@ export const PaymentSubscribe: FC = () => {
   const dispatch = useDispatch()
   useSetBreadcrumbs([{ label: t('Payment.title'), href: undefined }])
 
-  const submit = async (token: any) => {
-    if (!token.token) {
+  const submit = async (token: string) => {
+    if (!token) {
       return
     }
 
     dispatch(commonSlice.actions.updateIsBackdropShow(true))
     const { subscribePaidPlan } = await squareService.subscribePaidPlan(
-      token.token,
+      token,
       amplifyUser,
     )
     dispatch(commonSlice.actions.updateIsBackdropShow(false))

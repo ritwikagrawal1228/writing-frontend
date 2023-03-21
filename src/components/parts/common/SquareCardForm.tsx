@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { Button } from '@mui/material'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { RootState } from '@/store'
@@ -44,11 +43,10 @@ const darkModeCardStyle = {
 
 type Props = {
   buttonText: string
-  submit: (token: any) => void
+  submit: (token: string) => void
 }
 
 export const SquareCardForm: FC<Props> = ({ buttonText, submit }) => {
-  const { t } = useTranslation()
   const renderedRef = useRef(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
   const [card, setCard] = useState()
@@ -103,8 +101,6 @@ export const SquareCardForm: FC<Props> = ({ buttonText, submit }) => {
     // disable the submit button as we await tokenization and make a payment request.
     setIsButtonDisabled(true)
     const token = await tokenize(card)
-
-    console.log(token)
 
     submit(token)
   }

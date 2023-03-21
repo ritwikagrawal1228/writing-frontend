@@ -49,11 +49,11 @@ export const PaymentSetting: FC = () => {
   const [isConfirmShow, setIsConfirmShow] = useState<boolean>(false)
   const dispatch = useDispatch()
 
-  const submit = async (token: any) => {
-    if (token.token) {
+  const submit = async (token: string) => {
+    if (token) {
       dispatch(commonSlice.actions.updateIsBackdropShow(true))
       await squareService
-        .updateSquareCard(token.token)
+        .updateSquareCard(token)
         .then(({ updateSquareCard }) => {
           if (updateSquareCard) {
             setCard(updateSquareCard)
