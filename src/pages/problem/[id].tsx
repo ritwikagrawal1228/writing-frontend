@@ -11,6 +11,7 @@ import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import EditIcon from '@mui/icons-material/Edit'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import {
   Box,
   Button,
@@ -77,8 +78,13 @@ export const ProblemDetail: FC = () => {
   const dispatch = useDispatch()
 
   const [anchorElMenu, setAnchorElMenu] = useState<null | HTMLElement>(null)
+  const [anchorElAnswerMenu, setAnchorAnswerElMenu] =
+    useState<null | HTMLElement>(null)
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElMenu(event.currentTarget)
+  }
+  const handleOpenAnswerMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorAnswerElMenu(event.currentTarget)
   }
   const handleCloseUserMenu = (menu: string) => {
     switch (menu) {
@@ -93,6 +99,13 @@ export const ProblemDetail: FC = () => {
     }
 
     setAnchorElMenu(null)
+  }
+  const handleCloseAnswerMenu = (aId?: string) => {
+    if (aId) {
+      confirmDeleteAnswer(aId)
+    }
+
+    setAnchorAnswerElMenu(null)
   }
 
   useLayoutEffect(() => {
@@ -140,6 +153,10 @@ export const ProblemDetail: FC = () => {
         })
     }
 
+    getAnswers(problem)
+  }, [problem])
+
+  const getAnswers = (problem: Problem) => {
     setIsAnswerLoading(true)
     answerService
       .getAnswersByProblemId(problem.id, amplifyUser)
@@ -149,7 +166,7 @@ export const ProblemDetail: FC = () => {
       .finally(() => {
         setIsAnswerLoading(false)
       })
-  }, [problem])
+  }
 
   const moveEditPage = () => {
     if (!problem) {
@@ -160,6 +177,41 @@ export const ProblemDetail: FC = () => {
 
   const confirmDelete = () => {
     setIsAlertOpen(true)
+  }
+
+  const confirmDeleteAnswer = (aId: string) => {
+    dispatch(
+      commonSlice.actions.updateDialog({
+        isDialogShow: true,
+        titleText: t('Problem.detail.answer.list.deleteConfirmTitle'),
+        contentText: t('Problem.detail.answer.list.deleteConfirmDescription'),
+        cancelText: t('Problem.detail.answer.list.deleteConfirmCancelBtn'),
+        actionText: t('Problem.detail.answer.list.deleteConfirmDeleteBtn'),
+        onAction: (result?: boolean) => {
+          if (!result) {
+            return
+          }
+          dispatch(commonSlice.actions.updateIsBackdropShow(true))
+          answerService
+            .deleteAnswer(aId, amplifyUser)
+            .then(() => {
+              dispatch(
+                commonSlice.actions.updateSnackBar({
+                  isSnackbarShow: true,
+                  snackBarMsg: t('Problem.detail.answer.list.deleteSuccess'),
+                  snackBarType: 'success',
+                }),
+              )
+              if (problem) {
+                getAnswers(problem)
+              }
+            })
+            .finally(() =>
+              dispatch(commonSlice.actions.updateIsBackdropShow(false)),
+            )
+        },
+      }),
+    )
   }
 
   const handleAlertClose = () => {
@@ -415,10 +467,11 @@ export const ProblemDetail: FC = () => {
               {answerModels.length > 0 ? (
                 answerModels.map((answer) => (
                   <Fragment key={answer.id}>
-                    <Box>
+                    <Box sx={{ display: 'flex' }}>
                       <Card
                         sx={{
                           mb: 2,
+                          width: '100%',
                           backgroundColor:
                             theme.palette.mode === 'dark'
                               ? colors.base.black
@@ -477,6 +530,53 @@ export const ProblemDetail: FC = () => {
                           </CardActions>
                         </CardActionArea>
                       </Card>
+                      <Tooltip title="Open menu">
+                        <IconButton
+                          onClick={handleOpenAnswerMenu}
+                          sx={{ p: 0, height: '30px' }}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Menu
+                        sx={{ mt: '45px' }}
+                        id="menu-appbar"
+                        anchorEl={anchorElAnswerMenu}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElAnswerMenu)}
+                        onClose={() => handleCloseAnswerMenu()}
+                      >
+                        <List
+                          sx={{
+                            width: '100%',
+                            maxWidth: 360,
+                            bgcolor: 'background.paper',
+                          }}
+                          component="nav"
+                          aria-labelledby="nested-list-subheader"
+                        >
+                          <ListItemButton
+                            onClick={() => handleCloseAnswerMenu(answer.id)}
+                          >
+                            <ListItemIcon>
+                              <DeleteForeverIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={t(
+                                'Answer.review.tabContentMyReviewDeleteButton',
+                              )}
+                            />
+                          </ListItemButton>
+                        </List>
+                      </Menu>
                     </Box>
                   </Fragment>
                 ))

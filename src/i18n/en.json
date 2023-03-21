@@ -47,7 +47,12 @@
           "empty": "There is no answer yet.",
           "completed": "Completed",
           "inProgress": "In Progress",
-          "lastAnswered": "Last Answered"
+          "lastAnswered": "Last Answered",
+          "deleteConfirmTitle": "Are you sure you want to delete this answer?",
+          "deleteConfirmDescription": "You can not undo this action. \n The answer and reviews associated with it will be permanently deleted.",
+          "deleteConfirmCancelBtn": "Cancel",
+          "deleteConfirmDeleteBtn": "Delete",
+          "deleteSuccess": "Answer deleted successfully."
         }
       }
     },

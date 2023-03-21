@@ -47,7 +47,12 @@
           "empty": "まだ回答がありません。",
           "completed": "完了",
           "inProgress": "進行中",
-          "lastAnswered": "最終回答日"
+          "lastAnswered": "最終回答日",
+          "deleteConfirmTitle": "本当にこの回答を削除しますか？",
+          "deleteConfirmDescription": "この操作は取り消すことができません。 \n 回答とその回答に紐づく全てのレビューなどが完全に削除されます。",
+          "deleteConfirmCancelBtn": "キャンセル",
+          "deleteConfirmDeleteBtn": "削除",
+          "deleteSuccess": "回答を削除しました。"
         }
       }
     },

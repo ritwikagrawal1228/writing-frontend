@@ -123,9 +123,26 @@ const getAnswerById = async (id: string, user: AmplifyUser) => {
     .then((res) => res)
 }
 
+const deleteAnswer = async (answerId: string, user?: AmplifyUser) => {
+  const query = gql`
+    mutation ($id: ID!) {
+      deleteAnswer(id: $id)
+    }
+  `
+  const variables = {
+    id: answerId,
+  }
+
+  return await getGraphQLClient(user).request<{ deleteAnswer: boolean }>(
+    query,
+    variables,
+  )
+}
+
 export const answerService = {
   createAnswer,
   updateAnswer,
   getAnswerById,
   getAnswersByProblemId,
+  deleteAnswer,
 }

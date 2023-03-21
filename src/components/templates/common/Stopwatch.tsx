@@ -152,7 +152,7 @@ export const Stopwatch: FC = () => {
           </Button>
           <Button
             color="secondary"
-            variant="outlined"
+            variant="contained"
             onClick={() => handleStartTimer()}
           >
             {t('Answer.form.startDialogStartButton')}!
