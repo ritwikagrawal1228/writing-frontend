@@ -40,7 +40,7 @@ import { SquareCard } from '@/types/model/squareCard'
 
 export const PaymentSetting: FC = () => {
   const lang = useSelector((state: RootState) => state.lang.lang)
-  const { user } = useGetAuthUser()
+  const { user, amplifyUser } = useGetAuthUser()
   const { t } = useTranslation()
   useSetBreadcrumbs([{ label: t('Setting.payment.title'), href: undefined }])
 
@@ -88,7 +88,7 @@ export const PaymentSetting: FC = () => {
     }
     setIsCardLoading(true)
     squareService
-      .getSquareCard()
+      .getSquareCard(amplifyUser)
       .then(({ getSquareCard }) => {
         if (getSquareCard) {
           setCard(getSquareCard)
