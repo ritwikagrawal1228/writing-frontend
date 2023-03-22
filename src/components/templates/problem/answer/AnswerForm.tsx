@@ -142,35 +142,37 @@ export const AnswerForm = memo(({ problem, handleSubmit }: Props) => {
         </Grid>
       </Grid>
       <ProblemDescriptionGrid problem={problem} />
-      <Grid container columnSpacing={2}>
-        <Grid item xs={6}>
-          <ProblemDisplayPaper problem={problem} img={img} />
+      <Paper sx={{ width: '100%' }}>
+        <Grid container columnSpacing={2}>
+          <Grid item xs={6}>
+            <ProblemDisplayPaper problem={problem} img={img} />
+          </Grid>
+          <Grid item xs={6}>
+            <Paper sx={{ width: '100%', minHeight: '600px', p: 3 }}>
+              <Controller
+                name="answer"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    inputProps={{ style: { fontSize: fontSizes.m } }}
+                    color="secondary"
+                    fullWidth
+                    multiline
+                    rows={30}
+                    {...field}
+                  />
+                )}
+              />
+              <Typography sx={{ mt: 1 }}>
+                Word Count:{' '}
+                {watchForm.answer
+                  ? watchForm.answer.trim().split(/\s+/).length
+                  : 0}
+              </Typography>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <Paper sx={{ width: '100%', minHeight: '600px', p: 3 }}>
-            <Controller
-              name="answer"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  inputProps={{ style: { fontSize: fontSizes.m } }}
-                  color="secondary"
-                  fullWidth
-                  multiline
-                  rows={30}
-                  {...field}
-                />
-              )}
-            />
-            <Typography sx={{ mt: 1 }}>
-              Word Count:{' '}
-              {watchForm.answer
-                ? watchForm.answer.trim().split(/\s+/).length
-                : 0}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+      </Paper>
     </>
   )
 })
