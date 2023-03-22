@@ -199,19 +199,14 @@ export const AnswerReview = () => {
               <ReviewArea answer={answer} user={user} />
             </Grid>
           </Grid>
-          <Grid container columnSpacing={2} sx={{ pb: 4 }}>
-            <Grid item xs={6}>
-              <ProblemDisplayPaper problem={answer.problem} img={img} />
-            </Grid>
-            <Grid item xs={6}>
-              <Paper
-                sx={{
-                  p: 3,
-                  width: '100%',
-                  minHeight: '600px',
-                  lineHeight: '40px',
-                }}
-              >
+          <Paper
+            sx={{ p: 3, width: '100%', minHeight: '600px', lineHeight: '40px' }}
+          >
+            <Grid container columnSpacing={2} sx={{ pb: 4 }}>
+              <Grid item xs={6}>
+                <ProblemDisplayPaper problem={answer.problem} img={img} />
+              </Grid>
+              <Grid item xs={6}>
                 <FormControlLabel
                   control={
                     <Switch checked={isDiffView} onChange={handleViewChange} />
@@ -235,9 +230,9 @@ export const AnswerReview = () => {
                     </Typography>
                   </>
                 )}
-              </Paper>
+              </Grid>
             </Grid>
-          </Grid>
+          </Paper>
         </>
       )}
     </>
