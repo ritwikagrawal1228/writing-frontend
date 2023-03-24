@@ -154,11 +154,14 @@ export const AnswerForm = memo(({ problem, handleSubmit }: Props) => {
                 control={control}
                 render={({ field }) => (
                   <TextField
-                    inputProps={{ style: { fontSize: fontSizes.m } }}
+                    inputProps={{
+                      style: { fontSize: fontSizes.m },
+                      spellCheck: 'false',
+                    }}
                     color="secondary"
                     fullWidth
                     multiline
-                    rows={30}
+                    rows={35}
                     {...field}
                   />
                 )}

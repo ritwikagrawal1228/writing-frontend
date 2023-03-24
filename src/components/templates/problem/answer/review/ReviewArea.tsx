@@ -68,9 +68,7 @@ export const ReviewArea: FC<Props> = memo(({ answer, user }) => {
   const amplifyUser = useSelector((state: RootState) => state.user.amplifyUser)
   const [reviews, setReviews] = React.useState<Review[]>([])
   const theme = useTheme()
-  const [value, setValue] = React.useState(
-    answer.problem.taskType === ProblemType1 ? 1 : 0,
-  )
+  const [value, setValue] = React.useState(1)
   const [isWaitingAiReview, setIsWaitingAiReview] = React.useState(false)
   const lang = useSelector((state: RootState) => state.lang.lang)
   const navigate = useNavigate()
