@@ -36,6 +36,9 @@ export const Stopwatch: FC = () => {
     if (watchForm.countDownSec || 0 > 0) {
       setIsActive(true)
       setIsPaused(true)
+      setIsResumeConfirm(true)
+    } else {
+      setIsStartConfirm(true)
     }
   }, [])
 
