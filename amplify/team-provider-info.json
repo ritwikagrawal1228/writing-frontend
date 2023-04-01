@@ -1,4 +1,25 @@
 {
+  "local": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-iwh-local-112333-authRole",
+      "UnauthRoleArn": "arn:aws:iam::596211650892:role/amplify-iwh-local-112333-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::596211650892:role/amplify-iwh-local-112333-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-iwh-local-112333-deployment",
+      "UnauthRoleName": "amplify-iwh-local-112333-unauthRole",
+      "StackName": "amplify-iwh-local-112333",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:596211650892:stack/amplify-iwh-local-112333/a3b07d30-d07f-11ed-8010-06c9c8a28489",
+      "AmplifyAppId": "d2tjbsu3wiqi7o"
+    },
+    "categories": {
+      "auth": {
+        "iwh2dcc1fd7": {}
+      },
+      "storage": {
+        "iwh": {}
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-iwh-dev-181516-authRole",
