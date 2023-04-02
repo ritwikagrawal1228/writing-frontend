@@ -62,6 +62,7 @@ const getAiReviewByAnswerId = async (
       createAiReview(input: $input) {
         id
         content
+        userId
       }
     }
   `
